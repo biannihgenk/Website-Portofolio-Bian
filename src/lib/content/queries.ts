@@ -257,25 +257,68 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
 // ─────────────────────────────────────────────
 
 /**
- * Fetches all projects for the admin dashboard (draft, published, archived).
+ * Fetches all projects for the admin dashboard with optional status, category, and search filters.
  */
 export async function getAdminProjects(options?: {
-  status?: "draft" | "published" | "archived";
+  status?: "draft" | "published" | "archived" | "all";
+  category?: string;
+  search?: string;
 }): Promise<Project[]> {
   await requireAdmin();
   const supabase = await createClient();
   let query = supabase
     .from("projects")
     .select("*")
+    .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false });
 
-  if (options?.status) {
+  if (options?.status && options.status !== "all") {
     query = query.eq("status", options.status);
+  }
+
+  if (options?.category && options.category !== "all") {
+    query = query.eq("category", options.category);
+  }
+
+  if (options?.search && options.search.trim() !== "") {
+    const s = options.search.trim();
+    query = query.or(`title_id.ilike.%${s}%,title_en.ilike.%${s}%,slug.ilike.%${s}%`);
   }
 
   const { data, error } = await query;
   if (error) throw new Error(`Failed to load admin projects: ${error.message}`);
   return data ?? [];
+}
+
+/**
+ * Fetches a single project by ID for editing in the admin dashboard.
+ */
+export async function getAdminProjectById(id: string): Promise<Project | null> {
+  await requireAdmin();
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("projects")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) throw new Error(`Failed to load project: ${error.message}`);
+  return data;
+}
+
+/**
+ * Fetches distinct categories across all projects for filtering.
+ */
+export async function getDistinctProjectCategories(): Promise<string[]> {
+  await requireAdmin();
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("projects")
+    .select("category");
+
+  if (error || !data) return [];
+  const unique = Array.from(new Set(data.map((r) => r.category).filter(Boolean)));
+  return unique.sort();
 }
 
 /**

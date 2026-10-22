@@ -1,20 +1,33 @@
 import Link from "next/link";
-import { getAdminProjects } from "@/lib/content/queries";
+import {
+  getAdminProjects,
+  getDistinctProjectCategories,
+} from "@/lib/content/queries";
+import { ProjectListTable } from "@/components/admin/ProjectListTable";
 import type { Project } from "@/types/content";
+
+export const dynamic = "force-dynamic";
 
 export default async function AdminProjectsPage() {
   let projects: Project[] = [];
-  let errorMsg = null;
+  let categories: string[] = [];
+  let errorMsg: string | null = null;
 
   try {
-    projects = await getAdminProjects();
+    const [fetchedProjects, fetchedCategories] = await Promise.all([
+      getAdminProjects(),
+      getDistinctProjectCategories(),
+    ]);
+    projects = fetchedProjects;
+    categories = fetchedCategories;
   } catch (err: unknown) {
-    errorMsg = err instanceof Error ? err.message : "Database connection pending";
+    errorMsg = err instanceof Error ? err.message : "Gagal memuat data proyek dari database.";
   }
 
   return (
-    <div className="space-y-6 max-w-5xl">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6">
+      {/* Top Header with Action */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-zinc-800/80">
         <div>
           <div className="flex items-center gap-2">
             <Link href="/admin" className="text-xs text-zinc-500 hover:text-zinc-300">
@@ -23,53 +36,35 @@ export default async function AdminProjectsPage() {
             <span className="text-xs text-zinc-600">/</span>
             <span className="text-xs text-zinc-300">Projects</span>
           </div>
-          <h2 className="text-2xl font-bold tracking-tight text-white mt-1">
-            Projects Management
-          </h2>
+          <h1 className="text-2xl font-bold tracking-tight text-white mt-1">
+            Manajemen Proyek Portofolio
+          </h1>
+          <p className="mt-1 text-xs text-zinc-400">
+            Kelola karya rekayasa perangkat lunak, deskripsi bilingual, dan aset media portofolio.
+          </p>
+        </div>
+
+        <div>
+          <Link
+            href="/admin/projects/new"
+            className="inline-flex items-center gap-2 rounded-lg bg-zinc-100 px-4 py-2 text-xs font-semibold text-zinc-950 transition-colors hover:bg-white shadow-sm"
+          >
+            <span>+ Proyek Baru</span>
+          </Link>
         </div>
       </div>
 
+      {/* Error Notice */}
       {errorMsg ? (
-        <div className="rounded-xl border border-amber-500/20 bg-amber-500/10 p-5 text-sm text-amber-300">
-          <p className="font-medium">Database Notice</p>
-          <p className="mt-1 text-xs text-amber-400/80">{errorMsg}</p>
-        </div>
-      ) : projects.length === 0 ? (
-        <div className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-8 text-center">
-          <div className="text-3xl mb-3">💼</div>
-          <h3 className="text-base font-semibold text-zinc-200">No Projects Found</h3>
-          <p className="mt-1 text-xs text-zinc-500 max-w-md mx-auto">
-            The database schema (`public.projects`) and RLS policies are active.
-            Project editing forms will be implemented with Google Stitch designs in the next phase.
-          </p>
+        <div className="rounded-xl border border-rose-500/20 bg-rose-500/10 p-5 text-sm text-rose-300">
+          <p className="font-semibold text-rose-200">Database Notice</p>
+          <p className="mt-1 text-xs text-rose-300/80">{errorMsg}</p>
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-zinc-800 bg-zinc-900/40">
-          <table className="w-full text-left text-xs text-zinc-300">
-            <thead className="border-b border-zinc-800 bg-zinc-900/80 text-zinc-400 uppercase tracking-wider">
-              <tr>
-                <th className="px-4 py-3">Title</th>
-                <th className="px-4 py-3">Slug</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3">Featured</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-zinc-800/60 font-mono">
-              {projects.map((p) => (
-                <tr key={p.id}>
-                  <td className="px-4 py-3 font-sans font-medium text-zinc-200">{p.title_id}</td>
-                  <td className="px-4 py-3 text-zinc-400">{p.slug}</td>
-                  <td className="px-4 py-3">
-                    <span className="rounded px-2 py-0.5 text-[10px] bg-zinc-800 text-zinc-300">
-                      {p.status}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">{p.is_featured ? "Yes" : "No"}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <ProjectListTable
+          initialProjects={projects}
+          categories={categories}
+        />
       )}
     </div>
   );
