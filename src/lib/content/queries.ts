@@ -384,42 +384,187 @@ export async function getAdminMediaAssets(options?: {
   };
 }
 
+export interface TableStats {
+  published: number;
+  draft: number;
+  archived: number;
+  total: number;
+}
+
+export interface ModuleStatResult {
+  stats: TableStats | null;
+  error: string | null;
+}
+
+export interface CountStatResult {
+  count: number | null;
+  error: string | null;
+}
+
+export interface AdminStatsResponse {
+  projects: ModuleStatResult;
+  blogPosts: ModuleStatResult;
+  galleryItems: ModuleStatResult;
+  achievements: ModuleStatResult;
+  education: CountStatResult;
+  mediaAssets: CountStatResult;
+}
+
+export interface RecentContentItem {
+  id: string;
+  type: "project" | "blog" | "achievement";
+  title: string;
+  status: "draft" | "published" | "archived";
+  createdAt: string;
+  href: string;
+}
+
+export interface RecentContentResponse {
+  items: RecentContentItem[];
+  error: string | null;
+}
+
 /**
  * Fetches summary counts across all content tables for the admin dashboard overview.
+ * Does not fabricate counts: returns specific error states if any query fails.
  */
-export async function getAdminStats() {
+export async function getAdminStats(): Promise<AdminStatsResponse> {
   await requireAdmin();
   const supabase = await createClient();
 
-  // Run in parallel for quick overview loading
   const [projectsRes, blogRes, galleryRes, achievementsRes, educationRes, mediaRes] =
     await Promise.all([
-      supabase.from("projects").select("status", { count: "exact" }),
-      supabase.from("blog_posts").select("status", { count: "exact" }),
-      supabase.from("gallery_items").select("status", { count: "exact" }),
-      supabase.from("achievements").select("status", { count: "exact" }),
-      supabase.from("education").select("id", { count: "exact" }),
-      supabase.from("media_assets").select("id", { count: "exact" }),
+      supabase.from("projects").select("status"),
+      supabase.from("blog_posts").select("status"),
+      supabase.from("gallery_items").select("status"),
+      supabase.from("achievements").select("status"),
+      supabase.from("education").select("id", { count: "exact", head: true }),
+      supabase.from("media_assets").select("id", { count: "exact", head: true }),
     ]);
 
-  const countByStatus = (rows: { status?: string }[] | null) => {
-    const counts = { published: 0, draft: 0, archived: 0, total: 0 };
-    if (!rows) return counts;
-    counts.total = rows.length;
-    for (const r of rows) {
-      if (r.status === "published") counts.published++;
-      else if (r.status === "draft") counts.draft++;
-      else if (r.status === "archived") counts.archived++;
+  const parseModuleResult = (
+    data: { status: string }[] | null,
+    error: { message: string } | null
+  ): ModuleStatResult => {
+    if (error) {
+      return { stats: null, error: error.message };
     }
-    return counts;
+    const rows = data ?? [];
+    const stats: TableStats = { published: 0, draft: 0, archived: 0, total: rows.length };
+    for (const r of rows) {
+      if (r.status === "published") stats.published++;
+      else if (r.status === "draft") stats.draft++;
+      else if (r.status === "archived") stats.archived++;
+    }
+    return { stats, error: null };
+  };
+
+  const parseCountResult = (
+    count: number | null,
+    error: { message: string } | null
+  ): CountStatResult => {
+    if (error) {
+      return { count: null, error: error.message };
+    }
+    return { count: count ?? 0, error: null };
   };
 
   return {
-    projects: countByStatus(projectsRes.data),
-    blogPosts: countByStatus(blogRes.data),
-    galleryItems: countByStatus(galleryRes.data),
-    achievements: countByStatus(achievementsRes.data),
-    educationCount: educationRes.count ?? 0,
-    mediaAssetsCount: mediaRes.count ?? 0,
+    projects: parseModuleResult(projectsRes.data, projectsRes.error),
+    blogPosts: parseModuleResult(blogRes.data, blogRes.error),
+    galleryItems: parseModuleResult(galleryRes.data, galleryRes.error),
+    achievements: parseModuleResult(achievementsRes.data, achievementsRes.error),
+    education: parseCountResult(educationRes.count, educationRes.error),
+    mediaAssets: parseCountResult(mediaRes.count, mediaRes.error),
   };
 }
+
+/**
+ * Fetches the most recent content records across projects, blog posts, and achievements.
+ * Returns empty array if no records exist yet.
+ */
+export async function getAdminRecentContent(): Promise<RecentContentResponse> {
+  await requireAdmin();
+  const supabase = await createClient();
+
+  try {
+    const [projectsRes, blogRes, achievementsRes] = await Promise.all([
+      supabase
+        .from("projects")
+        .select("id, title_id, status, created_at")
+        .order("created_at", { ascending: false })
+        .limit(4),
+      supabase
+        .from("blog_posts")
+        .select("id, title_id, status, created_at")
+        .order("created_at", { ascending: false })
+        .limit(4),
+      supabase
+        .from("achievements")
+        .select("id, title_id, status, created_at")
+        .order("created_at", { ascending: false })
+        .limit(4),
+    ]);
+
+    const errors: string[] = [];
+    if (projectsRes.error) errors.push(`Projects: ${projectsRes.error.message}`);
+    if (blogRes.error) errors.push(`Blog: ${blogRes.error.message}`);
+    if (achievementsRes.error) errors.push(`Achievements: ${achievementsRes.error.message}`);
+
+    // If all failed, return top-level error
+    if (errors.length === 3) {
+      return { items: [], error: errors.join(" • ") };
+    }
+
+    const items: RecentContentItem[] = [];
+
+    (projectsRes.data ?? []).forEach((p) => {
+      items.push({
+        id: p.id,
+        type: "project",
+        title: p.title_id,
+        status: p.status as "draft" | "published" | "archived",
+        createdAt: p.created_at,
+        href: "/admin/projects",
+      });
+    });
+
+    (blogRes.data ?? []).forEach((b) => {
+      items.push({
+        id: b.id,
+        type: "blog",
+        title: b.title_id,
+        status: b.status as "draft" | "published" | "archived",
+        createdAt: b.created_at,
+        href: "/admin/blog",
+      });
+    });
+
+    (achievementsRes.data ?? []).forEach((a) => {
+      items.push({
+        id: a.id,
+        type: "achievement",
+        title: a.title_id,
+        status: a.status as "draft" | "published" | "archived",
+        createdAt: a.created_at,
+        href: "/admin/achievements",
+      });
+    });
+
+    // Sort combined by created_at descending
+    items.sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+
+    return {
+      items: items.slice(0, 5),
+      error: errors.length > 0 ? errors.join(" • ") : null,
+    };
+  } catch (err: unknown) {
+    return {
+      items: [],
+      error: err instanceof Error ? err.message : "Failed to load recent content",
+    };
+  }
+}
+
