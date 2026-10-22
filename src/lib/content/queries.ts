@@ -42,7 +42,8 @@ export async function getSiteSettings(): Promise<SiteSetting[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("site_settings")
-    .select("*");
+    .select("*")
+    .eq("is_public", true);
 
   if (error) {
     console.error("Error fetching site settings:", error.message);

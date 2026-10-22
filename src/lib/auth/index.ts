@@ -51,26 +51,18 @@ export async function requireAdmin() {
 
   if (!adminRecord) {
     // User is in the allowlist but not yet provisioned in the database.
-    // This happens on first login — provision them automatically.
-    const { error: insertError } = await supabase
+    // Provision them securely using the server admin client (service-role).
+    const { createAdminClient } = await import("@/lib/supabase/admin");
+    const adminClient = createAdminClient();
+    const { error: adminInsertError } = await adminClient
       .from("admin_users")
       .insert({ user_id: user.id });
 
-    // If insert fails (RLS prevents it because they're not yet admin),
-    // use the admin client to bootstrap
-    if (insertError) {
-      const { createAdminClient } = await import("@/lib/supabase/admin");
-      const adminClient = createAdminClient();
-      const { error: adminInsertError } = await adminClient
-        .from("admin_users")
-        .insert({ user_id: user.id });
-
-      if (adminInsertError) {
-        console.error("Failed to provision admin user:", adminInsertError.message);
-        const signOutClient = await createClient();
-        await signOutClient.auth.signOut();
-        redirect("/admin/login?error=provision_failed");
-      }
+    if (adminInsertError) {
+      console.error("Failed to provision admin user:", adminInsertError.message);
+      const signOutClient = await createClient();
+      await signOutClient.auth.signOut();
+      redirect("/admin/login?error=provision_failed");
     }
   }
 

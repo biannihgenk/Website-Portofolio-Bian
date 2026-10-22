@@ -1,11 +1,10 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { getClientEnv } from "@/lib/env";
+import { getClientEnv, isAdminEmail } from "@/lib/env";
 
 /**
  * Updates the Supabase session in middleware.
- * This ensures session cookies are refreshed on every request,
- * keeping the user's session alive.
+ * Refreshes session cookies on every request and protects admin routes.
  */
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
@@ -32,21 +31,52 @@ export async function updateSession(request: NextRequest) {
     },
   );
 
-  // Refresh the session — this is essential for keeping sessions alive
+  // Refresh session — keeps the user's session active
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Protect admin routes: redirect unauthenticated users to login
-  if (
-    !user &&
-    request.nextUrl.pathname.startsWith("/admin") &&
-    !request.nextUrl.pathname.startsWith("/admin/login") &&
-    !request.nextUrl.pathname.startsWith("/admin/auth")
-  ) {
+  const { pathname } = request.nextUrl;
+  const isAdminRoute = pathname.startsWith("/admin");
+  const isLoginRoute = pathname.startsWith("/admin/login");
+  const isAuthCallback = pathname.startsWith("/admin/auth");
+
+  // Helper to copy updated session cookies to redirect responses
+  const createRedirectWithCookies = (url: URL) => {
+    const redirectRes = NextResponse.redirect(url);
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectRes.cookies.set(cookie);
+    });
+    return redirectRes;
+  };
+
+  // 1. Unauthenticated users trying to access protected /admin routes
+  if (!user && isAdminRoute && !isLoginRoute && !isAuthCallback) {
     const url = request.nextUrl.clone();
     url.pathname = "/admin/login";
-    return NextResponse.redirect(url);
+    return createRedirectWithCookies(url);
+  }
+
+  // 2. Authenticated users lacking admin authorization trying to access /admin
+  if (user && isAdminRoute && !isLoginRoute && !isAuthCallback) {
+    if (!user.email || !isAdminEmail(user.email)) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/admin/login";
+      url.searchParams.set("error", "unauthorized");
+      return createRedirectWithCookies(url);
+    }
+  }
+
+  // 3. Authorized admin visiting /admin/login -> redirect straight to /admin dashboard
+  if (
+    user?.email &&
+    isAdminEmail(user.email) &&
+    isLoginRoute &&
+    !request.nextUrl.searchParams.has("error")
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/admin";
+    return createRedirectWithCookies(url);
   }
 
   return supabaseResponse;

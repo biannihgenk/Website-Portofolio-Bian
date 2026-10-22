@@ -111,18 +111,27 @@ export interface Database {
           id: string;
           key: string;
           value: Json;
+          description: string | null;
+          is_public: boolean;
+          created_at: string;
           updated_at: string;
         };
         Insert: {
           id?: string;
           key: string;
-          value: Json;
+          value?: Json;
+          description?: string | null;
+          is_public?: boolean;
+          created_at?: string;
           updated_at?: string;
         };
         Update: {
           id?: string;
           key?: string;
           value?: Json;
+          description?: string | null;
+          is_public?: boolean;
+          created_at?: string;
           updated_at?: string;
         };
         Relationships: [];

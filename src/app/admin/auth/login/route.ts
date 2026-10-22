@@ -38,7 +38,8 @@ export async function POST(request: NextRequest) {
     // Send magic link
     const supabase = await createClient();
     const env = getClientEnv();
-    const redirectTo = `${env.NEXT_PUBLIC_SITE_URL}/admin/auth/callback`;
+    const siteUrl = env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "");
+    const redirectTo = `${siteUrl}/admin/auth/callback`;
 
     const { error } = await supabase.auth.signInWithOtp({
       email,

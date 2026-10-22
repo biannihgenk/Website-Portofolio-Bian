@@ -15,6 +15,10 @@ import type { Database } from "@/types/database.types";
  * NEVER expose this client to client-side code.
  */
 export function createAdminClient() {
+  if (typeof window !== "undefined") {
+    throw new Error("❌ Security Violation: createAdminClient cannot be executed in browser code.");
+  }
+
   const clientEnv = getClientEnv();
   const serverEnv = getServerEnv();
 
