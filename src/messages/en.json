@@ -1,0 +1,26 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "profile": "Profile",
+    "projects": "Projects",
+    "achievements": "Achievements",
+    "education": "Education",
+    "gallery": "Gallery",
+    "blog": "Blog",
+    "contact": "Contact"
+  },
+  "common": {
+    "readMore": "Read More",
+    "viewAll": "View All",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "notFound": "Page not found",
+    "backToHome": "Back to Home",
+    "language": "Language"
+  },
+  "meta": {
+    "siteTitle": "Portfolio Debian Firwanto",
+    "siteDescription": "Personal portfolio of Debian Firwanto"
+  }
+}

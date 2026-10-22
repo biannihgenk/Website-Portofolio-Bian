@@ -1,0 +1,26 @@
+{
+  "nav": {
+    "home": "Beranda",
+    "about": "Tentang",
+    "profile": "Profil",
+    "projects": "Proyek",
+    "achievements": "Pencapaian",
+    "education": "Pendidikan",
+    "gallery": "Galeri",
+    "blog": "Blog",
+    "contact": "Kontak"
+  },
+  "common": {
+    "readMore": "Baca Selengkapnya",
+    "viewAll": "Lihat Semua",
+    "loading": "Memuat...",
+    "error": "Terjadi kesalahan",
+    "notFound": "Halaman tidak ditemukan",
+    "backToHome": "Kembali ke Beranda",
+    "language": "Bahasa"
+  },
+  "meta": {
+    "siteTitle": "Portfolio Debian Firwanto",
+    "siteDescription": "Portfolio pribadi Debian Firwanto"
+  }
+}
