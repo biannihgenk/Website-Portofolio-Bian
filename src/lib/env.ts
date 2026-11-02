@@ -28,7 +28,8 @@ const rawClientEnvSchema = z.object({
     .min(1, "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY is required"),
   NEXT_PUBLIC_SITE_URL: z
     .string()
-    .url("NEXT_PUBLIC_SITE_URL must be a valid URL"),
+    .url("NEXT_PUBLIC_SITE_URL must be a valid URL")
+    .default("https://debianfirwanto.com"),
 });
 
 export interface ClientEnv {
@@ -45,6 +46,16 @@ export interface ServerEnv {
 }
 
 /**
+ * Returns the parsed admin email allowlist without accessing server secret keys.
+ */
+export function getAdminAllowlist(): string[] {
+  return (process.env.ADMIN_EMAIL_ALLOWLIST || "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+/**
  * Validates and returns client-safe environment variables.
  * Supports both modern (NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) and legacy (NEXT_PUBLIC_SUPABASE_ANON_KEY) naming.
  * Safe to call from both server and client code.
@@ -55,11 +66,17 @@ export function getClientEnv(): ClientEnv {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
     process.env.SUPABASE_PUBLISHABLE_KEY;
 
+  const rawSiteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (process.env.NEXT_PUBLIC_VERCEL_URL
+      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+      : "https://debianfirwanto.com");
+
   const parsed = rawClientEnvSchema.safeParse({
     NEXT_PUBLIC_SUPABASE_URL:
       process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL,
     publishableKey,
-    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
+    NEXT_PUBLIC_SITE_URL: rawSiteUrl,
   });
 
   if (!parsed.success) {
@@ -123,6 +140,5 @@ export function getServerEnv(): ServerEnv {
  * Must only be called from server-side code.
  */
 export function isAdminEmail(email: string): boolean {
-  const { ADMIN_EMAIL_ALLOWLIST } = getServerEnv();
-  return ADMIN_EMAIL_ALLOWLIST.includes(email.toLowerCase().trim());
+  return getAdminAllowlist().includes(email.toLowerCase().trim());
 }

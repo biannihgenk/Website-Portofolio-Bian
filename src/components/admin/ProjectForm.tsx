@@ -3,7 +3,6 @@
 import React, { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import type { Project } from "@/types/content";
 import {
   PROJECT_STATUS_OPTIONS,
@@ -14,9 +13,8 @@ import {
 import {
   createProjectAction,
   updateProjectAction,
-  uploadProjectCoverAction,
 } from "@/lib/actions/projects";
-import { getStoragePublicUrl } from "@/lib/supabase/storage";
+import { MediaUploader } from "@/components/admin/MediaUploader";
 
 const POPULAR_TECH_SUGGESTIONS = [
   "Next.js",
@@ -65,13 +63,8 @@ export function ProjectForm({ project, mode }: ProjectFormProps) {
   const [technologies, setTechnologies] = useState<string[]>(initialTechs);
   const [techInput, setTechInput] = useState("");
 
-  // Cover Image & Upload State
+  // Cover Image State
   const [coverImagePath, setCoverImagePath] = useState<string | null>(project?.cover_image_path ?? null);
-  const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | null>(
-    project?.cover_image_path ? getStoragePublicUrl(project.cover_image_path) : null
-  );
-  const [isUploadingImage, setIsUploadingImage] = useState(false);
-  const [uploadError, setUploadError] = useState<string | null>(null);
 
   // Validation & Error Feedback
   const [actionState, setActionState] = useState<ProjectActionState>({});
@@ -102,40 +95,6 @@ export function ProjectForm({ project, mode }: ProjectFormProps) {
 
   const handleRemoveTechnology = (techToRemove: string) => {
     setTechnologies(technologies.filter((t) => t !== techToRemove));
-  };
-
-  // Cover Image File Upload Handler
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setIsUploadingImage(true);
-    setUploadError(null);
-
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("slug", slug || "project");
-
-    try {
-      const res = await uploadProjectCoverAction(formData);
-      if (res.success && res.path && res.publicUrl) {
-        setCoverImagePath(res.path);
-        setCoverPreviewUrl(res.publicUrl);
-      } else {
-        setUploadError(res.error || "Gagal mengunggah gambar cover.");
-      }
-    } catch (err: unknown) {
-      setUploadError(err instanceof Error ? err.message : "Terjadi kesalahan upload.");
-    } finally {
-      setIsUploadingImage(false);
-      // Reset input value
-      e.target.value = "";
-    }
-  };
-
-  const handleRemoveCover = () => {
-    setCoverImagePath(null);
-    setCoverPreviewUrl(null);
   };
 
   // Form Submit Handler
@@ -444,100 +403,16 @@ export function ProjectForm({ project, mode }: ProjectFormProps) {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-          {/* Upload Input */}
-          <div className="space-y-3">
-            <label className="block text-xs font-medium text-zinc-300">
-              Unggah Gambar Cover Baru
-            </label>
-            <div className="rounded-lg border-2 border-dashed border-zinc-800 bg-zinc-950/60 p-5 text-center hover:border-zinc-700 transition-colors">
-              <input
-                type="file"
-                id="cover-file-input"
-                accept="image/jpeg,image/png,image/webp,image/avif"
-                onChange={handleFileChange}
-                disabled={isUploadingImage}
-                className="hidden"
-              />
-              <label
-                htmlFor="cover-file-input"
-                className="cursor-pointer inline-flex flex-col items-center justify-center space-y-2"
-              >
-                <span className="p-3 rounded-full bg-zinc-900 text-zinc-400 border border-zinc-800">
-                  📁
-                </span>
-                <span className="text-xs font-medium text-blue-400 hover:text-blue-300">
-                  {isUploadingImage ? "Mengunggah ke Supabase Storage..." : "Pilih file gambar"}
-                </span>
-                <span className="text-[11px] text-zinc-500">
-                  JPEG, PNG, WebP, AVIF hingga 5MB
-                </span>
-              </label>
-            </div>
-
-            {uploadError && (
-              <p className="text-xs text-rose-400 bg-rose-950/30 p-2.5 rounded border border-rose-900/50">
-                {uploadError}
-              </p>
-            )}
-
-            {/* Custom Storage Path Input fallback */}
-            <div>
-              <label className="block text-[11px] font-medium text-zinc-400 mb-1">
-                Atau masukkan Path / URL Gambar secara langsung:
-              </label>
-              <input
-                type="text"
-                value={coverImagePath || ""}
-                onChange={(e) => {
-                  const val = e.target.value.trim();
-                  setCoverImagePath(val || null);
-                  setCoverPreviewUrl(val ? getStoragePublicUrl(val) : null);
-                }}
-                placeholder="projects/project-cover.webp"
-                className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-1.5 text-xs font-mono text-zinc-200 placeholder-zinc-700 focus:border-zinc-600 focus:outline-none"
-              />
-            </div>
-          </div>
-
-          {/* Image Preview */}
-          <div>
-            <label className="block text-xs font-medium text-zinc-300 mb-2">
-              Pratinjau Cover
-            </label>
-            {coverPreviewUrl ? (
-              <div className="relative rounded-xl border border-zinc-800 bg-zinc-950 overflow-hidden group">
-                <div className="aspect-video relative w-full bg-zinc-900">
-                  <Image
-                    src={coverPreviewUrl}
-                    alt="Pratinjau Cover Proyek"
-                    fill
-                    unoptimized
-                    className="object-cover"
-                  />
-                </div>
-                <div className="p-3 bg-zinc-950/90 border-t border-zinc-800 flex items-center justify-between">
-                  <span className="text-[11px] font-mono text-zinc-400 truncate max-w-[200px]" title={coverImagePath || ""}>
-                    {coverImagePath}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={handleRemoveCover}
-                    className="text-xs text-rose-400 hover:text-rose-300 font-medium"
-                  >
-                    Hapus Cover
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="aspect-video rounded-xl border border-dashed border-zinc-800 bg-zinc-950/40 flex flex-col items-center justify-center text-zinc-600 text-xs">
-                <span>Belum ada gambar cover dipilih</span>
-                <span className="text-[10px] text-zinc-700 mt-1">
-                  Thumbnail fallback default akan digunakan
-                </span>
-              </div>
-            )}
-          </div>
+        <div className="max-w-xl">
+          <MediaUploader
+            value={coverImagePath}
+            onChange={setCoverImagePath}
+            folder="projects"
+            prefix={slug || "project"}
+            label="Gambar Cover Proyek"
+            aspectRatio="video"
+            helperText="Format JPEG, PNG, WebP, AVIF maksimal 5 MB"
+          />
         </div>
       </div>
 
@@ -754,7 +629,7 @@ export function ProjectForm({ project, mode }: ProjectFormProps) {
         <div className="flex items-center gap-3">
           <button
             type="submit"
-            disabled={isPending || isUploadingImage}
+            disabled={isPending}
             className="inline-flex items-center gap-2 rounded-lg bg-zinc-100 px-5 py-2 text-xs font-semibold text-zinc-950 transition-all hover:bg-white disabled:opacity-50"
           >
             {isPending ? (

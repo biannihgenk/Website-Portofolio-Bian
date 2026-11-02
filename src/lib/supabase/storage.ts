@@ -1,5 +1,3 @@
-import { getClientEnv } from "@/lib/env";
-
 export const PORTFOLIO_BUCKET = "portfolio-public";
 export const ALLOWED_IMAGE_TYPES = [
   "image/jpeg",
@@ -19,8 +17,8 @@ export function getStoragePublicUrl(path: string | null | undefined): string | n
     return path;
   }
 
-  const env = getClientEnv();
-  const cleanBase = env.NEXT_PUBLIC_SUPABASE_URL.replace(/\/$/, "");
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+  const cleanBase = supabaseUrl.replace(/\/$/, "");
   const cleanPath = path.replace(/^\//, "");
 
   // If path already includes bucket prefix, normalize

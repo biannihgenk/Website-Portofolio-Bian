@@ -211,7 +211,7 @@ export async function getBlogPosts(options?: {
   const supabase = await createClient();
   let query = supabase
     .from("blog_posts")
-    .select("*")
+    .select("*, category:blog_categories(*)")
     .eq("status", "published")
     .order("published_at", { ascending: false });
 
@@ -230,7 +230,7 @@ export async function getBlogPosts(options?: {
     console.error("Error fetching published blog posts:", error.message);
     return [];
   }
-  return data ?? [];
+  return (data as unknown as BlogPost[]) ?? [];
 }
 
 /**
@@ -240,7 +240,7 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("blog_posts")
-    .select("*")
+    .select("*, category:blog_categories(*)")
     .eq("slug", slug)
     .eq("status", "published")
     .maybeSingle();
@@ -249,7 +249,7 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
     console.error(`Error fetching blog post with slug "${slug}":`, error.message);
     return null;
   }
-  return data;
+  return (data as unknown as BlogPost) ?? null;
 }
 
 // ─────────────────────────────────────────────
@@ -322,42 +322,129 @@ export async function getDistinctProjectCategories(): Promise<string[]> {
 }
 
 /**
- * Fetches all blog posts for the admin dashboard.
+ * Fetches all achievements for the admin dashboard with optional filters.
  */
-export async function getAdminBlogPosts(options?: {
-  status?: "draft" | "published" | "archived";
-}): Promise<BlogPost[]> {
+export async function getAdminAchievements(options?: {
+  status?: "draft" | "published" | "archived" | "all";
+  category?: string;
+  search?: string;
+}): Promise<Achievement[]> {
   await requireAdmin();
   const supabase = await createClient();
   let query = supabase
-    .from("blog_posts")
+    .from("achievements")
     .select("*")
+    .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false });
 
-  if (options?.status) {
+  if (options?.status && options.status !== "all") {
     query = query.eq("status", options.status);
+  }
+  if (options?.category && options.category !== "all") {
+    query = query.eq("category", options.category);
+  }
+  if (options?.search && options.search.trim() !== "") {
+    const s = options.search.trim();
+    query = query.or(`title_id.ilike.%${s}%,title_en.ilike.%${s}%,organization.ilike.%${s}%`);
   }
 
   const { data, error } = await query;
-  if (error) throw new Error(`Failed to load admin blog posts: ${error.message}`);
+  if (error) throw new Error(`Failed to load admin achievements: ${error.message}`);
   return data ?? [];
+}
+
+export async function getAdminAchievementById(id: string): Promise<Achievement | null> {
+  await requireAdmin();
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("achievements")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) throw new Error(`Failed to load achievement: ${error.message}`);
+  return data;
+}
+
+export async function getDistinctAchievementCategories(): Promise<string[]> {
+  await requireAdmin();
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("achievements").select("category");
+  if (error || !data) return [];
+  const unique = Array.from(new Set(data.map((r) => r.category).filter(Boolean)));
+  return unique.sort();
+}
+
+/**
+ * Fetches all education records for the admin dashboard.
+ */
+export async function getAdminEducation(options?: {
+  status?: "draft" | "published" | "archived" | "all";
+  entry_type?: "education" | "certificate" | "training" | "all";
+  search?: string;
+}): Promise<Education[]> {
+  await requireAdmin();
+  const supabase = await createClient();
+  let query = supabase
+    .from("education")
+    .select("*")
+    .order("sort_order", { ascending: true })
+    .order("start_date", { ascending: false });
+
+  if (options?.status && options.status !== "all") {
+    query = query.eq("status", options.status);
+  }
+  if (options?.entry_type && options.entry_type !== "all") {
+    query = query.eq("entry_type", options.entry_type);
+  }
+  if (options?.search && options.search.trim() !== "") {
+    const s = options.search.trim();
+    query = query.or(`institution.ilike.%${s}%,program.ilike.%${s}%`);
+  }
+
+  const { data, error } = await query;
+  if (error) throw new Error(`Failed to load admin education: ${error.message}`);
+  return data ?? [];
+}
+
+export async function getAdminEducationById(id: string): Promise<Education | null> {
+  await requireAdmin();
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("education")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) throw new Error(`Failed to load education record: ${error.message}`);
+  return data;
 }
 
 /**
  * Fetches all gallery items for the admin dashboard.
  */
 export async function getAdminGalleryItems(options?: {
-  status?: "draft" | "published" | "archived";
+  status?: "draft" | "published" | "archived" | "all";
+  category?: string;
+  search?: string;
 }): Promise<GalleryItem[]> {
   await requireAdmin();
   const supabase = await createClient();
   let query = supabase
     .from("gallery_items")
     .select("*")
+    .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false });
 
-  if (options?.status) {
+  if (options?.status && options.status !== "all") {
     query = query.eq("status", options.status);
+  }
+  if (options?.category && options.category !== "all") {
+    query = query.eq("category", options.category);
+  }
+  if (options?.search && options.search.trim() !== "") {
+    const s = options.search.trim();
+    query = query.or(`title.ilike.%${s}%,caption_id.ilike.%${s}%,caption_en.ilike.%${s}%`);
   }
 
   const { data, error } = await query;
@@ -365,33 +452,107 @@ export async function getAdminGalleryItems(options?: {
   return data ?? [];
 }
 
-/**
- * Fetches all achievements for the admin dashboard.
- */
-export async function getAdminAchievements(): Promise<Achievement[]> {
+export async function getAdminGalleryItemById(id: string): Promise<GalleryItem | null> {
   await requireAdmin();
   const supabase = await createClient();
   const { data, error } = await supabase
-    .from("achievements")
+    .from("gallery_items")
     .select("*")
-    .order("created_at", { ascending: false });
+    .eq("id", id)
+    .maybeSingle();
 
-  if (error) throw new Error(`Failed to load admin achievements: ${error.message}`);
-  return data ?? [];
+  if (error) throw new Error(`Failed to load gallery item: ${error.message}`);
+  return data;
+}
+
+export async function getDistinctGalleryCategories(): Promise<string[]> {
+  await requireAdmin();
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("gallery_items").select("category");
+  if (error || !data) return [];
+  const unique = Array.from(new Set(data.map((r) => r.category).filter(Boolean)));
+  return unique.sort();
 }
 
 /**
- * Fetches all education records for the admin dashboard.
+ * Fetches all blog posts for the admin dashboard.
  */
-export async function getAdminEducation(): Promise<Education[]> {
+export async function getAdminBlogPosts(options?: {
+  status?: "draft" | "published" | "archived" | "all";
+  categoryId?: string;
+  search?: string;
+}): Promise<BlogPost[]> {
+  await requireAdmin();
+  const supabase = await createClient();
+  let query = supabase
+    .from("blog_posts")
+    .select("*, category:blog_categories(*)")
+    .order("created_at", { ascending: false });
+
+  if (options?.status && options.status !== "all") {
+    query = query.eq("status", options.status);
+  }
+  if (options?.categoryId && options.categoryId !== "all") {
+    query = query.eq("category_id", options.categoryId);
+  }
+  if (options?.search && options.search.trim() !== "") {
+    const s = options.search.trim();
+    query = query.or(`title_id.ilike.%${s}%,title_en.ilike.%${s}%,slug.ilike.%${s}%`);
+  }
+
+  const { data, error } = await query;
+  if (error) throw new Error(`Failed to load admin blog posts: ${error.message}`);
+  return (data as unknown as BlogPost[]) ?? [];
+}
+
+export async function getAdminBlogPostById(id: string): Promise<BlogPost | null> {
   await requireAdmin();
   const supabase = await createClient();
   const { data, error } = await supabase
-    .from("education")
+    .from("blog_posts")
     .select("*")
-    .order("sort_order", { ascending: true });
+    .eq("id", id)
+    .maybeSingle();
 
-  if (error) throw new Error(`Failed to load admin education: ${error.message}`);
+  if (error) throw new Error(`Failed to load blog post: ${error.message}`);
+  return data;
+}
+
+export async function getAdminBlogCategories(): Promise<BlogCategory[]> {
+  await requireAdmin();
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("blog_categories")
+    .select("*")
+    .order("sort_order", { ascending: true })
+    .order("name_id", { ascending: true });
+
+  if (error) throw new Error(`Failed to load blog categories: ${error.message}`);
+  return data ?? [];
+}
+
+export async function getAdminBlogCategoryById(id: string): Promise<BlogCategory | null> {
+  await requireAdmin();
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("blog_categories")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) throw new Error(`Failed to load blog category: ${error.message}`);
+  return data;
+}
+
+export async function getAdminSiteSettings(): Promise<SiteSetting[]> {
+  await requireAdmin();
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("site_settings")
+    .select("*")
+    .order("key", { ascending: true });
+
+  if (error) throw new Error(`Failed to load site settings: ${error.message}`);
   return data ?? [];
 }
 
@@ -401,19 +562,26 @@ export async function getAdminEducation(): Promise<Education[]> {
 export async function getAdminMediaAssets(options?: {
   page?: number;
   pageSize?: number;
+  search?: string;
 }): Promise<PaginatedResponse<MediaAsset>> {
   await requireAdmin();
   const supabase = await createClient();
   const page = Math.max(1, options?.page ?? 1);
-  const pageSize = options?.pageSize ?? 20;
+  const pageSize = options?.pageSize ?? 24;
   const start = (page - 1) * pageSize;
   const end = start + pageSize - 1;
 
-  const { data, count, error } = await supabase
+  let query = supabase
     .from("media_assets")
     .select("*", { count: "exact" })
-    .order("created_at", { ascending: false })
-    .range(start, end);
+    .order("created_at", { ascending: false });
+
+  if (options?.search && options.search.trim() !== "") {
+    const s = options.search.trim();
+    query = query.or(`original_filename.ilike.%${s}%,storage_path.ilike.%${s}%`);
+  }
+
+  const { data, count, error } = await query.range(start, end);
 
   if (error) throw new Error(`Failed to load media assets: ${error.message}`);
 

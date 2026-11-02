@@ -1,26 +1,371 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --font-serif: var(--font-serif), "Playfair Display", Georgia, serif;
+  --font-sans: var(--font-sans), "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-mono: var(--font-mono), "JetBrains Mono", monospace;
+  --font-handwriting: var(--font-handwriting), "Caveat", cursive;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --surface: #fbf9f3;
+    --surface-low: #f5f3ee;
+    --surface-card: #ffffff;
+    --surface-warm: #f5f2ea;
+    --surface-dim: #eae6dc;
+    --surface-container: #f0eee8;
+    --surface-container-low: #f5f3ee;
+    --surface-container-high: #eae8e2;
+    --surface-container-highest: #e4e2dd;
+
+    --charcoal: #222222;
+    --charcoal-muted: #6b6863;
+    --ink-muted: #686660;
+
+    --primary: #0b0c0c;
+    --primary-container: #222222;
+    --on-primary: #ffffff;
+
+    --secondary: #2563eb;
+    --secondary-container: #dbeafe;
+    --secondary-fixed: #bfdbfe;
+    --on-secondary-fixed: #1e3a8a;
+    --on-secondary-container: #1d4ed8;
+
+    --tertiary: #1e0300;
+    --tertiary-container: #3f1407;
+
+    --blue-accent: #2563eb;
+    --accent-blue-soft: #eff6ff;
+    --lime-accent: #dbeafe;
+    --accent-lime-soft: #eff6ff;
+    --peach-accent: #f3b9a7;
+    --accent-peach-soft: #f3b9a7;
+    --accent-sage-subtle: #dbeafe;
+
+    --border-subtle: #e5e1d4;
+    --border-warm: #ded8cb;
+    --tape-cream: rgba(245, 242, 234, 0.85);
+
+    --font-serif: "Playfair Display", Georgia, serif;
+    --font-sans: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", monospace;
+    --font-handwriting: "Caveat", cursive;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--surface);
+    color: var(--charcoal);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--surface);
+    color: var(--charcoal);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: #dbeafe;
+    color: #1e3a8a;
+  }
+
+  :focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 3px;
+    border-radius: 4px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Background textures & patterns */
+.blueprint-dots {
+  background-image: radial-gradient(rgba(34, 34, 34, 0.1) 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
 }
+
+.grid-paper {
+  background-size: 16px 16px;
+  background-image: 
+    linear-gradient(to right, rgba(220, 215, 203, 0.5) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(220, 215, 203, 0.5) 1px, transparent 1px);
+}
+
+.badge-stamp {
+  border: 1.5px dashed #222222;
+}
+
+.shadow-scrapbook {
+  box-shadow: 0 8px 30px rgba(45, 38, 30, 0.08);
+}
+
+.shadow-scrapbook-lg {
+  box-shadow: 0 20px 40px rgba(45, 38, 30, 0.12);
+}
+
+.shadow-tape {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* Collaborative Cursors Organic Roaming Keyframes */
+@keyframes roam-1 {
+  0%, 100% { transform: translate(0px, 0px); }
+  25% { transform: translate(35px, -24px); }
+  50% { transform: translate(18px, 32px); }
+  75% { transform: translate(-28px, 14px); }
+}
+
+@keyframes roam-2 {
+  0%, 100% { transform: translate(0px, 0px); }
+  30% { transform: translate(-42px, 20px); }
+  60% { transform: translate(25px, -30px); }
+  85% { transform: translate(38px, 16px); }
+}
+
+@keyframes roam-3 {
+  0%, 100% { transform: translate(0px, 0px); }
+  20% { transform: translate(28px, 30px); }
+  55% { transform: translate(-34px, -18px); }
+  80% { transform: translate(-14px, 22px); }
+}
+
+@keyframes roam-4 {
+  0%, 100% { transform: translate(0px, 0px); }
+  35% { transform: translate(-30px, -28px); }
+  70% { transform: translate(32px, 18px); }
+}
+
+.cursor-float-1 { animation: roam-1 14s ease-in-out infinite; }
+.cursor-float-2 { animation: roam-2 16s ease-in-out infinite; }
+.cursor-float-3 { animation: roam-3 18s ease-in-out infinite; }
+.cursor-float-4 { animation: roam-4 15s ease-in-out infinite; }
+
+/* Kinetic Character Hover Micro-Interaction */
+.kinetic-char {
+  display: inline-block;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease;
+  user-select: none;
+}
+
+.kinetic-char:hover {
+  transform: translateY(-8px) rotate(-2deg) scale(1.04);
+}
+
+/* Washi tape visual accents */
+.washi-tape {
+  background: rgba(245, 242, 234, 0.85);
+  backdrop-filter: blur(2px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+::-webkit-scrollbar-thumb {
+  background: #ded8cb;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #c2bcb0;
+}
+
+@keyframes softFloat {
+  0%, 100% { transform: translateY(0px) rotate(-3deg); }
+  50% { transform: translateY(-6px) rotate(-2deg); }
+}
+
+@keyframes softFloatReverse {
+  0%, 100% { transform: translateY(0px) rotate(4deg); }
+  50% { transform: translateY(-7px) rotate(5deg); }
+}
+
+@keyframes pulseBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-soft-float { animation: softFloat 6s ease-in-out infinite; }
+.animate-soft-float-rev { animation: softFloatReverse 7s ease-in-out infinite; }
+.animate-cursor-blink { animation: pulseBlink 1s infinite; }
+
+/* Infinite Ribbon Marquee Keyframes */
+@keyframes marquee-scroll-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-scroll-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.animate-marquee-left {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll-left 28s linear infinite;
+}
+
+.animate-marquee-right {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll-right 32s linear infinite;
+}
+
+.animate-marquee-left:hover,
+.animate-marquee-right:hover {
+  animation-play-state: paused;
+}
+
+/* Floating 3D Interactive Sticker Physics */
+@keyframes float-sticker-1 {
+  0%, 100% { transform: translateY(0px) rotate(-3deg) scale(1); }
+  50% { transform: translateY(-14px) rotate(1deg) scale(1.02); }
+}
+
+@keyframes float-sticker-2 {
+  0%, 100% { transform: translateY(0px) rotate(3deg) scale(1); }
+  50% { transform: translateY(-12px) rotate(-1deg) scale(1.02); }
+}
+
+.animate-float-sticker-1 {
+  animation: float-sticker-1 5.5s ease-in-out infinite;
+}
+
+.animate-float-sticker-2 {
+  animation: float-sticker-2 6.5s ease-in-out infinite;
+}
+
+/* Metallic / Liquid Sheen Shimmer Effect for Hero Typography */
+@keyframes text-metallic-gleam {
+  0% {
+    background-position: 220% center;
+  }
+  100% {
+    background-position: -120% center;
+  }
+}
+
+.text-shimmer-gleam {
+  background: linear-gradient(
+    115deg,
+    #111827 0%,
+    #1f2937 20%,
+    #4b5563 38%,
+    #ffffff 50%,
+    #60a5fa 54%,
+    #1f2937 65%,
+    #111827 100%
+  );
+  background-size: 260% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-metallic-gleam 6.5s ease-in-out infinite;
+}
+
+.text-shimmer-blue {
+  background: linear-gradient(
+    115deg,
+    #1e3a8a 0%,
+    #2563eb 25%,
+    #93c5fd 45%,
+    #ffffff 50%,
+    #38bdf8 55%,
+    #2563eb 70%,
+    #1e3a8a 100%
+  );
+  background-size: 260% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-metallic-gleam 5s ease-in-out infinite;
+}
+
+/* Subtle glowing pulse for neon badges */
+@keyframes neon-pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.25), 0 0 30px rgba(37, 99, 235, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(37, 99, 235, 0.45), 0 0 45px rgba(37, 99, 235, 0.2);
+  }
+}
+
+.neon-glow-blue {
+  animation: neon-pulse-glow 3s ease-in-out infinite;
+}
+
+/* Infinite gliding tickers for Tech Stack Motion */
+@keyframes glide-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes glide-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-glide-left {
+  animation: glide-left 22s linear infinite;
+  will-change: transform;
+}
+
+.animate-glide-right {
+  animation: glide-right 24s linear infinite;
+  will-change: transform;
+}
+
+@keyframes icon-float-subtle {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-3.5px) rotate(1.5deg);
+  }
+}
+
+.animate-icon-float {
+  animation: icon-float-subtle 3s ease-in-out infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .cursor-float-1,
+  .cursor-float-2,
+  .cursor-float-3,
+  .cursor-float-4,
+  .animate-soft-float,
+  .animate-soft-float-rev,
+  .animate-cursor-blink {
+    animation: none !important;
+  }
+  .kinetic-char {
+    transition: none !important;
+  }
+}
+

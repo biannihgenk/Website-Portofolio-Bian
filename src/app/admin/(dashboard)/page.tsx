@@ -5,7 +5,7 @@ import {
   type ModuleStatResult,
   type RecentContentItem,
 } from "@/lib/content/queries";
-import { getClientEnv, getServerEnv } from "@/lib/env";
+import { getClientEnv, getAdminAllowlist } from "@/lib/env";
 import {
   IconProjects,
   IconAchievements,
@@ -114,7 +114,7 @@ function SummaryCard({ title, description, href, icon: Icon, result }: SummaryCa
 
 export default async function AdminDashboardOverviewPage() {
   const clientEnv = getClientEnv();
-  const serverEnv = getServerEnv();
+  const adminAllowlistCount = getAdminAllowlist().length;
 
   // Safely attempt to fetch database statistics & recent content
   let statsData: Awaited<ReturnType<typeof getAdminStats>> | null = null;
@@ -458,7 +458,7 @@ export default async function AdminDashboardOverviewPage() {
             <li className="flex items-center justify-between">
               <span>Allowlist Enforcement</span>
               <span className="font-mono text-zinc-300">
-                {serverEnv.ADMIN_EMAIL_ALLOWLIST.length} permitted admin(s)
+                {adminAllowlistCount} permitted admin(s)
               </span>
             </li>
             <li className="flex items-center justify-between">
@@ -476,20 +476,20 @@ export default async function AdminDashboardOverviewPage() {
           </ul>
         </div>
 
-        {/* Phase Scope Guidelines */}
-        <div className="rounded-xl border border-blue-900/30 bg-blue-950/10 p-5 space-y-2 text-xs text-zinc-400">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-blue-300 pb-2 border-b border-blue-900/40">
-            📌 CMS Phase Boundary Notice
+        {/* CMS Operational Status */}
+        <div className="rounded-xl border border-emerald-900/30 bg-emerald-950/10 p-5 space-y-2 text-xs text-zinc-400">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-emerald-300 pb-2 border-b border-emerald-900/40">
+            ✓ CMS Operational Status
           </h3>
           <p className="leading-relaxed">
-            The foundation layout, authorization barrier, database types, and live query pipelines are active. Visual CRUD editing forms (rich text editors, media uploaders, sorting) will be implemented in subsequent phases using approved Google Stitch designs.
+            All content management modules (Projects, Profile, Achievements, Education, Gallery, Blog Posts & Categories, Site Settings, Media Library) are fully implemented and connected to Supabase PostgreSQL with strict RLS and Storage policies.
           </p>
           <div className="pt-2">
             <Link
               href="/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-blue-400 hover:text-blue-300 font-medium"
+              className="inline-flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 font-medium"
             >
               <span>Preview current public site</span>
               <IconExternalLink className="w-3.5 h-3.5" />

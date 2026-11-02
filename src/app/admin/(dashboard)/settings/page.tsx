@@ -1,19 +1,23 @@
 import Link from "next/link";
-import { getSiteSettings } from "@/lib/content/queries";
+import { getAdminSiteSettings } from "@/lib/content/queries";
+import { SiteSettingsManager } from "@/components/admin/SiteSettingsManager";
 import type { SiteSetting } from "@/types/content";
+
+export const dynamic = "force-dynamic";
 
 export default async function AdminSettingsPage() {
   let settings: SiteSetting[] = [];
-  let errorMsg = null;
+  let errorMsg: string | null = null;
 
   try {
-    settings = await getSiteSettings();
+    settings = await getAdminSiteSettings();
   } catch (err: unknown) {
-    errorMsg = err instanceof Error ? err.message : "Database connection pending";
+    errorMsg = err instanceof Error ? err.message : "Gagal memuat pengaturan situs.";
   }
 
   return (
     <div className="space-y-6 max-w-5xl">
+      {/* Header */}
       <div>
         <div className="flex items-center gap-2">
           <Link href="/admin" className="text-xs text-zinc-500 hover:text-zinc-300">
@@ -22,38 +26,21 @@ export default async function AdminSettingsPage() {
           <span className="text-xs text-zinc-600">/</span>
           <span className="text-xs text-zinc-300">Settings</span>
         </div>
-        <h2 className="text-2xl font-bold tracking-tight text-white mt-1">
-          Site Configuration & Settings
-        </h2>
+        <h1 className="text-2xl font-bold tracking-tight text-white mt-1">
+          Pengaturan Situs & SEO
+        </h1>
+        <p className="text-xs text-zinc-400 mt-0.5">
+          Konfigurasi identitas portofolio, metadata mesin pencari, kontak, dan tautan sosial.
+        </p>
       </div>
 
       {errorMsg ? (
-        <div className="rounded-xl border border-amber-500/20 bg-amber-500/10 p-5 text-sm text-amber-300">
-          <p className="font-medium">Database Notice</p>
-          <p className="mt-1 text-xs text-amber-400/80">{errorMsg}</p>
+        <div className="rounded-xl border border-rose-500/20 bg-rose-500/10 p-5 text-sm text-rose-300">
+          <p className="font-semibold text-rose-200">Gagal Memuat Pengaturan</p>
+          <p className="mt-1 text-xs text-rose-400/80">{errorMsg}</p>
         </div>
       ) : (
-        <div className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-6 space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-zinc-800">
-            <h3 className="text-sm font-semibold text-zinc-200">Database Settings Key-Values</h3>
-            <span className="text-xs text-zinc-500">{settings.length} key(s) configured</span>
-          </div>
-
-          {settings.length === 0 ? (
-            <p className="text-xs text-zinc-500">
-              No custom settings rows in <code className="font-mono text-zinc-300">public.site_settings</code>. Default fallback configurations in <code className="font-mono text-zinc-300">src/lib/env.ts</code> are active.
-            </p>
-          ) : (
-            <div className="divide-y divide-zinc-800/60 font-mono text-xs">
-              {settings.map((s) => (
-                <div key={s.id} className="py-2.5 flex justify-between">
-                  <span className="text-zinc-400">{s.key}</span>
-                  <span className="text-zinc-200">{JSON.stringify(s.value)}</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        <SiteSettingsManager initialSettings={settings} />
       )}
     </div>
   );

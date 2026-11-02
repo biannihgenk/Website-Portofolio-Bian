@@ -23,11 +23,13 @@ export type GalleryItem = Database["public"]["Tables"]["gallery_items"]["Row"];
 export type GalleryItemInsert = Database["public"]["Tables"]["gallery_items"]["Insert"];
 export type GalleryItemUpdate = Database["public"]["Tables"]["gallery_items"]["Update"];
 
-export type BlogPost = Database["public"]["Tables"]["blog_posts"]["Row"];
+export type BlogCategory = Database["public"]["Tables"]["blog_categories"]["Row"];
+
+export type BlogPost = Database["public"]["Tables"]["blog_posts"]["Row"] & {
+  category?: BlogCategory | null;
+};
 export type BlogPostInsert = Database["public"]["Tables"]["blog_posts"]["Insert"];
 export type BlogPostUpdate = Database["public"]["Tables"]["blog_posts"]["Update"];
-
-export type BlogCategory = Database["public"]["Tables"]["blog_categories"]["Row"];
 
 export type MediaAsset = Database["public"]["Tables"]["media_assets"]["Row"];
 
