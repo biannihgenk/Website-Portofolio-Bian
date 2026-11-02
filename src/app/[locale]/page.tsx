@@ -61,11 +61,11 @@ export async function generateMetadata({
 
   return buildPageMetadata({
     title: isId
-      ? "Debian (Bian) Firwanto — Vocational TKJ & Software Engineer"
-      : "Debian (Bian) Firwanto — Vocational TKJ & Software Engineer",
+      ? "Naufal Nizar De Bian (Debian Firwanto) — Web & Network Engineer | SMK Telkom Malang"
+      : "Naufal Nizar De Bian (Debian Firwanto) — Web & Network Engineer | SMK Telkom Malang",
     description: isId
-      ? "Portfolio pribadi dan catatan proses Debian (Bian) Firwanto. Siswa TKJ SMK Telkom Malang yang menjelajahi rekayasa perangkat lunak, infrastruktur jaringan, homelab, dan sistem digital."
-      : "Personal portfolio and process notes of Debian (Bian) Firwanto. A vocational TKJ student at SMK Telkom Malang exploring software engineering, network routing, homelab systems, and digital products.",
+      ? "Portofolio resmi dan jurnal rekayasa Naufal Nizar De Bian Setyo Firwanto (Debian Firwanto). Siswa TKJ SMK Telkom Malang berfokus pada Modern Web Development (Next.js, TypeScript) dan Network Infrastructure (MikroTik RouterOS, Cisco, Linux Debian SysAdmin)."
+      : "Official portfolio and engineering journal of Naufal Nizar De Bian Setyo Firwanto (Debian Firwanto). Vocational TKJ student at SMK Telkom Malang focusing on Modern Web (Next.js, TypeScript) and Network Infrastructure (MikroTik RouterOS, Cisco, Debian Linux SysAdmin).",
     locale,
     path: "/",
     ogType: "profile",
@@ -124,7 +124,7 @@ export default async function HomePage({
   const personJsonLd = buildPersonJsonLd({
     name: displayName,
     url: `${DEFAULT_SITE_URL.replace(/\/+$/, "")}/${locale}`,
-    jobTitle: "Vocational TKJ Student & Software Engineer",
+    jobTitle: "Web & Network Engineer",
     school,
     sameAs: [githubUrl, linkedinUrl, instagramUrl].filter(Boolean),
     imageUrl: avatarUrl,

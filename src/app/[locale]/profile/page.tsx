@@ -95,7 +95,7 @@ export default async function ProfilePage({
   const personJsonLd = buildPersonJsonLd({
     name: displayName,
     url: `${DEFAULT_SITE_URL.replace(/\/+$/, "")}/${locale}/profile`,
-    jobTitle: "Vocational TKJ Student & Software Engineer",
+    jobTitle: "Web & Network Engineer",
     school,
     sameAs: [githubUrl, linkedinUrl, instagramUrl].filter(Boolean),
     imageUrl: avatarUrl,

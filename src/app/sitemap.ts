@@ -5,13 +5,13 @@ import { DEFAULT_SITE_URL } from "@/lib/seo";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = DEFAULT_SITE_URL.replace(/\/+$/, "");
 
-  // Base public routes
+  // Base public routes and their SEO crawling priorities
   const staticRoutes = [
     { path: "", changeFrequency: "daily" as const, priority: 1.0 },
     { path: "/profile", changeFrequency: "monthly" as const, priority: 0.9 },
-    { path: "/projects", changeFrequency: "weekly" as const, priority: 0.9 },
-    { path: "/achievements", changeFrequency: "monthly" as const, priority: 0.8 },
-    { path: "/education", changeFrequency: "monthly" as const, priority: 0.8 },
+    { path: "/projects", changeFrequency: "weekly" as const, priority: 0.95 },
+    { path: "/achievements", changeFrequency: "monthly" as const, priority: 0.85 },
+    { path: "/education", changeFrequency: "monthly" as const, priority: 0.85 },
     { path: "/gallery", changeFrequency: "weekly" as const, priority: 0.8 },
     { path: "/blog", changeFrequency: "daily" as const, priority: 0.9 },
     { path: "/contact", changeFrequency: "monthly" as const, priority: 0.8 },
@@ -19,7 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const entries: MetadataRoute.Sitemap = [];
 
-  // 1. Root redirect entry
+  // 1. Root domain entry
   entries.push({
     url: baseUrl,
     lastModified: new Date(),
@@ -29,6 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       languages: {
         id: `${baseUrl}/id`,
         en: `${baseUrl}/en`,
+        "x-default": `${baseUrl}/id`,
       },
     },
   });
@@ -45,26 +46,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           languages: {
             id: `${baseUrl}/id${route.path}`,
             en: `${baseUrl}/en${route.path}`,
+            "x-default": `${baseUrl}/id${route.path}`,
           },
         },
       });
     }
   }
 
-  // 3. Published Blog Posts from Database
+  // 3. Dynamic Published Blog Posts from Supabase
   try {
     const dbPosts = await getBlogPosts().catch(() => []);
-    const allPosts = dbPosts;
-
-    // Deduplicate by slug and verify published status
     const seenSlugs = new Set<string>();
-    for (const post of allPosts) {
-      if (!post.slug || seenSlugs.has(post.slug) || post.status !== "published") continue;
+
+    for (const post of dbPosts) {
+      if (!post.slug || seenSlugs.has(post.slug) || post.status !== "published") {
+        continue;
+      }
       seenSlugs.add(post.slug);
 
-      const lastMod = post.published_at
-        ? new Date(post.published_at)
-        : new Date();
+      const lastMod = post.published_at ? new Date(post.published_at) : new Date();
 
       for (const locale of ["id", "en"]) {
         entries.push({
@@ -76,13 +76,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             languages: {
               id: `${baseUrl}/id/blog/${post.slug}`,
               en: `${baseUrl}/en/blog/${post.slug}`,
+              "x-default": `${baseUrl}/id/blog/${post.slug}`,
             },
           },
         });
       }
     }
   } catch (err) {
-    console.error("Sitemap: Failed to query blog posts:", err);
+    console.warn("Sitemap: Unable to query dynamic blog posts during generation:", err);
   }
 
   return entries;

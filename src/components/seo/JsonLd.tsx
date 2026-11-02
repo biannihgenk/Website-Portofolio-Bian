@@ -1,4 +1,12 @@
 import React from "react";
+import {
+  AUTHOR_NAME,
+  AUTHOR_PREFERRED_NAME,
+  AUTHOR_SCHOOL,
+  AUTHOR_ROLE,
+  DEFAULT_SITE_URL,
+  SOCIAL_LINKS,
+} from "@/lib/seo";
 
 interface JsonLdProps {
   data: Record<string, unknown> | Array<Record<string, unknown>>;
@@ -19,53 +27,131 @@ export function JsonLd({ data }: JsonLdProps) {
   );
 }
 
-/**
- * Generates Schema.org Person & WebSite JSON-LD for portfolio homepage/profile.
- */
-export function buildPersonJsonLd(options: {
-  name: string;
-  url: string;
-  jobTitle: string;
-  school: string;
-  sameAs: string[];
+export interface PersonJsonLdOptions {
+  name?: string;
+  url?: string;
+  jobTitle?: string;
+  school?: string;
+  sameAs?: string[];
   imageUrl?: string | null;
   description?: string;
-}) {
+}
+
+/**
+ * Generates Google-compliant Schema.org Structured Data graph including
+ * Person, ProfilePage, and WebSite entities to maximize SEO Knowledge Graph visibility.
+ */
+export function buildPersonJsonLd(options?: PersonJsonLdOptions) {
+  const baseUrl = DEFAULT_SITE_URL.replace(/\/+$/, "");
+  const currentUrl = options?.url || baseUrl;
+  const officialName = AUTHOR_NAME;
+  const preferredName = options?.name || AUTHOR_PREFERRED_NAME;
+  const schoolName = options?.school || AUTHOR_SCHOOL;
+  const jobTitle = options?.jobTitle || AUTHOR_ROLE;
+  const imageUrl =
+    options?.imageUrl || `${baseUrl}/images/foto_bian.png`;
+
+  const sameAsList = Array.from(
+    new Set([
+      ...(options?.sameAs || []),
+      SOCIAL_LINKS.github,
+      SOCIAL_LINKS.linkedin,
+      SOCIAL_LINKS.instagram,
+    ].filter(Boolean))
+  );
+
+  const defaultDescription =
+    options?.description ||
+    `Portofolio resmi ${officialName} (${preferredName}) — Siswa ${schoolName} spesialisasi Teknik Komputer dan Jaringan (TKJ). Berfokus pada rekayasa Web Modern (Next.js, TypeScript) dan Infrastruktur Jaringan (MikroTik RouterOS, Cisco, Linux Debian SysAdmin).`;
+
   return {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "WebSite",
-        "@id": `${options.url}/#website`,
-        url: options.url,
-        name: `${options.name} Portfolio`,
-        description: options.description || "Portfolio and process notes of Debian Firwanto",
+        "@id": `${baseUrl}/#website`,
+        url: baseUrl,
+        name: `${officialName} (${preferredName}) — Web & Network Engineer Portfolio`,
+        description: defaultDescription,
         inLanguage: ["id-ID", "en-US"],
+        publisher: {
+          "@id": `${baseUrl}/#person`,
+        },
+      },
+      {
+        "@type": "ProfilePage",
+        "@id": `${currentUrl}/#profilepage`,
+        url: currentUrl,
+        name: `${officialName} — Profile & Portfolio`,
+        isPartOf: {
+          "@id": `${baseUrl}/#website`,
+        },
+        about: {
+          "@id": `${baseUrl}/#person`,
+        },
+        mainEntity: {
+          "@id": `${baseUrl}/#person`,
+        },
       },
       {
         "@type": "Person",
-        "@id": `${options.url}/#person`,
-        name: options.name,
-        alternateName: ["Bian", "Naufal Nizar De Bian Setyo Firwanto"],
-        url: options.url,
-        jobTitle: options.jobTitle,
-        description: options.description,
-        ...(options.imageUrl ? { image: options.imageUrl } : {}),
+        "@id": `${baseUrl}/#person`,
+        name: officialName,
+        alternateName: [
+          preferredName,
+          "Naufal Nizar De Bian",
+          "Bian",
+          "biannihgenk",
+          "debianxyz",
+        ],
+        url: baseUrl,
+        image: imageUrl,
+        jobTitle,
+        description: defaultDescription,
+        worksFor: {
+          "@type": "EducationalOrganization",
+          name: `${schoolName} (Siswa TKJ / Vocational Student)`,
+        },
         alumniOf: {
           "@type": "EducationalOrganization",
-          name: options.school,
+          name: schoolName,
+          url: "https://smktelkom-mlg.sch.id",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Malang",
+            addressRegion: "Jawa Timur",
+            addressCountry: "ID",
+          },
         },
         knowsAbout: [
           "Computer Networks",
-          "Web Development",
-          "Next.js",
-          "TypeScript",
-          "MikroTik",
-          "Debian Linux",
-          "PostgreSQL",
+          "Network Engineering",
+          "MikroTik RouterOS",
           "Cisco Networking",
+          "Debian Linux",
+          "Linux Server Administration",
+          "Web Engineering",
+          "Next.js",
+          "React",
+          "TypeScript",
+          "Tailwind CSS",
+          "PostgreSQL",
+          "Supabase",
+          "Homelab Infrastructure",
+          "VLAN & Subnetting",
+          "REST APIs",
         ],
-        sameAs: options.sameAs.filter(Boolean),
+        hasOccupation: {
+          "@type": "Occupation",
+          name: jobTitle,
+          occupationLocation: {
+            "@type": "City",
+            name: "Malang",
+          },
+          skills:
+            "Next.js, TypeScript, MikroTik RouterOS, Cisco Packet Tracer, Debian Linux, Network Routing, Cloud Architecture",
+        },
+        sameAs: sameAsList,
       },
     ],
   };
@@ -81,10 +167,14 @@ export function buildArticleJsonLd(options: {
   imageUrl?: string | null;
   datePublished?: string;
   dateModified?: string;
-  authorName: string;
-  authorUrl: string;
+  authorName?: string;
+  authorUrl?: string;
   breadcrumbs: Array<{ name: string; url: string }>;
 }) {
+  const baseUrl = DEFAULT_SITE_URL.replace(/\/+$/, "");
+  const author = options.authorName || AUTHOR_NAME;
+  const authorUrl = options.authorUrl || baseUrl;
+
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -107,13 +197,13 @@ export function buildArticleJsonLd(options: {
           : {}),
         author: {
           "@type": "Person",
-          name: options.authorName,
-          url: options.authorUrl,
+          name: author,
+          url: authorUrl,
         },
         publisher: {
           "@type": "Person",
-          name: options.authorName,
-          url: options.authorUrl,
+          name: author,
+          url: authorUrl,
         },
       },
       {
