@@ -56,11 +56,11 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body
-        className={`${plusJakarta.variable} ${playfair.variable} ${jetbrainsMono.variable} ${caveat.variable} min-h-screen bg-[#fbf9f3] text-[#222222] font-sans antialiased selection:bg-[#dbeafe] selection:text-[#222222]`}
+        className={`${plusJakarta.variable} ${playfair.variable} ${jetbrainsMono.variable} ${caveat.variable} min-h-screen bg-[#fbf9f3] text-[#222222] font-sans antialiased selection:bg-[#dbeafe] selection:text-[#222222] overflow-x-hidden`}
       >
         <NextIntlClientProvider messages={messages}>
           <InteractiveNetworkBackground />
-          <div className="relative z-10 w-full min-h-screen">
+          <div className="relative z-10 w-full min-h-screen overflow-x-hidden">
             {children}
           </div>
           <InteractiveDeskCompanion />

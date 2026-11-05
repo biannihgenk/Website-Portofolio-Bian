@@ -59,17 +59,6 @@ export function GalleryGrid({ initialItems, onOpenLightbox }: GalleryGridProps) 
     });
   };
 
-  // Pre-configured rotation styling per card for organic scrapbook feel
-  const rotations = ["-rotate-1", "rotate-1", "-rotate-2", "rotate-2", "-rotate-1", "rotate-1", "-rotate-2", "rotate-1"];
-
-  // Washi tape positioning variety
-  const tapeStyles = [
-    "top-[-10px] left-1/3 -translate-x-1/2 w-20 h-5 bg-[#f0eee8] rotate-2",
-    "top-[-8px] right-4 w-16 h-4 bg-[#bfdbfe]/70 -rotate-3",
-    "top-[-10px] left-8 w-20 h-5 bg-[#dbeafe]/80 rotate-1",
-    "top-[-8px] right-6 w-18 h-4 bg-[#f3b9a7]/70 rotate-3",
-  ];
-
   return (
     <div className="w-full">
       {/* ───────────────────────────────────────────────────────────── */}
@@ -198,8 +187,6 @@ export function GalleryGrid({ initialItems, onOpenLightbox }: GalleryGridProps) 
           >
             {filteredItems.map((item, index) => {
               const globalIndex = initialItems.findIndex((it) => it.id === item.id);
-              const rotationClass = viewMode === "masonry" ? rotations[index % rotations.length] : "";
-              const tapeClass = tapeStyles[index % tapeStyles.length];
               const isLargePortrait = viewMode === "masonry" && item.featured && index === 0;
               const isFav = !!cardFavorites[item.id];
 
@@ -207,17 +194,10 @@ export function GalleryGrid({ initialItems, onOpenLightbox }: GalleryGridProps) 
                 <div
                   key={item.id}
                   onClick={() => onOpenLightbox(globalIndex >= 0 ? globalIndex : index)}
-                  className={`group relative bg-white p-3 rounded-2xl shadow-scrapbook hover:shadow-scrapbook-lg transition-all duration-300 cursor-pointer border border-[#ded8cb] ${
+                  className={`group relative bg-white p-3 rounded-2xl shadow-xs hover:shadow-md transition-all duration-300 cursor-pointer border border-[#ded8cb] ${
                     isLargePortrait ? "md:row-span-2" : ""
-                  } ${rotationClass} hover:rotate-0 hover:-translate-y-1`}
+                  } hover:-translate-y-1`}
                 >
-                  {/* Top Faux Washi Tape Accent (in scrapbook mode) */}
-                  {viewMode === "masonry" && (
-                    <div
-                      className={`absolute rounded-xs shadow-xs z-10 pointer-events-none opacity-85 border-t border-b border-[#222222]/10 ${tapeClass}`}
-                    />
-                  )}
-
                   {/* Photo Frame Container */}
                   <div
                     className={`relative w-full overflow-hidden rounded-xl bg-[#f5f3ee] border border-[#ded8cb] ${

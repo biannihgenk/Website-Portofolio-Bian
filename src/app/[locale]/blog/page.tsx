@@ -12,7 +12,6 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { BlogHero } from "@/components/blog/BlogHero";
 import { BlogDirectory } from "@/components/blog/BlogDirectory";
-import { BlogScrapbookTouches } from "@/components/blog/BlogScrapbookTouches";
 import { ContactSection } from "@/components/home/ContactSection";
 import { TechStackMotionBar } from "@/components/home/TechStackMotionBar";
 
@@ -118,9 +117,6 @@ export default async function BlogPage({
             categories={categories}
             locale={locale}
           />
-
-          {/* 3. MARGIN NOTES & SUBTLE SCRAPBOOK TOUCHES (Pantun & Manifesto) */}
-          <BlogScrapbookTouches />
 
           {/* Tech Stack Interactive Motion Ticker */}
           <TechStackMotionBar />

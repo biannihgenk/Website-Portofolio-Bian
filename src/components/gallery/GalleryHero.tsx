@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { InteractiveSticker } from "@/components/ui/InteractiveSticker";
 
 type FilmFilter = "warm" | "teal" | "bw";
 
@@ -11,7 +10,6 @@ export function GalleryHero() {
   const [shotsCount, setShotsCount] = useState(1);
   const [isFlashing, setIsFlashing] = useState(false);
   const [showToast, setShowToast] = useState(false);
-  const [noteTilted, setNoteTilted] = useState(false);
   const [filmFilter, setFilmFilter] = useState<FilmFilter>("warm");
 
   // Synthesize an authentic retro mechanical camera shutter sound using Web Audio API
@@ -167,43 +165,16 @@ export function GalleryHero() {
 
           {/* Handwritten / Doodle Note Sticker & Interactive 35mm Film Roll Sticker */}
           <div className="flex items-center gap-4 flex-wrap mt-2">
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              onClick={() => setNoteTilted((prev) => !prev)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  setNoteTilted((prev) => !prev);
-                }
-              }}
-              title="Klik untuk berinteraksi"
-              className={`inline-flex items-center gap-2.5 self-start px-4 py-2.5 rounded-2xl bg-white text-[#444748] shadow-scrapbook cursor-pointer border border-[#ded8cb] transition-transform duration-300 ${
-                noteTilted ? "rotate-2 bg-[#fbf9f3]" : "-rotate-1 hover:rotate-0"
-              }`}
-            >
+            <div className="inline-flex items-center gap-2.5 self-start px-4 py-2.5 rounded-2xl bg-white text-[#444748] shadow-xs border border-[#ded8cb]">
               <span className="text-base text-[#2563eb]">📷</span>
               <span className="font-mono text-xs sm:text-sm italic font-medium text-[#222222]">
                 “Di balik setiap jepretan, ada cerita yang pantas diabadikan.”
               </span>
-            </motion.div>
-
-            <InteractiveSticker
-              id="gallery-film"
-              imageSrc="/images/sticker_film_roll.png"
-              alt="3D Film Roll Canister Sticker"
-              quote="Roll Film 35mm 🎞️"
-              subquote="36 Eksposur • Kodak ISO 400"
-              badge="RETRO 35MM"
-              badgeColor="amber"
-              size="sm"
-              floatType="1"
-            />
+            </div>
           </div>
         </motion.div>
 
-        {/* Right Column: Interactive Vintage Rangefinder Camera Card */}
+        {/* Right Column: Rangefinder Camera Card */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -211,20 +182,8 @@ export function GalleryHero() {
           className="relative w-full sm:w-88 lg:w-80 shrink-0 self-center lg:self-end mt-4 lg:mt-0 flex flex-col items-center"
         >
           <div className="relative w-full">
-            {/* Top Washi Tape strip */}
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 h-6 bg-[#dbeafe]/95 rounded-sm shadow-xs rotate-1 z-20 pointer-events-none border-l-2 border-r-2 border-dashed border-[#2563eb]/30 flex items-center justify-center backdrop-blur-xs">
-              <span className="font-mono text-[9px] uppercase font-bold text-[#1e40af] tracking-wider">
-                RANGEFINDER 35MM // VINTAGE OPTICS
-              </span>
-            </div>
-
-            {/* Polaroid Card Frame with Spring Hover */}
-            <motion.div
-              whileHover={{ rotate: 0, scale: 1.02 }}
-              initial={{ rotate: 2 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="bg-white p-4 rounded-3xl shadow-scrapbook-lg border border-[#ded8cb] relative group"
-            >
+            {/* Card Frame */}
+            <div className="bg-white p-4 rounded-3xl shadow-md border border-[#ded8cb] relative group">
               {/* White flash overlay when shutter triggered */}
               <div
                 className={`absolute inset-0 bg-white rounded-3xl z-30 pointer-events-none transition-opacity duration-200 ${
@@ -308,7 +267,7 @@ export function GalleryHero() {
                   </motion.div>
                 )}
               </AnimatePresence>
-            </motion.div>
+            </div>
           </div>
         </motion.div>
       </div>

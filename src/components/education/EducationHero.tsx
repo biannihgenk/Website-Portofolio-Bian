@@ -61,19 +61,8 @@ export function EducationHero() {
           Menempuh pendidikan vokasi di SMK Telkom Malang dengan fokus mendalam pada arsitektur jaringan komputer, protokol routing, administrasi server Linux, serta pengembangan sistem web modern berbasis AI.
         </p>
 
-        {/* Sticky Note / Tactile Washi Pin */}
-        <motion.div
-          whileHover={{ scale: 1.02, rotate: 0 }}
-          onClick={() => setNoteTapped(!noteTapped)}
-          className={`relative max-w-md p-4 sm:p-5 rounded-2xl shadow-xs transition-all duration-300 cursor-pointer border border-[#ded8cb] ${
-            noteTapped
-              ? "bg-[#bfdbfe]/50 rotate-0"
-              : "bg-[#bfdbfe]/35 -rotate-1"
-          }`}
-          title="Klik untuk berinteraksi"
-        >
-          {/* Simulated Washi Tape Accent */}
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-28 h-6 bg-[rgba(245,242,234,0.95)] backdrop-blur-xs rounded-xs shadow-tape opacity-95 border-l-2 border-r-2 border-dashed border-[#686660]/30" />
+        {/* Quote Callout Banner */}
+        <div className="relative max-w-md p-4 sm:p-5 rounded-2xl shadow-xs border border-[#ded8cb] bg-white">
           <div className="flex items-start gap-3">
             <span className="text-xl shrink-0 mt-0.5">💡</span>
             <div>
@@ -85,7 +74,7 @@ export function EducationHero() {
               </span>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Metric / Reflective Pills */}
         <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -127,15 +116,8 @@ export function EducationHero() {
             </div>
           </div>
 
-          {/* Polaroid Container */}
-          <div className="relative bg-white p-4 pb-6 rounded-3xl shadow-scrapbook rotate-1 transition-transform duration-300 hover:rotate-0 hover:scale-[1.01] border border-[#ded8cb] z-10">
-            {/* Masking Tape Top Center */}
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-36 h-6 bg-[#dbeafe]/90 backdrop-blur-md rounded-xs shadow-tape border-l-2 border-r-2 border-dashed border-[#2563eb]/30 z-20 flex items-center justify-center">
-              <span className="font-mono text-[9px] uppercase font-bold text-[#1e40af] tracking-wider">
-                STUDENT PROFILE // 2026
-              </span>
-            </div>
-
+          {/* Photo Frame Container */}
+          <div className="relative bg-white p-4 pb-6 rounded-3xl shadow-sm border border-[#ded8cb] z-10">
             {/* Visual Photo Frame: Debian in SMK Telkom Almamater */}
             <div className="w-full aspect-[4/3] rounded-2xl overflow-hidden bg-[#f5f3ee] relative border border-[#ded8cb]/80 flex items-center justify-center group">
               <Image

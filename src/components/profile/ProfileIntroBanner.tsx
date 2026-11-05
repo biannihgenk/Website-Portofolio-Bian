@@ -48,7 +48,7 @@ export function ProfileIntroBanner({
         </div>
 
         {/* Quick Status Stamp Badge */}
-        <div className="flex items-center gap-3 bg-white p-3.5 rounded-2xl shadow-scrapbook rotate-1 border border-[#ded8cb] shrink-0">
+        <div className="flex items-center gap-3 bg-white p-3.5 rounded-2xl shadow-xs border border-[#ded8cb] shrink-0">
           <div className="w-10 h-10 rounded-xl bg-[#bfdbfe] flex items-center justify-center text-[#1e40af]">
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
@@ -79,12 +79,9 @@ export function ProfileIntroBanner({
           </p>
         </div>
 
-        {/* Sticky note annotation */}
+        {/* Reflective Note Card */}
         <div className="lg:col-span-4 relative">
-          {/* Faux Masking Tape */}
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-6 bg-[#f3b9a7]/80 rounded-sm shadow-tape rotate-2 z-10 border-t border-b border-[#222222]/10 pointer-events-none" />
-
-          <div className="bg-[#dbeafe]/50 p-6 rounded-2xl shadow-scrapbook -rotate-1 relative transition-transform hover:rotate-0 duration-200 border border-[#ded8cb]">
+          <div className="bg-[#dbeafe]/40 p-6 rounded-2xl shadow-xs border border-[#ded8cb]">
             <div className="flex items-center gap-1.5 text-[#2563eb] mb-2">
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
@@ -102,18 +99,6 @@ export function ProfileIntroBanner({
             <div className="mt-4 pt-2 border-t border-[#ded8cb]/60 flex justify-between items-center text-[#6b6863] text-xs font-mono">
               <span>{t("deskNoteLabel")}</span>
               <span className="text-[#2563eb] font-bold">{t("deskNoteTime")}</span>
-            </div>
-
-            {/* Decorative 3D Tech Sticker Floating Accent */}
-            <div className="absolute -bottom-8 -right-6 w-20 h-20 pointer-events-none drop-shadow-xl animate-bounce [animation-duration:3s]">
-              <Image
-                src="/images/sticker_fiber_globe.png"
-                alt="Fiber optic globe sticker"
-                width={80}
-                height={80}
-                unoptimized
-                className="w-full h-full object-contain transform rotate-6"
-              />
             </div>
           </div>
         </div>

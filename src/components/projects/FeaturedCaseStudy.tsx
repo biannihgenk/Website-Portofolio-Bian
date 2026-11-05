@@ -59,14 +59,7 @@ export function FeaturedCaseStudy({
 
   return (
     <section className="w-full my-12 sm:my-16" id="featured-inspection">
-      <div className="bg-white rounded-3xl p-6 sm:p-8 lg:p-10 shadow-scrapbook relative overflow-hidden border border-[#ded8cb]">
-        {/* Top Tape Stamp */}
-        <div className="absolute -top-3 left-8 sm:left-12 w-36 h-6 bg-[rgba(245,242,234,0.95)] shadow-tape rounded-xs -rotate-1 flex items-center justify-center border-l-2 border-r-2 border-dashed border-[#686660]/30 z-20 backdrop-blur-xs">
-          <span className="font-mono text-[9px] text-[#686660] tracking-widest uppercase font-bold">
-            {t("deepDiveBadge")}
-          </span>
-        </div>
-
+      <div className="bg-white rounded-3xl p-6 sm:p-8 lg:p-10 shadow-sm relative overflow-hidden border border-[#ded8cb]">
         <div className="flex flex-col lg:flex-row gap-8 items-start justify-between relative z-10 pt-2">
           {/* Left Column: Problem & Narrative (7/12) */}
           <div className="lg:w-7/12 space-y-6">

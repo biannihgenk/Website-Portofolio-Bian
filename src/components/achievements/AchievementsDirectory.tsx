@@ -32,15 +32,7 @@ interface AchievementItemDisplay {
   headerTag?: string;
   goldenTicket?: boolean;
   tags: string[];
-  tapeClass?: string;
 }
-
-const TAPE_STYLES = [
-  "absolute -top-3 left-8 w-24 h-5 bg-[#f3b9a7]/90 rounded-xs transform -rotate-2 shadow-tape border-l border-r border-dashed border-[#686660]/30",
-  "absolute -top-3 right-8 w-20 h-5 bg-[#dbeafe]/90 rounded-xs transform rotate-2 shadow-tape border-l border-r border-dashed border-[#686660]/30",
-  "absolute -top-3 left-10 w-20 h-5 bg-[#dbeafe] rounded-xs transform -rotate-1 shadow-tape border-l border-r border-dashed border-[#686660]/30",
-  "absolute -top-3 right-10 w-22 h-5 bg-[#f0eee8] rounded-xs transform rotate-1 shadow-tape border-l border-r border-dashed border-[#686660]/30",
-];
 
 export function AchievementsDirectory({
   achievements,
@@ -114,7 +106,6 @@ export function AchievementsDirectory({
         headerTag,
         goldenTicket: slugLower.includes("oktal"),
         tags,
-        tapeClass: TAPE_STYLES[idx % TAPE_STYLES.length],
       };
     });
   }, [achievements, isId]);
@@ -287,11 +278,8 @@ export function AchievementsDirectory({
                   openLightbox(item);
                 }
               }}
-              className="group bg-white rounded-2xl p-5 sm:p-6 border border-[#ded8cb] shadow-scrapbook hover:shadow-scrapbook-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between relative cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]"
+              className="group bg-white rounded-2xl p-5 sm:p-6 border border-[#ded8cb] shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between relative cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]"
             >
-              {/* Tape Stamp Accent */}
-              {item.tapeClass && <div className={item.tapeClass} />}
-
               <div>
                 {/* Header Tag / Podiums */}
                 <div className="flex items-center justify-between gap-2 mb-3">

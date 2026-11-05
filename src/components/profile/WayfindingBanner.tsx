@@ -13,10 +13,7 @@ export function WayfindingBanner({ locale }: WayfindingBannerProps) {
 
   return (
     <section className="w-full mt-12 sm:mt-16">
-      <div className="relative bg-[#f5f2ea] rounded-3xl p-6 sm:p-10 shadow-scrapbook overflow-hidden border border-[#ded8cb]">
-        {/* Translucent tape highlight top right */}
-        <div className="absolute top-0 right-16 w-32 h-7 bg-[#f3b9a7]/80 rounded-b-md shadow-tape -rotate-2 border-b border-[#222222]/10 pointer-events-none" />
-
+      <div className="relative bg-[#f5f2ea] rounded-3xl p-6 sm:p-10 shadow-sm overflow-hidden border border-[#ded8cb]">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
           <div className="max-w-xl flex flex-col gap-2 text-center md:text-left">
             <div className="inline-flex items-center gap-1.5 w-fit mx-auto md:mx-0 bg-white border border-[#ded8cb] px-3 py-1 rounded-full shadow-xs">

@@ -90,7 +90,7 @@ export function FeaturedProjects({ projects, locale }: FeaturedProjectsProps) {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* FLAGSHIP PROJECT (7 Columns) */}
             {flagship && (
-            <div className="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 border border-[#ded8cb] shadow-scrapbook flex flex-col justify-between group hover:shadow-scrapbook-lg transition-all duration-300">
+            <div className="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 border border-[#ded8cb] shadow-xs flex flex-col justify-between group hover:shadow-md transition-all duration-300">
               <div>
                 <div className="flex items-center justify-between gap-2 mb-4">
                   <span className="px-3 py-1 rounded-full bg-blue-100 border border-blue-200 text-blue-900 font-mono text-xs uppercase tracking-wider font-bold">
@@ -184,7 +184,7 @@ export function FeaturedProjects({ projects, locale }: FeaturedProjectsProps) {
               return (
                 <div
                   key={p.id}
-                  className="bg-white rounded-3xl p-6 sm:p-7 border border-[#ded8cb] shadow-scrapbook flex flex-col justify-between group hover:shadow-scrapbook-lg transition-all duration-300"
+                  className="bg-white rounded-3xl p-6 sm:p-7 border border-[#ded8cb] shadow-xs flex flex-col justify-between group hover:shadow-md transition-all duration-300"
                 >
                   <div>
                     <div className="flex items-center justify-between gap-2 mb-3">

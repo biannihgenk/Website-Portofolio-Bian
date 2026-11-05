@@ -9,7 +9,6 @@ import { EducationHero } from "@/components/education/EducationHero";
 import { EducationTimeline } from "@/components/education/EducationTimeline";
 import { CertificatesRepository } from "@/components/education/CertificatesRepository";
 import { CurrentlyExploringBento } from "@/components/education/CurrentlyExploringBento";
-import { LearningNotesAndPantun } from "@/components/education/LearningNotesAndPantun";
 import { TechStackMotionBar } from "@/components/home/TechStackMotionBar";
 import { ContactSection } from "@/components/home/ContactSection";
 
@@ -118,9 +117,6 @@ export default async function EducationPage({
 
             {/* 4. "CURRENTLY EXPLORING" (Honest Skill Tracker Bento) */}
             <CurrentlyExploringBento />
-
-            {/* 5. LEARNING NOTES & SCRAPBOOK PANTUN */}
-            <LearningNotesAndPantun />
           </div>
 
           {/* Tech Stack Interactive Motion Ticker */}

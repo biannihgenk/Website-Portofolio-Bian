@@ -21,7 +21,7 @@ export function ProcessCreed({ locale }: ProcessCreedProps) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
           {/* Text and Action Buttons (Col 8) */}
           <div className="lg:col-span-8 space-y-5">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-white shadow-xs -rotate-1 border border-[#ded8cb]">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-white shadow-xs border border-[#ded8cb]">
               <span className="font-mono text-[11px] text-[#2563eb] uppercase tracking-wider font-bold">
                 {t("creedTag")}
               </span>
@@ -62,11 +62,8 @@ export function ProcessCreed({ locale }: ProcessCreedProps) {
           {/* Spot Illustration of Bian Celebrating (Col 4) */}
           <div className="lg:col-span-4 flex justify-center">
             <div className="relative w-56 sm:w-64">
-              {/* Tape Sticker on Top */}
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-5 bg-[rgba(245,242,234,0.95)] shadow-tape rounded-xs rotate-2 z-20 border-l border-r border-dashed border-[#686660]/30" />
-
-              {/* Polaroid Card Style */}
-              <div className="bg-white p-3.5 rounded-2xl shadow-scrapbook rotate-2 hover:rotate-0 transition-transform duration-300 border border-[#ded8cb]">
+              {/* Photo Card */}
+              <div className="bg-white p-3.5 rounded-2xl shadow-sm border border-[#ded8cb]">
                 <div className="rounded-xl overflow-hidden bg-[#f5f3ee] aspect-square flex items-center justify-center border border-[#ded8cb]/80">
                   <Image
                     src="https://lh3.googleusercontent.com/aida/AEtjO1X8x7ZrxDh76j36fLf6cjqvOPefdYA5FQ5UM6vgfk1njEjTRNm4zy8sjMrOtX76KkIHjlAjb-E7ey59ADHkd77KkPFIvOfKx8uH6FVeArcj6Um-gwtTdeTwiHhAv_91_sS4wm45AJyTqID_c96kHBkdwH1tIOI0zm6TQszn9uMlRcc9jmYjFGJwKwzB-pCL5ypa437I-NphiUpayJ3M6LOLJzpiyI-iPzvDZu7teg23pJ2vN8FwZrUuUEU"
@@ -77,9 +74,9 @@ export function ProcessCreed({ locale }: ProcessCreedProps) {
                   />
                 </div>
 
-                {/* Handwritten Sticker Badge */}
+                {/* Badge */}
                 <div className="mt-3 text-center pb-1">
-                  <div className="inline-block bg-[#f3b9a7] text-[#222222] px-3 py-1 rounded-md text-xs font-mono shadow-xs -rotate-1 font-semibold border border-[#ded8cb]">
+                  <div className="inline-block bg-[#f3b9a7] text-[#222222] px-3 py-1 rounded-md text-xs font-mono shadow-xs font-semibold border border-[#ded8cb]">
                     {t("creedSticker")}
                   </div>
                   <div className="font-serif text-xs italic text-[#686660] mt-1.5 font-medium">

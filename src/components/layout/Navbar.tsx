@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { usePathname, useRouter } from "@/lib/i18n/navigation";
+import { Link, usePathname, useRouter } from "@/lib/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -59,6 +58,7 @@ export function Navbar({
   const chatScrollRef = useRef<HTMLDivElement>(null);
 
   const dropdownRef = useRef<HTMLLIElement>(null);
+  const aboutDropdownRef = useRef<HTMLDivElement>(null);
   const contactRef = useRef<HTMLLIElement>(null);
 
   // Live WIB clock update
@@ -109,10 +109,14 @@ export function Navbar({
   // Handle click outside & ESC key for dropdowns & modals
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      const target = e.target as Node;
+      const clickedInsideAboutBtn = dropdownRef.current?.contains(target);
+      const clickedInsideAboutMenu = aboutDropdownRef.current?.contains(target);
+
+      if (!clickedInsideAboutBtn && !clickedInsideAboutMenu) {
         setAboutOpen(false);
       }
-      if (contactRef.current && !contactRef.current.contains(e.target as Node)) {
+      if (contactRef.current && !contactRef.current.contains(target)) {
         setContactOpen(false);
       }
     }
@@ -238,19 +242,19 @@ export function Navbar({
   const isGallery = pathname.includes("/gallery");
   const isBlog = pathname.includes("/blog");
 
-  const homeHref = isHome ? "#home" : `/${locale}`;
-  const projectsHref = `/${locale}/projects`;
-  const achievementsHref = `/${locale}/achievements`;
-  const educationHref = `/${locale}/education`;
-  const galleryHref = `/${locale}/gallery`;
-  const blogHref = `/${locale}/blog`;
-  const contactHref = isHome ? "#contact" : `/${locale}#contact`;
+  const homeHref = isHome ? "#home" : "/";
+  const projectsHref = "/projects";
+  const achievementsHref = "/achievements";
+  const educationHref = "/education";
+  const galleryHref = "/gallery";
+  const blogHref = "/blog";
+  const contactHref = isHome ? "#contact" : "/contact";
 
   const aboutSubmenuItems = [
     {
       title: t("profile"),
       desc: t("profileDesc"),
-      href: `/${locale}/profile`,
+      href: "/profile",
       pill: "Story & Ethos",
       color: "bg-blue-100/80 text-blue-800",
       icon: (
@@ -394,8 +398,8 @@ export function Navbar({
             <ul className="hidden md:flex items-center gap-1">
               {/* Beranda (Home) */}
               <li>
-                <a
-                  href={homeHref}
+                <Link
+                  href="/"
                   className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
                     isHome
                       ? "bg-blue-50 text-blue-600 font-bold shadow-xs border border-blue-200/60"
@@ -403,7 +407,7 @@ export function Navbar({
                   }`}
                 >
                   {t("home")}
-                </a>
+                </Link>
               </li>
 
               {/* Tentang (About with Bento Dropdown) */}
@@ -414,7 +418,7 @@ export function Navbar({
                     setAboutOpen(!aboutOpen);
                     setContactOpen(false);
                   }}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
                     aboutOpen
                       ? "bg-blue-100 text-blue-900 font-bold border border-blue-300 shadow-xs"
                       : isProfile || isProjects || isAchievements || isEducation || isGallery
@@ -442,8 +446,8 @@ export function Navbar({
 
               {/* Catatan / Blog */}
               <li>
-                <a
-                  href={blogHref}
+                <Link
+                  href="/blog"
                   className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
                     isBlog
                       ? "bg-blue-50 text-blue-600 font-bold shadow-xs border border-blue-200/60"
@@ -451,7 +455,7 @@ export function Navbar({
                   }`}
                 >
                   {t("blog")}
-                </a>
+                </Link>
               </li>
 
               {/* Kontak with Quick Popover Trigger */}
@@ -558,12 +562,12 @@ export function Navbar({
             {/* ─────────────────────────────────────────────────────── */}
             {/* RIGHT: "✨ Tanya AI", "ID | EN" Switcher, Help (?) Icon */}
             {/* ─────────────────────────────────────────────────────── */}
-            <div className="flex items-center gap-2 sm:gap-2.5">
+            <div className="flex items-center gap-1.5 sm:gap-2.5">
               {/* ✨ Tanya AI Button (Prominent Blue Pill) */}
               <button
                 type="button"
                 onClick={() => setAiModalOpen(true)}
-                className="flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs hover:shadow-md hover:shadow-blue-500/20 active:scale-95 transition-all cursor-pointer group"
+                className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs hover:shadow-md hover:shadow-blue-500/20 active:scale-95 transition-all cursor-pointer group"
               >
                 <svg
                   className="w-3.5 h-3.5 text-blue-200 group-hover:rotate-12 transition-transform duration-200"
@@ -607,11 +611,11 @@ export function Navbar({
                 </button>
               </div>
 
-              {/* Help Guide Button (?) */}
+              {/* Help Guide Button (?) - visible on sm+ screens */}
               <button
                 type="button"
                 onClick={() => setGuideModalOpen(true)}
-                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#f5f3ee] hover:bg-white border border-[#ded8cb] hover:border-[#222222]/30 flex items-center justify-center text-[#222222] text-xs font-bold transition-all shadow-xs active:scale-95 cursor-pointer"
+                className="hidden sm:flex w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#f5f3ee] hover:bg-white border border-[#ded8cb] hover:border-[#222222]/30 items-center justify-center text-[#222222] text-xs font-bold transition-all shadow-xs active:scale-95 cursor-pointer"
                 aria-label={t("helpGuide")}
                 title={t("helpGuide")}
               >
@@ -657,15 +661,11 @@ export function Navbar({
           {/* BENTO MEGA-MENU DROPDOWN CARD (ABOUT EXPANDED STATE) */}
           {/* ───────────────────────────────────────────────────────────── */}
           {aboutOpen && (
-            <div className="absolute top-full left-1/2 -translate-x-1/2 w-full max-w-4xl mt-3 z-40 animate-in fade-in slide-in-from-top-3 duration-200">
-              <div className="bg-white rounded-3xl p-5 sm:p-7 border border-[#ded8cb] shadow-scrapbook-lg grid-paper relative">
-                {/* Washi Tape decorative element top right */}
-                <div className="absolute -top-3.5 right-12 w-28 h-6 bg-[#f3b9a7]/80 -rotate-2 rounded-sm shadow-tape border-t border-b border-[#222222]/10 pointer-events-none flex items-center justify-center">
-                  <span className="font-handwriting text-xs text-[#222222] font-bold tracking-wider">
-                    about me &amp; work
-                  </span>
-                </div>
-
+            <div
+              ref={aboutDropdownRef}
+              className="absolute top-full left-1/2 -translate-x-1/2 w-full max-w-4xl mt-3 z-50 animate-in fade-in slide-in-from-top-3 duration-200"
+            >
+              <div className="bg-white rounded-3xl p-5 sm:p-7 border border-[#ded8cb] shadow-xl relative">
                 {/* Bento Grid Header */}
                 <div className="flex items-center justify-between pb-3.5 border-b border-[#e6e2d8] mb-4">
                   <div className="flex items-center gap-2">
@@ -682,11 +682,11 @@ export function Navbar({
                 {/* 5 SUBMENU ITEMS: Bento Layout mirroring Stitch design */}
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
                   {aboutSubmenuItems.map((item) => (
-                    <a
+                    <Link
                       key={item.href}
                       href={item.href}
                       onClick={() => setAboutOpen(false)}
-                      className={`group ${item.cols} bg-[#f5f3ee] hover:bg-white p-4 sm:p-4.5 rounded-2xl border border-[#e6e2d8] hover:border-[#222222]/30 hover:shadow-md transition-all flex flex-col justify-between`}
+                      className={`group ${item.cols} bg-[#f5f3ee] hover:bg-white p-4 sm:p-4.5 rounded-2xl border border-[#e6e2d8] hover:border-[#222222]/30 hover:shadow-md transition-all flex flex-col justify-between cursor-pointer`}
                     >
                       <div className="flex items-start justify-between">
                         <div
@@ -711,7 +711,7 @@ export function Navbar({
                           {item.desc}
                         </p>
                       </div>
-                    </a>
+                    </Link>
                   ))}
                 </div>
 
@@ -1099,15 +1099,15 @@ export function Navbar({
 
             {/* Mobile Links List */}
             <nav className="space-y-1.5">
-              <a
-                href={homeHref}
+              <Link
+                href="/"
                 onClick={() => setMobileMenuOpen(false)}
                 className={`block px-3 py-2 rounded-xl text-sm font-semibold transition-colors ${
                   isHome ? "bg-blue-50 text-blue-600 font-bold" : "text-[#222222] hover:bg-[#f5f3ee]"
                 }`}
               >
                 {t("home")}
-              </a>
+              </Link>
 
               {/* Mobile Accordion: About & 5 Subsections */}
               <div className="bg-[#f5f3ee] rounded-2xl p-3 border border-[#ded8cb]/80 space-y-2.5">
@@ -1127,62 +1127,62 @@ export function Navbar({
 
                 {mobileAboutExpanded && (
                   <div className="pl-3 border-l-2 border-blue-400 space-y-2 pt-1">
-                    <a
-                      href={`/${locale}/profile`}
+                    <Link
+                      href="/profile"
                       onClick={() => setMobileMenuOpen(false)}
                       className="block text-xs font-medium text-[#222222] hover:underline"
                     >
                       1. {t("profile")} <span className="text-[10px] text-[#6b6863]">— Bio &amp; Ethos</span>
-                    </a>
-                    <a
-                      href={projectsHref}
+                    </Link>
+                    <Link
+                      href="/projects"
                       onClick={() => setMobileMenuOpen(false)}
                       className="block text-xs font-medium text-[#222222] hover:underline"
                     >
                       2. {t("projects")} <span className="text-[10px] text-[#6b6863]">— Builds &amp; Showcase</span>
-                    </a>
-                    <a
-                      href={achievementsHref}
+                    </Link>
+                    <Link
+                      href="/achievements"
                       onClick={() => setMobileMenuOpen(false)}
                       className="block text-xs font-medium text-[#222222] hover:underline"
                     >
                       3. {t("achievements")} <span className="text-[10px] text-[#6b6863]">— Milestones &amp; Certs</span>
-                    </a>
-                    <a
-                      href={educationHref}
+                    </Link>
+                    <Link
+                      href="/education"
                       onClick={() => setMobileMenuOpen(false)}
                       className="block text-xs font-medium text-[#222222] hover:underline"
                     >
                       4. {t("education")} <span className="text-[10px] text-[#6b6863]">— SMK Telkom &amp; Homelab</span>
-                    </a>
-                    <a
-                      href={galleryHref}
+                    </Link>
+                    <Link
+                      href="/gallery"
                       onClick={() => setMobileMenuOpen(false)}
                       className="block text-xs font-medium text-[#222222] hover:underline"
                     >
                       5. {t("gallery")} <span className="text-[10px] text-[#6b6863]">— Photo Scrapbook</span>
-                    </a>
+                    </Link>
                   </div>
                 )}
               </div>
 
-              <a
-                href={blogHref}
+              <Link
+                href="/blog"
                 onClick={() => setMobileMenuOpen(false)}
                 className={`block px-3 py-2 rounded-xl text-sm font-semibold transition-colors ${
                   isBlog ? "bg-blue-50 text-blue-600 font-bold" : "text-[#222222] hover:bg-[#f5f3ee]"
                 }`}
               >
                 {t("blog")}
-              </a>
+              </Link>
 
-              <a
-                href={contactHref}
+              <Link
+                href="/contact"
                 onClick={() => setMobileMenuOpen(false)}
                 className="block px-3 py-2 rounded-xl text-sm font-semibold bg-[#f3b9a7]/30 border border-[#f3b9a7]/50 text-[#222222] hover:bg-[#f3b9a7]/50 transition-colors"
               >
                 {t("contact")}
-              </a>
+              </Link>
             </nav>
 
             {/* Mobile Language Switcher & Socials */}

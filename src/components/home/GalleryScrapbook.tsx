@@ -18,8 +18,6 @@ export const referencePhotos = [
     sub: "Kegiatan Berbagi & Edukasi • 2024",
     src: "https://lh3.googleusercontent.com/aida-public/AB6AXuCB7SNCmEF8Ndrbf-_ilT61vgXJ6ks7p2flZgkb9ghE5qAoKgMqwVRIpQwuTlRyhqbfkb7RnfIF9t_AqZCGFF_8J2oDqOiajmtG-FfJsmmT-T63oqXmi7WTAyMY8x0eq2FPUeQuy9hCPo52wYf6iLAg_Jq-3S1eK7VEHiqquGMQZYAqGTAKFvW66ZVBZaMMidJaIvBVIgCgEprgEFnRg2hvbCTp7-AWOv9pDUPJTJl26QpvkhrEyQpF",
     cols: "sm:col-span-1 lg:col-span-4",
-    rotate: "rotate-[-1.5deg]",
-    tapeColor: "bg-[#d9e8b8]/80",
     aspect: "aspect-[4/3]",
   },
   {
@@ -27,8 +25,6 @@ export const referencePhotos = [
     sub: "Kolaborasi & Riset Arsitektur • 2024",
     src: "https://lh3.googleusercontent.com/aida-public/AB6AXuAxgnvNpG2u5SXqyvHX9vGJz6IoB8YdEAuhkn3UknHeMhdXGtCAv_n-Dz-1Xpvq8qBOzy9bjtpCdb6OGqdqL2tSJ4gwSBNUEWD7GADgklEe3IMg5TgRu0IuQCGdq1IdSAebJ9tJrtlQtkAg9kZ50VygnDqQ2o6P1DJC9eGkjO6kvTpxw7rKqOIbWzTQmuNUKG0ForBom_9nB5QojIbyg0QO69xksvv3766hsDX8VyGZDm4eVRT9YyVK",
     cols: "sm:col-span-1 lg:col-span-4",
-    rotate: "rotate-[1deg]",
-    tapeColor: "bg-[#f3b9a7]/80",
     aspect: "aspect-[4/3]",
   },
   {
@@ -36,8 +32,6 @@ export const referencePhotos = [
     sub: "Perencanaan Produk Digital & Inovasi • 2024",
     src: "https://lh3.googleusercontent.com/aida-public/AB6AXuBr_FUM27PxaOLM-gfYqL_RiMTeAWEC1pHn5jySH5Elllrn0tOWzHHooDiJUNlgaWI7YT2cnvgZsFq8mzckQ34Nq02iM0ybHFNHVjE7YqkZxz0yf6X_QVa9aaw1IBQ6O7TnISD5oVqILVf8Qm0LFaeXDMb_vhhNE-EoZobNhP3XUHA4oPQkNKTi2sUyyjJ4xfrjYU5ySuWpl9bKSLuZcaVBOVYb6YeNmOY5d02epgl2C2I22CTNgwKu",
     cols: "sm:col-span-2 lg:col-span-4",
-    rotate: "rotate-[-0.5deg]",
-    tapeColor: "bg-[#d4dec8]/80",
     aspect: "aspect-[4/3]",
   },
 ];
@@ -45,10 +39,6 @@ export const referencePhotos = [
 export function GalleryScrapbook({ galleryItems, locale }: GalleryScrapbookProps) {
   const t = useTranslations("gallery");
   const isId = locale === "id";
-
-  // Only render cards from database if present; otherwise fallback to the 3 verified reference photos
-  const tapeColors = ["bg-[#d9e8b8]/80", "bg-[#f3b9a7]/80", "bg-[#d4dec8]/80", "bg-[#bfdbfe]/80"];
-  const rotations = ["rotate-[-1.5deg]", "rotate-[1deg]", "rotate-[-0.5deg]", "rotate-[1.5deg]"];
 
   const activeCards =
     galleryItems && galleryItems.length > 0
@@ -61,8 +51,6 @@ export function GalleryScrapbook({ galleryItems, locale }: GalleryScrapbookProps
             sub: sub || "SMK Telkom Malang",
             src: publicUrl || referencePhotos[idx % referencePhotos.length].src,
             cols: "sm:col-span-1 lg:col-span-4",
-            rotate: rotations[idx % rotations.length],
-            tapeColor: tapeColors[idx % tapeColors.length],
             aspect: "aspect-[4/3]",
           };
         })
@@ -94,19 +82,14 @@ export function GalleryScrapbook({ galleryItems, locale }: GalleryScrapbookProps
         </a>
       </div>
 
-      {/* Balanced 3-Column Scrapbook Photo Cards */}
+      {/* Balanced 3-Column Clean Photography Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-6 items-stretch">
         {activeCards.map((card, idx) => (
           <a
             key={idx}
             href={`/${locale}/gallery`}
-            className={`${card.cols} block bg-white p-4 pb-6 rounded-2xl border border-[#ded8cb] shadow-scrapbook ${card.rotate} hover:rotate-0 transition-all duration-300 group hover:shadow-scrapbook-lg hover:z-20 relative hover:-translate-y-1`}
+            className={`${card.cols} block bg-white p-4 pb-5 rounded-2xl border border-[#ded8cb] shadow-xs hover:shadow-md transition-all duration-300 group relative hover:-translate-y-1`}
           >
-            {/* Washi Tape */}
-            <div
-              className={`w-20 h-4.5 ${card.tapeColor} mx-auto -mt-6 mb-2 rounded-sm shadow-tape rotate-[-1deg] border-t border-b border-[#222222]/10 pointer-events-none`}
-            />
-
             <div className={`${card.aspect} bg-[#f5f3ee] rounded-xl overflow-hidden relative border border-[#ded8cb]`}>
               <Image
                 src={card.src}

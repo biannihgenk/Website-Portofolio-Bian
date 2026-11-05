@@ -4,7 +4,6 @@ import {
   getProfile,
   getProjects,
   getAchievements,
-  getEducation,
   getGalleryItems,
   getBlogPosts,
   getSiteSettings,
@@ -15,7 +14,6 @@ import { JsonLd, buildPersonJsonLd } from "@/components/seo/JsonLd";
 import type {
   Project,
   Achievement,
-  Education,
   GalleryItem,
   BlogPost,
   SiteSetting,
@@ -27,10 +25,8 @@ import { KineticCanvasStage } from "@/components/home/KineticCanvasStage";
 import { TechStackMotionBar } from "@/components/home/TechStackMotionBar";
 import { EditorialHero } from "@/components/home/EditorialHero";
 import { AboutTeaser } from "@/components/home/AboutTeaser";
-import { ExploringFocus } from "@/components/home/ExploringFocus";
 import { FeaturedProjects } from "@/components/home/FeaturedProjects";
 import { Milestones } from "@/components/home/Milestones";
-import { EducationSection } from "@/components/home/EducationSection";
 import { GalleryScrapbook } from "@/components/home/GalleryScrapbook";
 import { BlogNotebook } from "@/components/home/BlogNotebook";
 import { ContactSection } from "@/components/home/ContactSection";
@@ -82,12 +78,11 @@ export default async function HomePage({
   const isId = locale === "id";
 
   // Safely fetch published content from Supabase
-  const [profile, projects, achievements, educationList, gallery, posts, siteSettings] =
+  const [profile, projects, achievements, gallery, posts, siteSettings] =
     await Promise.all([
       getProfile().catch(() => null),
       getProjects({ limit: 6 }).catch(() => [] as Project[]),
       getAchievements({ limit: 6 }).catch(() => [] as Achievement[]),
-      getEducation().catch(() => [] as Education[]),
       getGalleryItems({ limit: 8 }).catch(() => [] as GalleryItem[]),
       getBlogPosts({ limit: 4 }).catch(() => [] as BlogPost[]),
       getSiteSettings().catch(() => [] as SiteSetting[]),
@@ -169,19 +164,13 @@ export default async function HomePage({
         {/* 3. ABOUT TEASER / THE JOURNEY & PHILOSOPHY */}
         <AboutTeaser />
 
-        {/* 4. CURRENTLY EXPLORING (3 TACTILE PANELS) */}
-        <ExploringFocus />
-
-        {/* 5. FEATURED PROJECTS (FLAGSHIP + BENTO GRID) */}
+        {/* 4. FEATURED PROJECTS (FLAGSHIP + BENTO GRID) */}
         <FeaturedProjects projects={projects} locale={locale} />
 
-        {/* 6. MILESTONES & RECOGNITIONS */}
+        {/* 5. MILESTONES & RECOGNITIONS */}
         <Milestones achievements={achievements} locale={locale} />
 
-        {/* 7. EDUCATION & HOMELAB GROWTH */}
-        <EducationSection educationList={educationList} locale={locale} />
-
-        {/* 8. PERSONAL GALLERY SCRAPBOOK */}
+        {/* 6. PERSONAL GALLERY SCRAPBOOK */}
         <GalleryScrapbook galleryItems={gallery} locale={locale} />
 
         {/* 9. NOTEBOOK & DEVLOGS */}

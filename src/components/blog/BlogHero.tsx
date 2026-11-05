@@ -120,14 +120,7 @@ export function BlogHero() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="lg:col-span-4 flex justify-center lg:justify-end"
         >
-          <div className="w-full max-w-sm bg-white rounded-3xl p-4 sm:p-5 shadow-scrapbook border border-[#ded8cb] flex flex-col gap-3.5 relative group hover:shadow-scrapbook-lg transition-all">
-            {/* Header washi tape */}
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 h-6 bg-[#dbeafe]/95 rounded-sm shadow-tape flex items-center justify-center border-l-2 border-r-2 border-dashed border-[#2563eb]/30 pointer-events-none z-20">
-              <span className="font-mono text-[9px] uppercase font-bold text-[#1e40af] tracking-wider">
-                AUTHOR PROFILE
-              </span>
-            </div>
-
+          <div className="w-full max-w-sm bg-white rounded-3xl p-4 sm:p-5 shadow-xs border border-[#ded8cb] flex flex-col gap-3.5 relative group hover:shadow-md transition-all">
             {/* Author Portrait Image */}
             <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-[#18181b] border border-[#ded8cb]/80 group/img">
               <Image

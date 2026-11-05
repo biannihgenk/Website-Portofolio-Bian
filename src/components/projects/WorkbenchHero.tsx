@@ -319,25 +319,9 @@ export function WorkbenchHero() {
               ))}
             </div>
 
-            {/* Main Polaroid Frame with Spring Hover Physics */}
+            {/* Main Photo Frame */}
             <div className="relative w-full max-w-sm sm:max-w-md">
-              {/* Background Tilt Sheet */}
-              <div className="absolute inset-1 bg-[#f0eee8] rounded-3xl -rotate-2 transform shadow-xs border border-[#ded8cb] pointer-events-none" />
-
-              {/* Foreground Card */}
-              <motion.div
-                whileHover={{ rotate: 0, scale: 1.015 }}
-                initial={{ rotate: 1.5 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="relative bg-white p-4 sm:p-5 rounded-3xl shadow-scrapbook-lg border border-[#ded8cb] z-10 transition-transform"
-              >
-                {/* Washi Tape Header Accent */}
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 h-6 bg-[#dbeafe]/95 shadow-tape rounded-sm rotate-1 flex items-center justify-center border-l-2 border-r-2 border-dashed border-[#2563eb]/30 z-20 backdrop-blur-xs">
-                  <span className="font-mono text-[9px] text-[#1e40af] tracking-widest uppercase font-bold">
-                    {currentPhoto.tag}
-                  </span>
-                </div>
-
+              <div className="relative bg-white p-4 sm:p-5 rounded-3xl shadow-sm border border-[#ded8cb] z-10">
                 {/* Real Photo with Smooth Crossfade */}
                 <div className="relative rounded-2xl overflow-hidden bg-[#18181b] aspect-[3/4] flex items-center justify-center border border-[#ded8cb]/80 group">
                   <AnimatePresence mode="wait">
@@ -398,7 +382,7 @@ export function WorkbenchHero() {
                     Setiap arsitektur dirancang dari permasalahan nyata—menghubungkan perangkat keras, otomasi cerdas, dan antarmuka web modern.
                   </p>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </div>

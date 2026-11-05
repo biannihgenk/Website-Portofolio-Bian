@@ -16,9 +16,6 @@ export function EducationClosingSection({
 
   return (
     <section className="bg-white rounded-3xl p-8 md:p-12 shadow-xs relative overflow-hidden border border-[#ded8cb] w-full mt-16 sm:mt-20">
-      {/* Top Tape Accent */}
-      <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-36 h-6 bg-[rgba(245,242,234,0.95)] backdrop-blur-md rounded-xs shadow-tape border-l-2 border-r-2 border-dashed border-[#686660]/30 z-20" />
-
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10 pt-2">
         {/* Text and Action Buttons (Col 8) */}
         <div className="lg:col-span-8 flex flex-col gap-4">
@@ -72,7 +69,7 @@ export function EducationClosingSection({
               />
             </div>
             {/* Floating note */}
-            <div className="absolute -bottom-2 -right-2 px-3 py-1.5 rounded-lg bg-[#bfdbfe] text-[#1e40af] font-mono text-[11px] font-bold shadow-xs -rotate-3 border border-[#2563eb]/20">
+            <div className="absolute -bottom-2 -right-2 px-3 py-1.5 rounded-lg bg-[#bfdbfe] text-[#1e40af] font-mono text-[11px] font-bold shadow-xs border border-[#2563eb]/20">
               {t("closingFloating")}
             </div>
           </div>

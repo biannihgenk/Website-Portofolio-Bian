@@ -32,10 +32,7 @@ export function EducationSection({ educationList, locale }: EducationSectionProp
         {/* Split Card Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Left Card: Formal Vocational Education */}
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-[#ded8cb] shadow-scrapbook hover:shadow-scrapbook-lg hover:-translate-y-1 transition-all duration-300 relative flex flex-col justify-between">
-            {/* Washi Tape */}
-            <div className="w-24 h-5 bg-blue-100/90 rounded-sm shadow-tape absolute -top-2.5 left-10 rotate-[-1deg] border-t border-b border-[#222222]/10 pointer-events-none" />
-
+          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-[#ded8cb] shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300 relative flex flex-col justify-between">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="px-3 py-1 rounded-full bg-blue-100 border border-blue-200 font-mono text-xs font-bold text-blue-900 uppercase">
@@ -80,10 +77,7 @@ export function EducationSection({ educationList, locale }: EducationSectionProp
           </div>
 
           {/* Right Card: Self-Directed Tech Exploration */}
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-[#ded8cb] shadow-scrapbook hover:shadow-scrapbook-lg hover:-translate-y-1 transition-all duration-300 relative flex flex-col justify-between">
-            {/* Washi Tape */}
-            <div className="w-24 h-5 bg-[#f3b9a7]/80 rounded-sm shadow-tape absolute -top-2.5 right-10 rotate-1 border-t border-b border-[#222222]/10 pointer-events-none" />
-
+          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-[#ded8cb] shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300 relative flex flex-col justify-between">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="px-3 py-1 rounded-full bg-[#f3b9a7] font-mono text-xs font-bold text-[#222222] uppercase">

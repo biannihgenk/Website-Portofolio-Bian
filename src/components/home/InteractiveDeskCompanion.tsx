@@ -14,27 +14,9 @@ export function InteractiveDeskCompanion() {
     "Halo, selamat datang! Saya Net-Bot, asisten interaktif portofolio. Anda dapat berinteraksi dengan Tanya AI, menguji latensi jaringan, atau menjelajahi katalog proyek."
   );
 
-  // Soft tactile audio chime
-  function playClickSound(freq = 600) {
-    try {
-      const AudioCtx =
-        window.AudioContext ||
-        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      if (AudioCtx) {
-        const ctx = new AudioCtx();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(freq, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(freq * 1.5, ctx.currentTime + 0.08);
-        gain.gain.setValueAtTime(0.12, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.08);
-      }
-    } catch {}
+  // Tactile interaction handler
+  function playClickSound(_freq = 600) {
+    // Silent for professional experience
   }
 
   // 1. Tanya AI Feature
@@ -95,7 +77,7 @@ export function InteractiveDeskCompanion() {
   }
 
   return (
-    <div className="fixed bottom-5 right-5 z-40 select-none">
+    <div className="fixed bottom-3 right-3 sm:bottom-5 sm:right-5 z-40 select-none max-w-[calc(100vw-24px)]">
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -103,7 +85,7 @@ export function InteractiveDeskCompanion() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 16 }}
             transition={{ type: "spring", stiffness: 380, damping: 26 }}
-            className="mb-3 w-80 sm:w-88 bg-white/95 backdrop-blur-md rounded-3xl p-4 sm:p-5 shadow-2xl border-2 border-blue-500/80 text-left relative overflow-hidden"
+            className="mb-3 w-[calc(100vw-24px)] max-w-xs sm:w-88 bg-white/95 backdrop-blur-md rounded-3xl p-4 sm:p-5 shadow-2xl border-2 border-blue-500/80 text-left relative overflow-hidden"
           >
             {/* Top Header */}
             <div className="flex items-center justify-between pb-3 border-b border-[#ded8cb]">

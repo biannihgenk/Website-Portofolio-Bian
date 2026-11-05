@@ -153,9 +153,8 @@ export function ArticleReadingView({
           </div>
         </div>
 
-        {/* Styled Washi-Tape Excerpt Highlight */}
+        {/* Clean Excerpt Highlight */}
         <div className="bg-[#f5f2ea] p-5 sm:p-6 rounded-2xl border-l-4 border-[#2563eb] border border-[#ded8cb] shadow-xs relative">
-          <div className="absolute -top-3 left-8 w-20 h-5 bg-[#f3b9a7]/80 rounded-xs shadow-tape border-l border-r border-dashed border-[#686660]/30 pointer-events-none" />
           <p className="font-serif text-sm sm:text-base text-[#222222] italic leading-relaxed pt-1">
             &ldquo;{excerpt}&rdquo;
           </p>
@@ -167,7 +166,7 @@ export function ArticleReadingView({
       {/* ───────────────────────────────────────────────────────────── */}
       {resolvedCover && (
         <div className="my-8 sm:my-10 space-y-2">
-          <div className="relative w-full aspect-[16/9] sm:aspect-[21/9] rounded-3xl overflow-hidden bg-[#eae8e2] border border-[#ded8cb] shadow-scrapbook">
+          <div className="relative w-full aspect-[16/9] sm:aspect-[21/9] rounded-3xl overflow-hidden bg-[#eae8e2] border border-[#ded8cb] shadow-md">
             <Image
               src={resolvedCover}
               alt={title}

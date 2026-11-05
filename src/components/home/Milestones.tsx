@@ -62,7 +62,7 @@ export function Milestones({ achievements, locale }: MilestonesProps) {
           </p>
         </div>
       ) : (
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#ded8cb] shadow-scrapbook space-y-4">
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#ded8cb] shadow-xs space-y-4">
           {items.map((item, idx) => {
           const title = isId ? item.title_id : item.title_en;
           const desc = isId ? item.description_id : item.description_en;

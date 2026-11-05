@@ -31,15 +31,8 @@ export function ProfileGalleryShowcase({ avatarUrl }: ProfileGalleryShowcaseProp
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
           {/* Main 3D Tech Avatar Hero Spotlight (Left 7 Cols) */}
           <div className="lg:col-span-7 flex flex-col items-center sm:items-start relative">
-            {/* Washi tape at top left */}
-            <div className="absolute -top-4 left-6 w-32 h-7 bg-[#dbeafe]/90 shadow-tape -rotate-2 z-20 border-t border-b border-[#222222]/10 pointer-events-none flex items-center justify-center">
-              <span className="font-mono text-[9px] uppercase tracking-wider text-[#1e40af] font-bold">
-                MOKLET // A&apos;35
-              </span>
-            </div>
-
             <motion.div
-              whileHover={{ scale: 1.015 }}
+              whileHover={{ scale: 1.01 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
               className="relative w-full rounded-2xl overflow-hidden bg-[#f5f2ea] p-3 sm:p-4 shadow-inner group border border-[#ded8cb]"
             >
@@ -86,21 +79,10 @@ export function ProfileGalleryShowcase({ avatarUrl }: ProfileGalleryShowcaseProp
             </motion.div>
           </div>
 
-          {/* Right Side: Real Polaroid Snapshot & Identity Stamps (5 Cols) */}
+          {/* Right Side: Portrait Snapshot (5 Cols) */}
           <div className="lg:col-span-5 flex flex-col gap-6">
-            {/* Polaroid Snapshot */}
             <div className="relative self-center lg:self-start w-full max-w-sm">
-              {/* Simulated paperclip */}
-              <div className="absolute -top-3 left-10 w-4 h-10 bg-[#747878] rounded-full shadow-md z-30 opacity-80 rotate-12 pointer-events-none" />
-              {/* Washi tape top right */}
-              <div className="absolute -top-3 right-6 w-20 h-6 bg-[#bfdbfe]/80 rounded-sm shadow-sm rotate-6 z-20 border-t border-b border-[#222222]/10 pointer-events-none" />
-
-              <motion.div
-                whileHover={{ rotate: 0, scale: 1.02 }}
-                initial={{ rotate: 2 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="bg-white p-4 pb-6 rounded-2xl shadow-scrapbook-lg border border-[#ded8cb] transition-transform duration-300"
-              >
+              <div className="bg-white p-4 pb-6 rounded-2xl shadow-sm border border-[#ded8cb]">
                 <div className="w-full aspect-[4/5] rounded-xl overflow-hidden bg-[#f5f3ee] relative">
                   <Image
                     src={polaroidUrl}
@@ -122,24 +104,13 @@ export function ProfileGalleryShowcase({ avatarUrl }: ProfileGalleryShowcaseProp
                     Breathe in nature, recharge logic & perspective.
                   </p>
                 </div>
-
-                {/* 3D Net-Bot Mascot Sticker on Polaroid corner */}
-                <div className="absolute -bottom-6 -right-6 w-20 h-20 pointer-events-none drop-shadow-xl z-30">
-                  <Image
-                    src="/images/sticker_packet_router.png"
-                    alt="Net-Bot 3000 sticker"
-                    width={80}
-                    height={80}
-                    className="w-full h-full object-contain transform rotate-6"
-                  />
-                </div>
-              </motion.div>
+              </div>
             </div>
 
             {/* Postal Stamp Badge & Identity Pill */}
             <div className="flex items-center gap-4 bg-[#f5f2ea] p-4 rounded-2xl border border-[#ded8cb] shadow-xs">
               {/* Postal Stamp Replica */}
-              <div className="w-16 h-16 shrink-0 bg-[#f3b9a7]/70 rounded-xl flex flex-col items-center justify-center text-center p-1 shadow-xs -rotate-3 border-2 border-dashed border-[#222222]/30">
+              <div className="w-16 h-16 shrink-0 bg-[#f3b9a7]/70 rounded-xl flex flex-col items-center justify-center text-center p-1 shadow-xs border-2 border-dashed border-[#222222]/30">
                 <span className="font-mono text-[9px] uppercase font-bold text-[#1e0300]">
                   MALANG
                 </span>

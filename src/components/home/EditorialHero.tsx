@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { InteractiveSticker } from "@/components/ui/InteractiveSticker";
 
 interface EditorialHeroProps {
   displayName?: string;
@@ -29,7 +28,7 @@ export function EditorialHero({
   return (
     <section
       id="editorial-hero"
-      className="relative w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-12 sm:py-20 lg:py-24 overflow-visible"
+      className="relative w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-12 sm:py-20 lg:py-24 overflow-hidden lg:overflow-visible"
     >
       {/* Soft Ambient Background Glow Accents */}
       <div className="absolute -top-24 -right-20 w-96 h-96 bg-blue-100/30 rounded-full blur-3xl pointer-events-none" />
@@ -51,7 +50,7 @@ export function EditorialHero({
           {/* Headline Greeting */}
           <div className="space-y-3">
             <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-black text-[#222222] tracking-tight leading-[1.08]">
-              Membangun Solusi Digital &amp; Infrastruktur Teruji.
+              Haloo Semuanya!!&amp;
             </h2>
 
             {/* Description Text with Debian's Full Name */}
@@ -119,39 +118,11 @@ export function EditorialHero({
         </div>
 
         {/* ───────────────────────────────────────────────────────────── */}
-        {/* RIGHT COLUMN: 3D HANGING LANYARD ID CARD (Inspired by filoalvian.com) */}
+        {/* RIGHT COLUMN: 3D ID BADGE CARD (Clean & Professional)        */}
         {/* ───────────────────────────────────────────────────────────── */}
         <div className="lg:col-span-5 relative flex flex-col items-center justify-center pt-8 lg:pt-0">
-          {/* Lanyard Assembly Area */}
+          {/* Card Presentation Area */}
           <div className="relative flex flex-col items-center select-none">
-            
-            {/* Lanyard Hanging Ribbon (Directly connected to metal buckle) */}
-            <div className="relative z-10 flex flex-col items-center origin-top pointer-events-none">
-              {/* Dual Blue Fabric Strap */}
-              <div className="w-14 sm:w-16 h-28 sm:h-36 bg-[#2563eb] shadow-lg flex items-center justify-center overflow-hidden border-x-2 border-blue-700 rounded-b-xs relative -mb-1">
-                {/* Woven strap pattern */}
-                <div className="absolute inset-0 opacity-25 [background-image:linear-gradient(45deg,#000_25%,transparent_25%,transparent_75%,#000_75%,#000)] [background-size:6px_6px]" />
-                
-                {/* Printed Repeating Lanyard Text with Stars */}
-                <div className="flex flex-col items-center gap-4 text-white font-mono text-[9px] font-black tracking-widest uppercase [writing-mode:vertical-rl] rotate-180 opacity-95 select-none">
-                  <span>✦ BIAN ✦ TKJ &apos;26 ✦ SMK TELKOM</span>
-                  <span>✦ NAUFAL NIZAR DE BIAN ✦</span>
-                </div>
-              </div>
-
-              {/* Metal Crimp Clasp & Swivel Hook */}
-              <div className="relative z-20 flex flex-col items-center">
-                {/* Metal horizontal crimp bar */}
-                <div className="w-14 h-4 rounded-xs bg-linear-to-b from-slate-200 via-slate-100 to-slate-400 border border-slate-400 shadow-md flex items-center justify-center">
-                  <div className="w-8 h-1 bg-slate-400/80 rounded-full" />
-                </div>
-                {/* Chrome Swivel Ring */}
-                <div className="w-7 h-5 rounded-full border-2 border-slate-300 bg-linear-to-b from-slate-100 to-slate-300 shadow-inner -mt-1" />
-                {/* Metallic Snap Carabiner Hook */}
-                <div className="w-4 h-6 rounded-xs bg-linear-to-b from-slate-300 via-slate-100 to-slate-400 shadow-sm border border-slate-400 -mt-1" />
-              </div>
-            </div>
-
             {/* Draggable & Flippable Card Container */}
             <motion.div
               drag
@@ -160,7 +131,7 @@ export function EditorialHero({
               dragTransition={{ bounceStiffness: 300, bounceDamping: 20 }}
               whileHover={{ scale: 1.015 }}
               whileTap={{ scale: 0.98, cursor: "grabbing" }}
-              className="relative z-30 cursor-grab select-none [perspective:1400px] -mt-1"
+              className="relative z-30 cursor-grab select-none [perspective:1400px]"
             >
               {/* Frosted Transparent Plastic Holder Pouch with Punch Hole */}
               <div className="p-3 sm:p-3.5 rounded-[32px] bg-white/80 backdrop-blur-md border border-slate-200/90 shadow-2xl shadow-blue-500/10 relative">
@@ -174,7 +145,7 @@ export function EditorialHero({
                 <motion.div
                   animate={{ rotateY: isFlipped ? 180 : 0 }}
                   transition={{ duration: 0.6, type: "spring", stiffness: 220, damping: 20 }}
-                  className="relative w-[285px] sm:w-[310px] min-h-[445px] sm:min-h-[465px] bg-white rounded-2xl p-4 sm:p-5 shadow-xs border border-[#ded8cb] [transform-style:preserve-3d]"
+                  className="relative w-[275px] xs:w-[295px] sm:w-[310px] min-h-[430px] sm:min-h-[465px] bg-white rounded-2xl p-4 sm:p-5 shadow-xs border border-[#ded8cb] [transform-style:preserve-3d]"
                 >
                   {/* ─────────────────────────────────────────────────── */}
                   {/* FRONT SIDE OF ID CARD (Inspired by filoalvian.com) */}
@@ -378,21 +349,6 @@ export function EditorialHero({
                 </span>
                 <span>Balik kartu</span>
               </button>
-
-              {/* Interactive 3D AI Chip Sticker */}
-              <div className="absolute -top-7 -right-7 sm:-right-8 z-40 hidden sm:block">
-                <InteractiveSticker
-                  id="hero-ai-chip"
-                  imageSrc="/images/sticker_ai_chip.png"
-                  alt="Stiker AI Chip"
-                  quote="AI & Smart Core ⚡"
-                  subquote="Integrasi LLM, Agentik & Otomasi Lab"
-                  badge="Smart Processor"
-                  badgeColor="emerald"
-                  floatType="2"
-                  size="sm"
-                />
-              </div>
             </motion.div>
 
             {/* Mobile Fallback Flip Button */}

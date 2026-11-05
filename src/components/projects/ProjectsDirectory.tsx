@@ -32,7 +32,6 @@ interface BlueprintItem {
   tech: string[];
   footerAction: string;
   footerStamp: string;
-  tapeClass?: string;
   projectUrl?: string | null;
   repoUrl?: string | null;
 }
@@ -46,14 +45,6 @@ const FALLBACK_PROJECT_COVERS: Record<string, string> = {
   topology:
     "https://lh3.googleusercontent.com/aida-public/AB6AXuBUjW_YctERHVZ2Y-trL13N57jKo3hP9Vt06D9x356_gdADlkq1bjccR-qj4eUuhgmuLM5qJMpvJdssvS84fVJpVW9CgOQzL-mG7_uqLUkirwWxg-3PFPHkKpCDqzXQtYuEyC9K1secJsNjODhS7hGzvdsQ97pmIlF3eOZFZ8mh0Bpnp4tz9BvxZ2rHN_ZmCjeaaIdaGNn4iW8Fk2CLBhhAqUXzekvuw_QH4KpjgSu-AXdI9CkGlQUX",
 };
-
-// Washi tape rotations per card
-const TAPE_ROTATIONS = [
-  "absolute -top-2.5 right-6 w-20 h-5 bg-[rgba(245,242,234,0.95)] shadow-tape rounded-xs rotate-2",
-  "absolute -top-2.5 left-8 w-20 h-5 bg-[rgba(245,242,234,0.95)] shadow-tape rounded-xs -rotate-3",
-  "absolute -top-2.5 right-10 w-16 h-5 bg-[rgba(245,242,234,0.95)] shadow-tape rounded-xs rotate-1",
-  "absolute -top-2.5 left-10 w-20 h-5 bg-[rgba(245,242,234,0.95)] shadow-tape rounded-xs -rotate-1",
-];
 
 // Helper to determine status styling and label
 function getStatusBadge(status?: string | null, isFeatured?: boolean, isId?: boolean) {
@@ -174,7 +165,6 @@ export function ProjectsDirectory({
         tech: techList,
         footerAction: t("inspectDetails"),
         footerStamp: p.project_status ? p.project_status.toUpperCase() : t("clickToView"),
-        tapeClass: TAPE_ROTATIONS[idx % TAPE_ROTATIONS.length],
         projectUrl: p.project_url,
         repoUrl: p.repository_url,
       };
@@ -334,11 +324,8 @@ export function ProjectsDirectory({
                   handleOpenModal(card);
                 }
               }}
-              className="group relative bg-white rounded-2xl p-5 shadow-xs hover:shadow-scrapbook transition-all duration-300 flex flex-col justify-between cursor-pointer border border-[#ded8cb] hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]"
+              className="group relative bg-white rounded-2xl p-5 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between cursor-pointer border border-[#ded8cb] hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]"
             >
-              {/* Top Washi Tape Accent */}
-              {card.tapeClass && <div className={card.tapeClass} />}
-
               <div>
                 {/* Header Badges */}
                 <div className="flex items-center justify-between gap-2 mb-3">

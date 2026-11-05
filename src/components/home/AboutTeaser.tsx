@@ -2,7 +2,6 @@
 
 import React from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { Link } from "@/lib/i18n/navigation";
 import { useTranslations } from "next-intl";
 
@@ -13,45 +12,11 @@ export function AboutTeaser() {
     <section id="about-profile" className="w-full py-16 sm:py-20 bg-transparent border-y border-[#ded8cb] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-          {/* Visual Left Collage */}
+          {/* Visual Left Frame */}
           <div className="lg:col-span-5 order-2 lg:order-1 relative">
             <div className="relative w-full max-w-md mx-auto">
-              {/* Tilted background paper card */}
-              <div className="absolute inset-0 bg-blue-100/50 rounded-3xl rotate-[-3deg] shadow-sm transform" />
-
-              {/* Perched 3D Server Rack Sticker on Top Right */}
-              <motion.div
-                animate={{
-                  y: [0, -6, 0],
-                  rotate: [0, 2, -2, 0],
-                }}
-                transition={{
-                  duration: 6,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                whileHover={{ scale: 1.15, rotate: 6 }}
-                className="absolute -top-10 -right-6 sm:-right-8 z-30 cursor-pointer select-none"
-                title="Bare-Metal Homelab Server Rack"
-              >
-                <div className="w-20 h-20 sm:w-24 sm:h-24 drop-shadow-[0_8px_16px_rgba(37,99,235,0.25)] hover:drop-shadow-[0_12px_24px_rgba(37,99,235,0.45)] transition-all">
-                  <Image
-                    src="/images/sticker_server_rack.png"
-                    alt="Server Rack Sticker"
-                    width={96}
-                    height={96}
-                    priority
-                    unoptimized
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-              </motion.div>
-
-              {/* Foreground photo card with Foto Bian */}
-              <div className="relative bg-white p-4 sm:p-5 rounded-3xl shadow-lg border border-[#ded8cb] rotate-[1.5deg]">
-                {/* Washi Tape */}
-                <div className="absolute -top-3 left-6 w-24 h-5 bg-blue-200/80 rounded-sm shadow-tape rotate-2 border-t border-b border-blue-300 pointer-events-none z-10" />
-
+              {/* Clean photo card with Foto Bian */}
+              <div className="relative bg-white p-4 sm:p-5 rounded-3xl shadow-sm border border-[#ded8cb]">
                 <div className="relative aspect-[4/5] sm:aspect-[3/4] rounded-2xl overflow-hidden bg-[#f5f2ea] shadow-inner">
                   <Image
                     src="/images/Foto Bian.png"
@@ -78,8 +43,8 @@ export function AboutTeaser() {
                 </div>
               </div>
 
-              {/* Post-it style mini note */}
-              <div className="absolute -bottom-6 -right-2 bg-[#f5f2ea] p-4 rounded-xl shadow-md border border-[#ded8cb] rotate-[-4deg] max-w-[210px] z-20">
+              {/* Clean bottom philosophy quote card */}
+              <div className="mt-4 bg-[#f5f2ea] p-4 rounded-2xl shadow-xs border border-[#ded8cb]">
                 <p className="font-mono text-[10px] text-[#6b6863] uppercase tracking-wider font-bold">
                   {t("philosophy")}
                 </p>

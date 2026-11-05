@@ -192,97 +192,18 @@ export function KineticCanvasStage({
         {/* Line 3: EN [🤖] GINEER. */}
         {/* ───────────────────────────────────────────────────────── */}
         <div className="relative w-full text-center flex flex-col items-center justify-center leading-[0.92] select-none py-2">
-          {/* Surrounding Tech Badges (Rich, Clean & Lively on Left & Right) */}
-          {/* Top Left: Routing Engine Stamp */}
-          <motion.div
-            animate={shouldReduceMotion ? {} : { y: [0, -6, 0] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-            className="hidden xl:flex absolute left-0 -top-2 items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white/95 backdrop-blur-md border border-[#ded8cb] shadow-xs text-left select-none pointer-events-auto hover:border-blue-300 hover:shadow-md transition-all group"
-          >
-            <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse" />
-            <div className="flex flex-col">
-              <span className="text-[10px] font-mono font-bold text-[#222222] tracking-wider group-hover:text-blue-600 transition-colors">
-                ROUTING ENGINE
-              </span>
-              <span className="text-[9px] font-mono text-[#6b6863]">BGP • OSPF • VLANs</span>
-            </div>
-          </motion.div>
-
-          {/* Bottom Left: 10G Core Homelab Pill */}
-          <motion.div
-            animate={shouldReduceMotion ? {} : { y: [0, 6, 0] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
-            className="hidden xl:flex absolute left-0 bottom-4 items-center gap-2 px-3 py-1.5 rounded-2xl bg-blue-50/90 backdrop-blur-md border border-blue-200/80 shadow-xs select-none pointer-events-auto hover:scale-105 transition-transform"
-          >
-            <span className="text-xs">⚡</span>
-            <span className="text-[10px] font-mono font-bold text-blue-900 tracking-wider">10G LAB ENGINE</span>
-            <span className="text-[9px] font-mono text-blue-600 font-semibold px-1.5 py-0.5 rounded bg-blue-100">PROD</span>
-          </motion.div>
-
-          {/* Top Right: Next.js 15 Arch Pill */}
-          <motion.div
-            animate={shouldReduceMotion ? {} : { y: [0, -7, 0] }}
-            transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
-            className="hidden xl:flex absolute right-0 -top-2 items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white/95 backdrop-blur-md border border-[#ded8cb] shadow-xs select-none pointer-events-auto hover:border-blue-300 hover:shadow-md transition-all text-right group"
-          >
-            <div className="flex flex-col">
-              <span className="text-[10px] font-mono font-bold text-[#222222] tracking-wider group-hover:text-blue-600 transition-colors">
-                NEXT.JS 15 ARCH
-              </span>
-              <span className="text-[9px] font-mono text-emerald-600 font-medium">99.9% UPTIME • V2.6</span>
-            </div>
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-          </motion.div>
-
-          {/* Bottom Right: Gateway Ping Widget */}
-          <motion.div
-            animate={shouldReduceMotion ? {} : { y: [0, 5, 0] }}
-            transition={{ duration: 6.2, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
-            onClick={handleTestPing}
-            className="hidden xl:flex absolute right-0 bottom-4 items-center gap-2 px-3 py-1.5 rounded-2xl bg-white/95 backdrop-blur-md border border-[#ded8cb] shadow-xs select-none pointer-events-auto hover:border-blue-400 hover:shadow-md transition-all cursor-pointer group"
-            title="Klik untuk test latensi jaringan gateway lab"
-          >
-            <span className="w-2 h-2 rounded-full bg-blue-600" />
-            <span className="text-[10px] font-mono font-bold text-[#222222] group-hover:text-blue-600 transition-colors">
-              GATEWAY: {pingState.testing ? "..." : `${pingState.latency}ms`}
-            </span>
-            <span className="text-[9px] font-mono text-[#6b6863]">RTT</span>
-          </motion.div>
 
           {/* Line 1: NETWORK & WEB (All in ONE single line) */}
           <motion.div
             variants={lineVariants}
-            className="font-serif font-black tracking-tight text-[30px] sm:text-[50px] md:text-[70px] lg:text-[88px] xl:text-[104px] flex items-center justify-center flex-nowrap whitespace-nowrap gap-x-1.5 sm:gap-x-2.5 md:gap-x-3.5 my-0.5 sm:my-1 relative"
+            className="font-serif font-black tracking-tight text-[26px] xs:text-[30px] sm:text-[50px] md:text-[70px] lg:text-[88px] xl:text-[104px] flex items-center justify-center flex-nowrap whitespace-nowrap gap-x-1 sm:gap-x-2.5 md:gap-x-3.5 my-0.5 sm:my-1 relative"
           >
             {/* Left corner accent */}
             <span className="hidden sm:inline-block font-mono text-[11px] md:text-[13px] text-blue-500/80 font-normal tracking-widest select-none -translate-y-1 sm:-translate-y-2">
               ⌜01
             </span>
 
-            <span className="text-shimmer-gleam font-serif">NET</span>
-
-            {/* Compact & Clean Mini Lightning Badge (Decorative Accent) */}
-            <motion.span
-              whileHover={{ scale: 1.2, rotate: 12 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={handleTestPing}
-              className="inline-flex items-center justify-center align-middle mx-0.5 sm:mx-1 cursor-pointer group/bolt select-none"
-              title="High-Speed Packet Routing • Uji latensi lab"
-            >
-              <span className="w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 rounded-xl bg-blue-50/90 border border-blue-400/80 text-blue-600 flex items-center justify-center shadow-[0_0_12px_rgba(37,99,235,0.25)] hover:shadow-[0_0_20px_rgba(37,99,235,0.45)] transition-all">
-                <svg
-                  className="w-3.5 h-3.5 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 fill-blue-500/20 stroke-blue-600"
-                  viewBox="0 0 24 24"
-                  strokeWidth="2.4"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-                </svg>
-              </span>
-            </motion.span>
-
-            <span className="text-shimmer-gleam font-serif">WORK</span>
+            <span className="text-shimmer-gleam font-serif">NETWORK</span>
 
             <span className="text-[#6b6863]/40 font-serif italic font-normal text-[24px] sm:text-[40px] md:text-[56px] lg:text-[70px] xl:text-[84px] mx-0.5">
               &amp;
@@ -318,7 +239,7 @@ export function KineticCanvasStage({
           {/* Line 2: the CURIOSITY */}
           <motion.div
             variants={lineVariants}
-            className="font-serif font-black tracking-tighter text-[44px] sm:text-[74px] md:text-[98px] lg:text-[120px] xl:text-[136px] flex items-center justify-center flex-wrap gap-x-2 sm:gap-x-3.5 my-0.5 sm:my-1 relative"
+            className="font-serif font-black tracking-tighter text-[38px] xs:text-[44px] sm:text-[74px] md:text-[98px] lg:text-[120px] xl:text-[136px] flex items-center justify-center flex-wrap gap-x-2 sm:gap-x-3.5 my-0.5 sm:my-1 relative"
           >
             {/* Perched LinkedIn badge on left */}
             <motion.a
@@ -345,50 +266,12 @@ export function KineticCanvasStage({
             </span>
           </motion.div>
 
-          {/* Line 3: EN [🤖] GINEER. */}
+          {/* Line 3: ENGINEER. */}
           <motion.div
             variants={lineVariants}
-            className="font-serif font-black tracking-tighter text-[40px] sm:text-[68px] md:text-[92px] lg:text-[112px] xl:text-[126px] flex items-center justify-center flex-wrap gap-x-1 sm:gap-x-2 relative"
+            className="font-serif font-black tracking-tighter text-[34px] xs:text-[40px] sm:text-[68px] md:text-[92px] lg:text-[112px] xl:text-[126px] flex items-center justify-center flex-wrap gap-x-1 sm:gap-x-2 relative"
           >
-            <span className="text-shimmer-gleam font-serif">EN</span>
-
-            {/* Compact Embedded Robot / Mascot Badge */}
-            <motion.span
-              whileHover={{ scale: 1.18, rotate: -8 }}
-              whileTap={{ scale: 0.92 }}
-              className="inline-flex items-center justify-center align-middle mx-1 cursor-pointer group/robot select-none"
-              title="Debian Homelab Bot • Selalu penasaran & bereksperimen"
-            >
-              <span className="w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-11 lg:h-11 rounded-xl bg-amber-50/90 border border-amber-400 text-amber-500 flex items-center justify-center shadow-[0_0_12px_rgba(245,158,11,0.2)] hover:shadow-[0_0_22px_rgba(245,158,11,0.4)] transition-all">
-                <svg
-                  className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M12 2v3" stroke="currentColor" strokeWidth="2.5" />
-                  <circle cx="12" cy="2" r="1.5" fill="currentColor" />
-                  <rect
-                    x="4"
-                    y="5"
-                    width="16"
-                    height="15"
-                    rx="5"
-                    fill="rgba(251,191,36,0.2)"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  />
-                  <circle cx="9" cy="11" r="1.8" fill="currentColor" />
-                  <circle cx="15" cy="11" r="1.8" fill="currentColor" />
-                  <path d="M9 15h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-              </span>
-            </motion.span>
-
-            <span className="text-shimmer-gleam font-serif">GINEER</span>
+            <span className="text-shimmer-gleam font-serif">ENGINEER</span>
             <span className="text-blue-600 font-serif italic text-[42px] sm:text-[72px] md:text-[96px] lg:text-[116px] xl:text-[130px]">
               .
             </span>
