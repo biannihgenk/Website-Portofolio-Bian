@@ -49,7 +49,7 @@ export function AchievementsDirectory({
 
   // Parse Supabase real achievements into display format
   const supabaseItems: AchievementItemDisplay[] = useMemo(() => {
-    return achievements.map((ach, idx) => {
+    return achievements.map((ach) => {
       const title = isId ? (ach.title_id || ach.title_en) : (ach.title_en || ach.title_id);
       const desc = isId ? (ach.description_id || ach.description_en) : (ach.description_en || ach.description_id);
       const catLower = (ach.category || "").toLowerCase();

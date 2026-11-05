@@ -247,8 +247,6 @@ export function Navbar({
   const achievementsHref = "/achievements";
   const educationHref = "/education";
   const galleryHref = "/gallery";
-  const blogHref = "/blog";
-  const contactHref = isHome ? "#contact" : "/contact";
 
   const aboutSubmenuItems = [
     {

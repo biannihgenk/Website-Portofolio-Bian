@@ -8,8 +8,6 @@ interface Node {
   vx: number;
   vy: number;
   radius: number;
-  baseRadius: number;
-  color: string;
 }
 
 interface Packet {
@@ -33,28 +31,21 @@ export function InteractiveNetworkBackground() {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    // Mouse coordinates (default to center or offscreen)
+    // Mouse coordinates (default to offscreen)
     const mouse = {
       x: -1000,
       y: -1000,
       targetX: -1000,
       targetY: -1000,
-      radius: 210, // Interaction radius
+      radius: 160,
       isActive: false,
     };
 
-    // Palette: Clean royal blue, electric cyan, and soft steel slate
-    const colors = [
-      "rgba(37, 99, 235, ",   // Royal Blue #2563eb
-      "rgba(56, 189, 248, ",  // Electric Sky #38bdf8
-      "rgba(99, 102, 241, ",  // Indigo #6366f1
-      "rgba(148, 163, 184, ", // Slate #94a3b8
-    ];
-
-    // Determine node count dynamically based on screen resolution (enriched for denser network web)
-    const calculateNodeCount = (w: number, h: number) => {
-      const area = w * h;
-      return Math.min(96, Math.max(46, Math.floor(area / 17000)));
+    // Responsive node count: lightweight on mobile, balanced on desktop
+    const calculateNodeCount = (w: number) => {
+      if (w < 640) return 20; // Mobile: ultra lightweight
+      if (w < 1024) return 28; // Tablet
+      return 38; // Desktop
     };
 
     let nodes: Node[] = [];
@@ -63,38 +54,34 @@ export function InteractiveNetworkBackground() {
     function initNodes() {
       nodes = [];
       packets = [];
-      const count = calculateNodeCount(width, height);
+      const count = calculateNodeCount(width);
 
       for (let i = 0; i < count; i++) {
-        const radius = Math.random() * 1.6 + 1.2;
-        const colorPrefix = colors[Math.floor(Math.random() * colors.length)];
+        const radius = Math.random() * 1.2 + 1.2;
         nodes.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.45,
-          vy: (Math.random() - 0.5) * 0.45,
+          vx: (Math.random() - 0.5) * 0.35,
+          vy: (Math.random() - 0.5) * 0.35,
           radius,
-          baseRadius: radius,
-          color: colorPrefix,
         });
       }
     }
 
     function spawnPacket() {
-      if (nodes.length < 2 || packets.length > 8) return;
+      if (nodes.length < 2 || packets.length > 5) return;
       const startIndex = Math.floor(Math.random() * nodes.length);
       const startNode = nodes[startIndex];
 
       // Find nearby nodes
       let targetNode: Node | null = null;
-      const minDistance = 165;
+      const minDistance = 150;
 
       for (let i = 0; i < nodes.length; i++) {
         if (i === startIndex) continue;
         const dx = nodes[i].x - startNode.x;
         const dy = nodes[i].y - startNode.y;
-        const dist = Math.hypot(dx, dy);
-        if (dist < minDistance) {
+        if (dx * dx + dy * dy < minDistance * minDistance) {
           targetNode = nodes[i];
           break;
         }
@@ -105,22 +92,25 @@ export function InteractiveNetworkBackground() {
           startNode,
           endNode: targetNode,
           progress: 0,
-          speed: Math.random() * 0.015 + 0.012,
+          speed: Math.random() * 0.012 + 0.008,
         });
       }
     }
 
-    const packetInterval = setInterval(spawnPacket, 1200);
+    const packetInterval = setInterval(spawnPacket, 1600);
 
-    // Handle Resize
+    // Debounced Resize
+    let resizeTimeout: NodeJS.Timeout;
     function handleResize() {
-      if (!canvas) return;
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-      initNodes();
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (!canvas) return;
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+        initNodes();
+      }, 150);
     }
 
-    // Handle Mouse
     function handlePointerMove(e: PointerEvent) {
       mouse.targetX = e.clientX;
       mouse.targetY = e.clientY;
@@ -147,8 +137,10 @@ export function InteractiveNetworkBackground() {
     };
     mediaQuery.addEventListener("change", handleMotionChange);
 
-    // Main Animation Loop
+    // Main 60FPS Batch-Rendered Loop
     let lastTime = performance.now();
+    const maxConnectDistSq = 145 * 145;
+    const mouseRadiusSq = mouse.radius * mouse.radius;
 
     function render(currentTime: number) {
       if (!ctx || !canvas) return;
@@ -157,67 +149,46 @@ export function InteractiveNetworkBackground() {
       lastTime = currentTime;
 
       // Smooth mouse position damping
-      mouse.x += (mouse.targetX - mouse.x) * 0.15;
-      mouse.y += (mouse.targetY - mouse.y) * 0.15;
+      if (mouse.isActive) {
+        mouse.x += (mouse.targetX - mouse.x) * 0.2;
+        mouse.y += (mouse.targetY - mouse.y) * 0.2;
+      }
 
       ctx.clearRect(0, 0, width, height);
 
-      const maxConnectDist = 165;
-      const maxConnectDistSq = maxConnectDist * maxConnectDist;
+      // 1. Batch draw connecting lines in a single path (99% fewer draw calls)
+      ctx.beginPath();
+      ctx.strokeStyle = "rgba(37, 99, 235, 0.12)";
+      ctx.lineWidth = 0.8;
 
-      // 1. Draw connecting lines between nodes (interconnected network web)
       for (let i = 0; i < nodes.length; i++) {
         const a = nodes[i];
-
         for (let j = i + 1; j < nodes.length; j++) {
           const b = nodes[j];
           const dx = b.x - a.x;
           const dy = b.y - a.y;
-          const distSq = dx * dx + dy * dy;
-
-          if (distSq < maxConnectDistSq) {
-            const dist = Math.sqrt(distSq);
-            const alpha = (1 - dist / maxConnectDist) * 0.28;
-            ctx.beginPath();
+          if (dx * dx + dy * dy < maxConnectDistSq) {
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = `rgba(37, 99, 235, ${alpha.toFixed(3)})`;
-            ctx.lineWidth = 1.0;
-            ctx.stroke();
           }
         }
 
-        // Connect nodes to mouse if nearby
+        // Connect node to mouse if active
         if (mouse.isActive) {
           const dx = mouse.x - a.x;
           const dy = mouse.y - a.y;
-          const distSq = dx * dx + dy * dy;
-          const mouseDist = mouse.radius;
-
-          if (distSq < mouseDist * mouseDist) {
-            const dist = Math.sqrt(distSq);
-            const alpha = (1 - dist / mouseDist) * 0.45;
-            ctx.beginPath();
+          if (dx * dx + dy * dy < mouseRadiusSq) {
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(mouse.x, mouse.y);
-            ctx.strokeStyle = `rgba(37, 99, 235, ${alpha.toFixed(3)})`;
-            ctx.lineWidth = 1.2;
-            ctx.stroke();
-
-            // Magnetic gentle drift towards mouse
-            if (!isReducedMotion) {
-              const force = (1 - dist / mouseDist) * 0.03;
-              a.x += dx * force;
-              a.y += dy * force;
-            }
           }
         }
       }
+      ctx.stroke();
 
-      // 2. Draw & update packets (transmitting data pulses)
+      // 2. Draw & update packets
       for (let k = packets.length - 1; k >= 0; k--) {
         const p = packets[k];
-        p.progress += p.speed * (isReducedMotion ? 0.2 : delta);
+        p.progress += p.speed * (isReducedMotion ? 0.3 : delta);
 
         if (p.progress >= 1) {
           packets.splice(k, 1);
@@ -228,15 +199,15 @@ export function InteractiveNetworkBackground() {
         const currY = p.startNode.y + (p.endNode.y - p.startNode.y) * p.progress;
 
         ctx.beginPath();
-        ctx.arc(currX, currY, 2.2, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(37, 99, 235, 0.85)";
-        ctx.shadowColor = "rgba(37, 99, 235, 0.6)";
-        ctx.shadowBlur = 6;
+        ctx.arc(currX, currY, 2, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(37, 99, 235, 0.75)";
         ctx.fill();
-        ctx.shadowBlur = 0; // reset
       }
 
-      // 3. Draw & update nodes
+      // 3. Update & batch draw all nodes in a single fill call
+      ctx.beginPath();
+      ctx.fillStyle = "rgba(37, 99, 235, 0.4)";
+
       for (let i = 0; i < nodes.length; i++) {
         const node = nodes[i];
 
@@ -261,36 +232,17 @@ export function InteractiveNetworkBackground() {
           }
         }
 
-        // Draw node dot
-        ctx.beginPath();
+        ctx.moveTo(node.x + node.radius, node.y);
         ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `${node.color}0.65)`;
-        ctx.fill();
       }
-
-      // Draw subtle interactive cursor focal aura
-      if (mouse.isActive && mouse.x > 0 && mouse.y > 0) {
-        ctx.beginPath();
-        ctx.arc(mouse.x, mouse.y, 4, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(37, 99, 235, 0.75)";
-        ctx.shadowColor = "rgba(37, 99, 235, 0.5)";
-        ctx.shadowBlur = 8;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-
-        ctx.beginPath();
-        ctx.arc(mouse.x, mouse.y, 14, 0, Math.PI * 2);
-        ctx.strokeStyle = "rgba(37, 99, 235, 0.25)";
-        ctx.lineWidth = 1;
-        ctx.stroke();
-      }
+      ctx.fill();
 
       animationFrameId = requestAnimationFrame(render);
     }
 
     animationFrameId = requestAnimationFrame(render);
 
-    // Pause on visibility change
+    // Pause on visibility change (saves CPU and battery when tab is hidden)
     function handleVisibility() {
       if (document.hidden) {
         cancelAnimationFrame(animationFrameId);
@@ -305,6 +257,7 @@ export function InteractiveNetworkBackground() {
     return () => {
       cancelAnimationFrame(animationFrameId);
       clearInterval(packetInterval);
+      clearTimeout(resizeTimeout);
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("pointermove", handlePointerMove);
       document.removeEventListener("mouseleave", handlePointerLeave);
@@ -318,15 +271,14 @@ export function InteractiveNetworkBackground() {
       aria-hidden="true"
       className="fixed inset-0 w-full h-full pointer-events-none z-[1] overflow-hidden"
     >
-      {/* 1. Global Architectural Blueprint Dots Layer (Matching Hero across all pages) */}
+      {/* 1. Global Architectural Blueprint Dots Layer */}
       <div className="absolute inset-0 w-full h-full blueprint-dots opacity-80 pointer-events-none" />
 
-      {/* 2. Soft Ambient Corner Glows to add depth without cluttering */}
-      <div className="absolute -top-32 -right-32 w-[520px] h-[520px] bg-blue-100/35 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-1/2 -left-32 w-[480px] h-[480px] bg-indigo-50/30 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-32 right-1/4 w-[500px] h-[500px] bg-sky-100/25 rounded-full blur-3xl pointer-events-none" />
+      {/* 2. Soft Ambient Corner Glows */}
+      <div className="absolute -top-32 -right-32 w-[420px] h-[420px] bg-blue-100/30 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/2 -left-32 w-[380px] h-[380px] bg-indigo-50/25 rounded-full blur-3xl pointer-events-none" />
 
-      {/* 3. Dynamic Network Plexus Canvas */}
+      {/* 3. Ultra-Smooth Hardware-Accelerated Canvas */}
       <canvas
         ref={canvasRef}
         className="w-full h-full block opacity-75 sm:opacity-85"

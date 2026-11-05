@@ -165,27 +165,9 @@ export function TechStackMotionBar() {
   const [selectedTech, setSelectedTech] = useState<TechItem | null>(null);
   const [activeCategory, setActiveCategory] = useState<"all" | "web" | "networking" | "devops">("all");
 
-  // Play crisp technological click chime
+  // Tactile interaction handler
   const playTechClickChime = () => {
-    try {
-      const AudioCtx =
-        window.AudioContext ||
-        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      if (AudioCtx) {
-        const ctx = new AudioCtx();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(659.25, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(1318.51, ctx.currentTime + 0.08);
-        gain.gain.setValueAtTime(0.25, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.08);
-      }
-    } catch {}
+    // Silent for professional experience
   };
 
   const handleCardClick = (tech: TechItem) => {
@@ -293,22 +275,17 @@ export function TechStackMotionBar() {
                 }`}
                 title={`Klik untuk lihat detail ${tech.name}`}
               >
-                {/* Actively Floating Icon Container with Wave Delay */}
+                {/* Icon Container */}
                 <div
                   className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#fbf9f3] p-1.5 flex items-center justify-center shrink-0 border border-[#ded8cb]/70 group-hover:border-blue-300 group-hover:bg-blue-50/50 group-hover:shadow-xs transition-colors"
                 >
-                  <div
-                    className="w-full h-full animate-icon-float"
-                    style={{ animationDelay: `${(idx % 5) * 0.35}s` }}
-                  >
-                    <Image
-                      src={tech.icon}
-                      alt={tech.name}
-                      width={44}
-                      height={44}
-                      className="w-full h-full object-contain group-hover:scale-125 group-hover:-rotate-6 transition-transform duration-300 drop-shadow-xs"
-                    />
-                  </div>
+                  <Image
+                    src={tech.icon}
+                    alt={tech.name}
+                    width={44}
+                    height={44}
+                    className="w-full h-full object-contain group-hover:scale-115 transition-transform duration-300 drop-shadow-xs"
+                  />
                 </div>
 
                 <div className="flex flex-col text-left">
@@ -347,22 +324,17 @@ export function TechStackMotionBar() {
                 }`}
                 title={`Klik untuk lihat detail ${tech.name}`}
               >
-                {/* Actively Floating Icon Container with Wave Delay */}
+                {/* Icon Container */}
                 <div
                   className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#fbf9f3] p-1.5 flex items-center justify-center shrink-0 border border-[#ded8cb]/70 group-hover:border-amber-300 group-hover:bg-amber-50/50 group-hover:shadow-xs transition-colors"
                 >
-                  <div
-                    className="w-full h-full animate-icon-float"
-                    style={{ animationDelay: `${((idx + 2) % 5) * 0.35}s` }}
-                  >
-                    <Image
-                      src={tech.icon}
-                      alt={tech.name}
-                      width={44}
-                      height={44}
-                      className="w-full h-full object-contain group-hover:scale-125 group-hover:rotate-6 transition-transform duration-300 drop-shadow-xs"
-                    />
-                  </div>
+                  <Image
+                    src={tech.icon}
+                    alt={tech.name}
+                    width={44}
+                    height={44}
+                    className="w-full h-full object-contain group-hover:scale-115 transition-transform duration-300 drop-shadow-xs"
+                  />
                 </div>
 
                 <div className="flex flex-col text-left">

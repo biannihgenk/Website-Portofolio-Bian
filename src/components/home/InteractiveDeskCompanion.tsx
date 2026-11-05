@@ -15,7 +15,8 @@ export function InteractiveDeskCompanion() {
   );
 
   // Tactile interaction handler
-  function playClickSound(_freq = 600) {
+  function playClickSound(..._args: unknown[]) {
+    void _args;
     // Silent for professional experience
   }
 

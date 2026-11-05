@@ -1,13 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { InteractiveSticker } from "@/components/ui/InteractiveSticker";
 
 export function EducationHero() {
-  const [noteTapped, setNoteTapped] = useState(false);
-
   return (
     <section className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center relative pt-2">
       {/* Left Column: Copy & Narrative (Col 7) */}

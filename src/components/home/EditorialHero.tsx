@@ -49,8 +49,8 @@ export function EditorialHero({
 
           {/* Headline Greeting */}
           <div className="space-y-3">
-            <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-black text-[#222222] tracking-tight leading-[1.08]">
-              Haloo Semuanya!!&amp;
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-black text-[#222222] tracking-tight leading-[1.15]">
+              Rekayasa Sistem Jaringan &amp; Web Modern
             </h2>
 
             {/* Description Text with Debian's Full Name */}
@@ -92,11 +92,11 @@ export function EditorialHero({
             </a>
           </div>
 
-          {/* Interactive Hint with Gesture Emoji */}
+          {/* Interactive Hint */}
           <div className="flex items-center gap-2 text-xs font-mono text-[#6b6863] pt-1">
-            <span className="text-sm">👆</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
             <span>
-              Kartu ID interaktif — klik tombol atau seret kartu untuk melihat spesifikasi teknis.
+              Kartu identitas interaktif — klik tombol balik atau seret untuk spesifikasi teknis.
             </span>
           </div>
 
