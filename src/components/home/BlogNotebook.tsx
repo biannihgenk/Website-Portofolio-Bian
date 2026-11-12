@@ -1,8 +1,10 @@
 "use client";
 
 import React from "react";
+import { Link } from "@/lib/i18n/navigation";
 import { useTranslations } from "next-intl";
 import type { BlogPost } from "@/types/content";
+import { ScrollReveal } from "@/components/motion/MotionProviders";
 
 interface BlogNotebookProps {
   posts: BlogPost[];
@@ -27,8 +29,8 @@ export function BlogNotebook({ posts, locale }: BlogNotebookProps) {
   }));
 
   return (
-    <section id="blog" className="w-full py-16 sm:py-20 bg-transparent border-y border-[#ded8cb]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
+    <section id="blog" className="w-full py-16 sm:py-20 bg-transparent border-y border-[#ded8cb] scroll-mt-24 overflow-x-clip">
+      <ScrollReveal className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
           <div className="space-y-2">
@@ -40,13 +42,13 @@ export function BlogNotebook({ posts, locale }: BlogNotebookProps) {
             </h2>
           </div>
 
-          <a
-            href={`/${locale}/blog`}
+          <Link
+            href="/blog"
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white hover:bg-[#f0eee8] text-[#222222] font-mono text-xs border border-[#ded8cb] shadow-xs transition-all whitespace-nowrap self-start sm:self-auto font-bold"
           >
             <span>{t("readAll")}</span>
             <span className="text-blue-600">→</span>
-          </a>
+          </Link>
         </div>
 
         {items.length === 0 ? (
@@ -66,10 +68,10 @@ export function BlogNotebook({ posts, locale }: BlogNotebookProps) {
             {items.map((post) => {
               const title = isId ? post.title_id : post.title_en;
               const excerpt = isId ? post.excerpt_id : post.excerpt_en;
-              const linkHref = post.slug ? `/${locale}/blog/${post.slug}` : `/${locale}/blog`;
+              const linkHref = post.slug ? `/blog/${post.slug}` : "/blog";
 
               return (
-                <a
+                <Link
                   key={post.id}
                   href={linkHref}
                   className="bg-white p-6 sm:p-7 rounded-3xl border border-[#ded8cb] shadow-scrapbook hover:shadow-scrapbook-lg transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1 block"
@@ -99,12 +101,12 @@ export function BlogNotebook({ posts, locale }: BlogNotebookProps) {
                       <span>{t("readAction")}</span> →
                     </span>
                   </div>
-                </a>
+                </Link>
               );
             })}
           </div>
         )}
-      </div>
+      </ScrollReveal>
     </section>
   );
 }

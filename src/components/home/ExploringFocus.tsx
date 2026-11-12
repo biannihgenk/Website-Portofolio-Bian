@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Link } from "@/lib/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { motion } from "motion/react";
 
@@ -251,14 +252,9 @@ export function ExploringFocus() {
 
       {/* 3 Interactive Modern Folder Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-        {cards.map((item) => (
-          <motion.a
-            key={item.index}
-            href={item.href}
-            whileHover={{ y: -6 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className="group relative bg-white rounded-3xl border border-[#ded8cb] shadow-scrapbook hover:shadow-[0_20px_35px_-10px_rgba(37,99,235,0.16)] transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer"
-          >
+        {cards.map((item) => {
+          const cardContent = (
+            <>
             {/* ─────────────────────────────────────────────────── */}
             {/* 1. UPPER VISUAL ART STAGE: PROFESSIONAL TOOL CLUSTER */}
             {/* ─────────────────────────────────────────────────── */}
@@ -386,8 +382,31 @@ export function ExploringFocus() {
                 </span>
               </div>
             </div>
-          </motion.a>
-        ))}
+            </>
+          );
+
+          const cardClasses =
+            "group relative h-full bg-white rounded-3xl border border-[#ded8cb] shadow-scrapbook hover:shadow-[0_20px_35px_-10px_rgba(37,99,235,0.16)] transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer";
+
+          return (
+            <motion.div
+              key={item.index}
+              whileHover={{ y: -6 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              className="h-full"
+            >
+              {item.href.startsWith("#") ? (
+                <a href={item.href} className={cardClasses}>
+                  {cardContent}
+                </a>
+              ) : (
+                <Link href={item.href} className={cardClasses}>
+                  {cardContent}
+                </Link>
+              )}
+            </motion.div>
+          );
+        })}
       </div>
     </section>
   );

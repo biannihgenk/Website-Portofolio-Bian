@@ -75,7 +75,7 @@ export function KineticCanvasStage({
   return (
     <section
       id="home"
-      className="relative w-full pt-24 sm:pt-28 pb-14 sm:pb-20 overflow-hidden"
+      className="relative w-full pt-24 sm:pt-28 pb-14 sm:pb-20 overflow-x-clip scroll-mt-24"
     >
       {/* Top Architectural Status Strip */}
       <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 relative z-20">

@@ -30,6 +30,7 @@ const caveat = Caveat({
 
 import { InteractiveNetworkBackground } from "@/components/layout/InteractiveNetworkBackground";
 import { InteractiveDeskCompanion } from "@/components/home/InteractiveDeskCompanion";
+import { MotionProvider } from "@/components/motion/MotionProviders";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -56,14 +57,16 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body
-        className={`${plusJakarta.variable} ${playfair.variable} ${jetbrainsMono.variable} ${caveat.variable} min-h-screen bg-[#fbf9f3] text-[#222222] font-sans antialiased selection:bg-[#dbeafe] selection:text-[#222222] overflow-x-hidden`}
+        className={`${plusJakarta.variable} ${playfair.variable} ${jetbrainsMono.variable} ${caveat.variable} min-h-screen bg-[#fbf9f3] text-[#222222] font-sans antialiased selection:bg-[#dbeafe] selection:text-[#222222] overflow-x-clip`}
       >
         <NextIntlClientProvider messages={messages}>
-          <InteractiveNetworkBackground />
-          <div className="relative z-10 w-full min-h-screen overflow-x-hidden">
-            {children}
-          </div>
-          <InteractiveDeskCompanion />
+          <MotionProvider>
+            <InteractiveNetworkBackground />
+            <div className="relative z-10 w-full min-h-screen overflow-x-clip">
+              {children}
+            </div>
+            <InteractiveDeskCompanion />
+          </MotionProvider>
         </NextIntlClientProvider>
       </body>
     </html>

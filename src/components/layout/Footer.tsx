@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "@/lib/i18n/navigation";
 import { useTranslations } from "next-intl";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 
 interface FooterProps {
   displayName?: string;

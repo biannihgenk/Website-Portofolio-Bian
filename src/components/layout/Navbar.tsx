@@ -20,6 +20,14 @@ interface AiMessage {
   text: string;
 }
 
+function persistGuideSeen() {
+  try {
+    localStorage.setItem("bian_welcome_guide_seen", "true");
+  } catch {
+    // ignore
+  }
+}
+
 export function Navbar({
   locale,
   githubUrl = "https://github.com",
@@ -87,24 +95,48 @@ export function Navbar({
   // Scroll listener for dynamic navbar morph
   useEffect(() => {
     function handleScroll() {
-      if (window.scrollY > 25) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      const next = window.scrollY > 25;
+      setIsScrolled((prev) => (prev === next ? prev : next));
     }
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Open welcome guide popup automatically when opening the website
+  // Open welcome guide popup automatically only on first visit
   useEffect(() => {
-    const t = setTimeout(() => {
+    try {
+      if (localStorage.getItem("bian_welcome_guide_seen") === "true") {
+        return;
+      }
+    } catch {
+      // ignore storage access issues
+    }
+    const timer = setTimeout(() => {
       setGuideModalOpen(true);
     }, 450);
-    return () => clearTimeout(t);
+    return () => clearTimeout(timer);
   }, []);
+
+  // Close menus automatically when route changes (e.g. browser Back/Forward)
+  useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      setAboutOpen(false);
+      setContactOpen(false);
+      setMobileMenuOpen(false);
+    });
+    return () => cancelAnimationFrame(id);
+  }, [pathname]);
+
+  // Lock page scroll while mobile drawer or modal overlays are open
+  useEffect(() => {
+    if (!mobileMenuOpen && !guideModalOpen && !aiModalOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [mobileMenuOpen, guideModalOpen, aiModalOpen]);
 
   // Handle click outside & ESC key for dropdowns & modals
   useEffect(() => {
@@ -125,7 +157,10 @@ export function Navbar({
         setAboutOpen(false);
         setContactOpen(false);
         setMobileMenuOpen(false);
-        setGuideModalOpen(false);
+        setGuideModalOpen((wasOpen) => {
+          if (wasOpen) persistGuideSeen();
+          return false;
+        });
         setAiModalOpen(false);
       }
     }
@@ -164,11 +199,7 @@ export function Navbar({
   }
 
   function handleDismissGuide() {
-    try {
-      localStorage.setItem("bian_welcome_guide_seen", "true");
-    } catch {
-      // ignore
-    }
+    persistGuideSeen();
     setGuideModalOpen(false);
   }
 
@@ -330,22 +361,22 @@ export function Navbar({
       {/* Dynamic transition between Full-width top and Scrolled Floating Pill */}
       {/* ───────────────────────────────────────────────────────────── */}
       <header
-        className={`fixed left-0 right-0 z-50 flex justify-center pointer-events-none transition-all duration-500 ease-out ${
+        className={`fixed left-0 right-0 z-50 flex justify-center pointer-events-none transition-[top,padding] duration-300 ease-out ${
           isScrolled
             ? "top-2.5 sm:top-4 px-3 sm:px-6"
             : "top-0 px-4 sm:px-8 py-3 sm:py-4"
         }`}
       >
         <div
-          className={`pointer-events-auto w-full transition-all duration-500 ease-out relative ${
+          className={`pointer-events-auto w-full transition-[max-width] duration-300 ease-out relative ${
             isScrolled ? "max-w-5xl" : "max-w-7xl"
           }`}
         >
           <nav
-            className={`flex items-center justify-between transition-all duration-500 ease-out ${
+            className={`flex items-center justify-between transition-[background-color,border-color,border-radius,padding,box-shadow] duration-300 ease-out ${
               isScrolled
-                ? "bg-white/92 backdrop-blur-xl border border-[#ded8cb] rounded-full px-3.5 sm:px-5 py-2 shadow-scrapbook-lg"
-                : "bg-white/80 backdrop-blur-md border border-[#ded8cb]/80 rounded-2xl sm:rounded-full px-4 sm:px-6 py-2.5 shadow-xs"
+                ? "bg-white/94 backdrop-blur-xl border border-[#ded8cb] rounded-full px-3.5 sm:px-5 py-2 shadow-scrapbook-lg"
+                : "bg-white/85 backdrop-blur-md border border-[#ded8cb]/80 rounded-2xl sm:rounded-full px-4 sm:px-6 py-2.5 shadow-xs"
             }`}
           >
             {/* ─────────────────────────────────────────────────────── */}
@@ -354,6 +385,10 @@ export function Navbar({
             <div className="flex items-center gap-2.5 sm:gap-3">
               <Link
                 href={homeHref}
+                onClick={() => {
+                  setAboutOpen(false);
+                  setContactOpen(false);
+                }}
                 className="group relative flex items-center focus:outline-none"
                 aria-label="Home"
               >
@@ -398,6 +433,13 @@ export function Navbar({
               <li>
                 <Link
                   href="/"
+                  onClick={() => {
+                    setAboutOpen(false);
+                    setContactOpen(false);
+                    if (isHome) {
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }
+                  }}
                   className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
                     isHome
                       ? "bg-blue-50 text-blue-600 font-bold shadow-xs border border-blue-200/60"
@@ -446,6 +488,10 @@ export function Navbar({
               <li>
                 <Link
                   href="/blog"
+                  onClick={() => {
+                    setAboutOpen(false);
+                    setContactOpen(false);
+                  }}
                   className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
                     isBlog
                       ? "bg-blue-50 text-blue-600 font-bold shadow-xs border border-blue-200/60"
@@ -464,7 +510,8 @@ export function Navbar({
                     setContactOpen(!contactOpen);
                     setAboutOpen(false);
                   }}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                  aria-expanded={contactOpen}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
                     contactOpen
                       ? "bg-[#f3b9a7]/50 text-[#222222] font-bold border border-[#222222]/20"
                       : "text-[#6b6863] hover:text-[#222222] hover:bg-[#f5f3ee]"
@@ -474,8 +521,15 @@ export function Navbar({
                 </button>
 
                 {/* Contact Popover Dropdown */}
+                <AnimatePresence>
                 {contactOpen && (
-                  <div className="absolute top-full right-0 mt-3 w-80 bg-white rounded-2xl p-4 border border-[#ded8cb] shadow-scrapbook-lg z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                  <motion.div
+                    initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -6, scale: 0.98 }}
+                    transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
+                    className="absolute top-full right-0 mt-3 w-80 bg-white rounded-2xl p-4 border border-[#ded8cb] shadow-scrapbook-lg z-50"
+                  >
                     <div className="text-[11px] font-mono font-semibold uppercase tracking-wider text-[#6b6863] pb-2 border-b border-[#e6e2d8] flex items-center justify-between">
                       <span>Verified Channels</span>
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
@@ -552,8 +606,9 @@ export function Navbar({
                         <span>Send Direct Email</span>
                       </a>
                     </div>
-                  </div>
+                  </motion.div>
                 )}
+                </AnimatePresence>
               </li>
             </ul>
 
@@ -636,8 +691,9 @@ export function Navbar({
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden w-8 h-8 rounded-full bg-[#f5f3ee] border border-[#e6e2d8] flex items-center justify-center text-[#222222] hover:bg-[#ded8cb] transition-colors ml-0.5"
+                className="md:hidden w-8 h-8 rounded-full bg-[#f5f3ee] border border-[#e6e2d8] flex items-center justify-center text-[#222222] hover:bg-[#ded8cb] transition-colors ml-0.5 cursor-pointer"
                 aria-label="Toggle Navigation"
+                aria-expanded={mobileMenuOpen}
               >
                 {mobileMenuOpen ? (
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -658,10 +714,15 @@ export function Navbar({
           {/* ───────────────────────────────────────────────────────────── */}
           {/* BENTO MEGA-MENU DROPDOWN CARD (ABOUT EXPANDED STATE) */}
           {/* ───────────────────────────────────────────────────────────── */}
+          <AnimatePresence>
           {aboutOpen && (
-            <div
+            <motion.div
               ref={aboutDropdownRef}
-              className="absolute top-full left-1/2 -translate-x-1/2 w-full max-w-4xl mt-3 z-50 animate-in fade-in slide-in-from-top-3 duration-200"
+              initial={{ opacity: 0, y: -10, scale: 0.985 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -8, scale: 0.985 }}
+              transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute top-full left-1/2 -translate-x-1/2 w-full max-w-4xl mt-3 z-50"
             >
               <div className="bg-white rounded-3xl p-5 sm:p-7 border border-[#ded8cb] shadow-xl relative">
                 {/* Bento Grid Header */}
@@ -728,8 +789,9 @@ export function Navbar({
                   </span>
                 </div>
               </div>
-            </div>
+            </motion.div>
           )}
+          </AnimatePresence>
         </div>
       </header>
 
@@ -744,7 +806,7 @@ export function Navbar({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setGuideModalOpen(false)}
+              onClick={handleDismissGuide}
               className="absolute inset-0 bg-black/50 backdrop-blur-sm cursor-pointer"
             />
 
@@ -759,7 +821,7 @@ export function Navbar({
               {/* Top Close Button */}
               <button
                 type="button"
-                onClick={() => setGuideModalOpen(false)}
+                onClick={handleDismissGuide}
                 className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#f5f3ee] hover:bg-[#ded8cb] text-[#6b6863] hover:text-[#222222] flex items-center justify-center transition-colors cursor-pointer"
                 aria-label="Close"
               >
@@ -1038,9 +1100,27 @@ export function Navbar({
       {/* ───────────────────────────────────────────────────────────── */}
       {/* MOBILE NAVIGATION DRAWER (ACCORDION & TOUCH-FRIENDLY) */}
       {/* ───────────────────────────────────────────────────────────── */}
+      <AnimatePresence>
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 md:hidden bg-black/40 backdrop-blur-xs flex flex-col justify-start p-4 pt-16 animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl border border-[#ded8cb] p-5 shadow-scrapbook-lg max-h-[85vh] overflow-y-auto space-y-4">
+        <motion.div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobile Navigation"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.18 }}
+          onClick={() => setMobileMenuOpen(false)}
+          className="fixed inset-0 z-50 md:hidden bg-black/40 backdrop-blur-xs flex flex-col justify-start p-4 pt-16"
+        >
+          <motion.div
+            initial={{ opacity: 0, y: -14, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.98 }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-3xl border border-[#ded8cb] p-5 shadow-scrapbook-lg max-h-[85vh] overflow-y-auto space-y-4"
+          >
             {/* Mobile Header Bar */}
             <div className="flex items-center justify-between pb-3 border-b border-[#e6e2d8]">
               <div className="flex items-center gap-2.5">
@@ -1232,9 +1312,10 @@ export function Navbar({
                 </a>
               </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
+      </AnimatePresence>
     </>
   );
 }

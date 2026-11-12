@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/navigation";
 import { useTranslations } from "next-intl";
 
 interface WayfindingBannerProps {
@@ -9,6 +9,7 @@ interface WayfindingBannerProps {
 }
 
 export function WayfindingBanner({ locale }: WayfindingBannerProps) {
+  void locale;
   const t = useTranslations("profilePage");
 
   return (
@@ -41,7 +42,7 @@ export function WayfindingBanner({ locale }: WayfindingBannerProps) {
           {/* Navigation Action Buttons */}
           <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto justify-center">
             <Link
-              href={`/${locale}/contact`}
+              href="/contact"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#222222] text-white font-sans text-xs sm:text-sm font-semibold px-6 py-3 rounded-xl shadow-md hover:-translate-y-0.5 hover:bg-[#2563eb] transition-all"
             >
               <span>✉</span>
@@ -49,7 +50,7 @@ export function WayfindingBanner({ locale }: WayfindingBannerProps) {
             </Link>
 
             <Link
-              href={`/${locale}/projects`}
+              href="/projects"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white hover:bg-[#f5f3ee] text-[#222222] border border-[#ded8cb] font-sans text-xs sm:text-sm font-semibold px-6 py-3 rounded-xl shadow-xs hover:-translate-y-0.5 transition-all"
             >
               <span>📁</span>

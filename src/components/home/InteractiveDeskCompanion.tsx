@@ -2,11 +2,12 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "@/lib/i18n/navigation";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 
 export function InteractiveDeskCompanion() {
   const router = useRouter();
+  const shouldReduceMotion = useReducedMotion();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [pingResult, setPingResult] = useState<string | null>(null);
   const [isPinging, setIsPinging] = useState<boolean>(false);
@@ -72,7 +73,7 @@ export function InteractiveDeskCompanion() {
     if (contactEl) {
       contactEl.scrollIntoView({ behavior: "smooth" });
     } else {
-      window.location.href = "mailto:debian.bian@student.telkomschools.sch.id";
+      router.push("/contact");
     }
     setTimeout(() => setIsOpen(false), 700);
   }
@@ -226,15 +227,23 @@ export function InteractiveDeskCompanion() {
 
       {/* Floating Mascot Trigger Button */}
       <motion.div
-        animate={{
-          y: [0, -5, 0],
-        }}
-        transition={{
-          duration: 4.5,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        whileHover={{ scale: 1.06 }}
+        animate={
+          shouldReduceMotion
+            ? undefined
+            : {
+                y: [0, -5, 0],
+              }
+        }
+        transition={
+          shouldReduceMotion
+            ? undefined
+            : {
+                duration: 4.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }
+        }
+        whileHover={shouldReduceMotion ? undefined : { scale: 1.06 }}
         whileTap={{ scale: 0.94 }}
         onClick={() => {
           playClickSound(isOpen ? 400 : 550);

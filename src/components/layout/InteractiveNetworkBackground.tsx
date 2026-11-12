@@ -27,9 +27,21 @@ export function InteractiveNetworkBackground() {
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
-    let animationFrameId: number;
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
+    let animationFrameId: number | null = null;
+    let packetInterval: ReturnType<typeof setInterval> | null = null;
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    let dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+
+    const syncCanvasSize = () => {
+      if (!canvas || !ctx) return;
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+
+    syncCanvasSize();
 
     // Mouse coordinates (default to offscreen)
     const mouse = {
@@ -43,9 +55,9 @@ export function InteractiveNetworkBackground() {
 
     // Responsive node count: lightweight on mobile, balanced on desktop
     const calculateNodeCount = (w: number) => {
-      if (w < 640) return 20; // Mobile: ultra lightweight
-      if (w < 1024) return 28; // Tablet
-      return 38; // Desktop
+      if (w < 640) return 18; // Mobile: ultra lightweight
+      if (w < 1024) return 26; // Tablet
+      return 36; // Desktop
     };
 
     let nodes: Node[] = [];
@@ -97,17 +109,48 @@ export function InteractiveNetworkBackground() {
       }
     }
 
-    const packetInterval = setInterval(spawnPacket, 1600);
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let isReducedMotion = mediaQuery.matches;
+    const isFinePointer = window.matchMedia("(pointer: fine)").matches;
 
-    // Debounced Resize
-    let resizeTimeout: NodeJS.Timeout;
+    function startPacketInterval() {
+      if (packetInterval || isReducedMotion) return;
+      packetInterval = setInterval(spawnPacket, 1600);
+    }
+
+    function stopPacketInterval() {
+      if (packetInterval) {
+        clearInterval(packetInterval);
+        packetInterval = null;
+      }
+    }
+
+    // Debounced Resize (preserves nodes smoothly during mobile URL-bar height shifts)
+    let resizeTimeout: ReturnType<typeof setTimeout>;
     function handleResize() {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
         if (!canvas) return;
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-        initNodes();
+        const nextWidth = window.innerWidth;
+        const nextHeight = window.innerHeight;
+        const widthChanged = Math.abs(nextWidth - width) > 2;
+
+        width = nextWidth;
+        height = nextHeight;
+        syncCanvasSize();
+
+        if (widthChanged) {
+          initNodes();
+        } else {
+          for (let i = 0; i < nodes.length; i++) {
+            nodes[i].x = Math.min(nodes[i].x, width);
+            nodes[i].y = Math.min(nodes[i].y, height);
+          }
+        }
+
+        if (isReducedMotion) {
+          drawFrame(0);
+        }
       }, 150);
     }
 
@@ -124,32 +167,23 @@ export function InteractiveNetworkBackground() {
     }
 
     window.addEventListener("resize", handleResize, { passive: true });
-    window.addEventListener("pointermove", handlePointerMove, { passive: true });
-    document.addEventListener("mouseleave", handlePointerLeave, { passive: true });
+    if (isFinePointer) {
+      window.addEventListener("pointermove", handlePointerMove, { passive: true });
+      document.addEventListener("mouseleave", handlePointerLeave, { passive: true });
+    }
 
     initNodes();
-
-    // Check prefers-reduced-motion
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let isReducedMotion = mediaQuery.matches;
-    const handleMotionChange = (e: MediaQueryListEvent) => {
-      isReducedMotion = e.matches;
-    };
-    mediaQuery.addEventListener("change", handleMotionChange);
 
     // Main 60FPS Batch-Rendered Loop
     let lastTime = performance.now();
     const maxConnectDistSq = 145 * 145;
     const mouseRadiusSq = mouse.radius * mouse.radius;
 
-    function render(currentTime: number) {
+    function drawFrame(delta: number) {
       if (!ctx || !canvas) return;
 
-      const delta = Math.min((currentTime - lastTime) / 16.667, 2);
-      lastTime = currentTime;
-
       // Smooth mouse position damping
-      if (mouse.isActive) {
+      if (mouse.isActive && !isReducedMotion) {
         mouse.x += (mouse.targetX - mouse.x) * 0.2;
         mouse.y += (mouse.targetY - mouse.y) * 0.2;
       }
@@ -174,7 +208,7 @@ export function InteractiveNetworkBackground() {
         }
 
         // Connect node to mouse if active
-        if (mouse.isActive) {
+        if (mouse.isActive && !isReducedMotion) {
           const dx = mouse.x - a.x;
           const dy = mouse.y - a.y;
           if (dx * dx + dy * dy < mouseRadiusSq) {
@@ -186,22 +220,24 @@ export function InteractiveNetworkBackground() {
       ctx.stroke();
 
       // 2. Draw & update packets
-      for (let k = packets.length - 1; k >= 0; k--) {
-        const p = packets[k];
-        p.progress += p.speed * (isReducedMotion ? 0.3 : delta);
+      if (!isReducedMotion) {
+        for (let k = packets.length - 1; k >= 0; k--) {
+          const p = packets[k];
+          p.progress += p.speed * delta;
 
-        if (p.progress >= 1) {
-          packets.splice(k, 1);
-          continue;
+          if (p.progress >= 1) {
+            packets.splice(k, 1);
+            continue;
+          }
+
+          const currX = p.startNode.x + (p.endNode.x - p.startNode.x) * p.progress;
+          const currY = p.startNode.y + (p.endNode.y - p.startNode.y) * p.progress;
+
+          ctx.beginPath();
+          ctx.arc(currX, currY, 2, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(37, 99, 235, 0.75)";
+          ctx.fill();
         }
-
-        const currX = p.startNode.x + (p.endNode.x - p.startNode.x) * p.progress;
-        const currY = p.startNode.y + (p.endNode.y - p.startNode.y) * p.progress;
-
-        ctx.beginPath();
-        ctx.arc(currX, currY, 2, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(37, 99, 235, 0.75)";
-        ctx.fill();
       }
 
       // 3. Update & batch draw all nodes in a single fill call
@@ -211,7 +247,7 @@ export function InteractiveNetworkBackground() {
       for (let i = 0; i < nodes.length; i++) {
         const node = nodes[i];
 
-        if (!isReducedMotion) {
+        if (!isReducedMotion && delta > 0) {
           node.x += node.vx * delta;
           node.y += node.vy * delta;
 
@@ -236,18 +272,54 @@ export function InteractiveNetworkBackground() {
         ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
       }
       ctx.fill();
+    }
 
+    function render(currentTime: number) {
+      if (isReducedMotion) return;
+      const delta = Math.min((currentTime - lastTime) / 16.667, 2);
+      lastTime = currentTime;
+      drawFrame(delta);
       animationFrameId = requestAnimationFrame(render);
     }
 
-    animationFrameId = requestAnimationFrame(render);
+    const handleMotionChange = (e: MediaQueryListEvent) => {
+      isReducedMotion = e.matches;
+      if (isReducedMotion) {
+        if (animationFrameId !== null) {
+          cancelAnimationFrame(animationFrameId);
+          animationFrameId = null;
+        }
+        stopPacketInterval();
+        packets = [];
+        drawFrame(0);
+      } else {
+        lastTime = performance.now();
+        startPacketInterval();
+        if (!document.hidden) {
+          animationFrameId = requestAnimationFrame(render);
+        }
+      }
+    };
+    mediaQuery.addEventListener("change", handleMotionChange);
+
+    if (isReducedMotion) {
+      drawFrame(0);
+    } else {
+      startPacketInterval();
+      animationFrameId = requestAnimationFrame(render);
+    }
 
     // Pause on visibility change (saves CPU and battery when tab is hidden)
     function handleVisibility() {
       if (document.hidden) {
-        cancelAnimationFrame(animationFrameId);
-      } else {
+        if (animationFrameId !== null) {
+          cancelAnimationFrame(animationFrameId);
+          animationFrameId = null;
+        }
+        stopPacketInterval();
+      } else if (!isReducedMotion) {
         lastTime = performance.now();
+        startPacketInterval();
         animationFrameId = requestAnimationFrame(render);
       }
     }
@@ -255,12 +327,16 @@ export function InteractiveNetworkBackground() {
     document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
-      clearInterval(packetInterval);
+      if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId);
+      }
+      stopPacketInterval();
       clearTimeout(resizeTimeout);
       window.removeEventListener("resize", handleResize);
-      window.removeEventListener("pointermove", handlePointerMove);
-      document.removeEventListener("mouseleave", handlePointerLeave);
+      if (isFinePointer) {
+        window.removeEventListener("pointermove", handlePointerMove);
+        document.removeEventListener("mouseleave", handlePointerLeave);
+      }
       document.removeEventListener("visibilitychange", handleVisibility);
       mediaQuery.removeEventListener("change", handleMotionChange);
     };
@@ -274,9 +350,15 @@ export function InteractiveNetworkBackground() {
       {/* 1. Global Architectural Blueprint Dots Layer */}
       <div className="absolute inset-0 w-full h-full blueprint-dots opacity-80 pointer-events-none" />
 
-      {/* 2. Soft Ambient Corner Glows */}
-      <div className="absolute -top-32 -right-32 w-[420px] h-[420px] bg-blue-100/30 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-1/2 -left-32 w-[380px] h-[380px] bg-indigo-50/25 rounded-full blur-3xl pointer-events-none" />
+      {/* 2. Soft Ambient Corner Glows (GPU-free radial gradient without blur filter) */}
+      <div
+        className="absolute -top-32 -right-32 w-[460px] h-[460px] rounded-full pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(219,234,254,0.42) 0%, transparent 70%)" }}
+      />
+      <div
+        className="absolute top-1/2 -left-32 w-[420px] h-[420px] rounded-full pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(224,231,255,0.34) 0%, transparent 70%)" }}
+      />
 
       {/* 3. Ultra-Smooth Hardware-Accelerated Canvas */}
       <canvas

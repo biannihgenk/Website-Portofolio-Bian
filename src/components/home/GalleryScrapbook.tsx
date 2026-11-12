@@ -2,9 +2,11 @@
 
 import React from "react";
 import Image from "next/image";
+import { Link } from "@/lib/i18n/navigation";
 import { useTranslations } from "next-intl";
 import type { GalleryItem } from "@/types/content";
 import { getStoragePublicUrl } from "@/lib/supabase/storage";
+import { ScrollReveal } from "@/components/motion/MotionProviders";
 
 interface GalleryScrapbookProps {
   galleryItems: GalleryItem[];
@@ -57,7 +59,8 @@ export function GalleryScrapbook({ galleryItems, locale }: GalleryScrapbookProps
       : referencePhotos;
 
   return (
-    <section id="gallery" className="w-full py-16 sm:py-20 max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 overflow-hidden">
+    <section id="gallery" className="w-full py-16 sm:py-20 max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 overflow-x-clip scroll-mt-24">
+      <ScrollReveal>
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
         <div className="space-y-2">
@@ -73,21 +76,21 @@ export function GalleryScrapbook({ galleryItems, locale }: GalleryScrapbookProps
           </p>
         </div>
 
-        <a
-          href={`/${locale}/gallery`}
+        <Link
+          href="/gallery"
           className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white hover:bg-[#f0eee8] text-[#222222] font-mono text-xs border border-[#ded8cb] shadow-xs transition-all whitespace-nowrap self-start md:self-auto font-bold"
         >
           <span>{isId ? "Buka Galeri Lengkap" : "Explore Gallery"}</span>
           <span className="text-blue-600">→</span>
-        </a>
+        </Link>
       </div>
 
       {/* Balanced 3-Column Clean Photography Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-6 items-stretch">
         {activeCards.map((card, idx) => (
-          <a
+          <Link
             key={idx}
-            href={`/${locale}/gallery`}
+            href="/gallery"
             className={`${card.cols} block bg-white p-4 pb-5 rounded-2xl border border-[#ded8cb] shadow-xs hover:shadow-md transition-all duration-300 group relative hover:-translate-y-1`}
           >
             <div className={`${card.aspect} bg-[#f5f3ee] rounded-xl overflow-hidden relative border border-[#ded8cb]`}>
@@ -95,6 +98,7 @@ export function GalleryScrapbook({ galleryItems, locale }: GalleryScrapbookProps
                 src={card.src}
                 alt={card.title}
                 fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 unoptimized
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
               />
@@ -108,9 +112,10 @@ export function GalleryScrapbook({ galleryItems, locale }: GalleryScrapbookProps
                 {card.sub}
               </p>
             </div>
-          </a>
+          </Link>
         ))}
       </div>
+      </ScrollReveal>
     </section>
   );
 }

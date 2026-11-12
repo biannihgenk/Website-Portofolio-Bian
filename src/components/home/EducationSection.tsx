@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Link } from "@/lib/i18n/navigation";
 import { useTranslations } from "next-intl";
 import type { Education } from "@/types/content";
 
@@ -10,6 +11,7 @@ interface EducationSectionProps {
 }
 
 export function EducationSection({ educationList, locale }: EducationSectionProps) {
+  void locale;
   const t = useTranslations("education");
 
   const primaryEdu = educationList[0];
@@ -124,13 +126,13 @@ export function EducationSection({ educationList, locale }: EducationSectionProp
 
         {/* CTA to Dedicated Education Page */}
         <div className="mt-10 text-center">
-          <a
-            href={`/${locale}/education`}
+          <Link
+            href="/education"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white hover:bg-[#f0eee8] text-[#222222] font-mono text-xs border border-[#ded8cb] shadow-xs transition-all font-bold"
           >
             <span>{t("cta")}</span>
             <span className="text-blue-600">→</span>
-          </a>
+          </Link>
         </div>
       </div>
     </section>

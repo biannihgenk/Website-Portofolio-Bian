@@ -4,13 +4,14 @@ import React from "react";
 import Image from "next/image";
 import { Link } from "@/lib/i18n/navigation";
 import { useTranslations } from "next-intl";
+import { ScrollReveal } from "@/components/motion/MotionProviders";
 
 export function AboutTeaser() {
   const t = useTranslations("about");
 
   return (
-    <section id="about-profile" className="w-full py-16 sm:py-20 bg-transparent border-y border-[#ded8cb] relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
+    <section id="about-profile" className="w-full py-16 sm:py-20 bg-transparent border-y border-[#ded8cb] relative overflow-x-clip scroll-mt-24">
+      <ScrollReveal className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           {/* Visual Left Frame */}
           <div className="lg:col-span-5 order-2 lg:order-1 relative">
@@ -85,7 +86,7 @@ export function AboutTeaser() {
             </div>
           </div>
         </div>
-      </div>
+      </ScrollReveal>
     </section>
   );
 }

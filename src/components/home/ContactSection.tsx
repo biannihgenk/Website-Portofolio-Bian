@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { CrossingTickerRibbons } from "@/components/home/CrossingTickerRibbons";
+import { ScrollReveal } from "@/components/motion/MotionProviders";
 
 interface ContactSectionProps {
   email?: string;
@@ -31,13 +32,13 @@ export function ContactSection({
   }
 
   return (
-    <section id="contact" className="relative w-full pt-8 pb-16 sm:pt-12 sm:pb-24 bg-transparent overflow-hidden">
+    <section id="contact" className="relative w-full pt-8 pb-16 sm:pt-12 sm:pb-24 bg-transparent overflow-x-clip scroll-mt-24">
       {/* Dual Crossing Animated Ribbons */}
       <div className="mb-10 sm:mb-14">
         <CrossingTickerRibbons />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+      <ScrollReveal className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         <div className="relative bg-white rounded-3xl sm:rounded-[36px] p-8 sm:p-14 lg:p-20 border border-[#ded8cb] shadow-sm overflow-hidden text-center">
           {/* Top Postage Badge */}
           <div className="absolute top-6 right-6 bg-[#f5f3ee] px-3.5 py-1.5 rounded-xl border border-[#ded8cb] font-mono text-[10px] sm:text-[11px] font-bold text-[#686660] uppercase tracking-widest hidden md:block">
@@ -239,7 +240,7 @@ export function ContactSection({
             </span>
           </button>
         </div>
-      </div>
+      </ScrollReveal>
     </section>
   );
 }

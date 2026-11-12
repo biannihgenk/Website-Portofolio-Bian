@@ -2,10 +2,11 @@
 
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/navigation";
 import { useTranslations } from "next-intl";
 import type { Project } from "@/types/content";
 import { getStoragePublicUrl } from "@/lib/supabase/storage";
+import { ScrollReveal } from "@/components/motion/MotionProviders";
 
 interface FeaturedProjectsProps {
   projects: Project[];
@@ -48,8 +49,8 @@ export function FeaturedProjects({ projects, locale }: FeaturedProjectsProps) {
   }
 
   return (
-    <section id="projects" className="w-full py-16 sm:py-20 bg-transparent border-y border-[#ded8cb]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
+    <section id="projects" className="w-full py-16 sm:py-20 bg-transparent border-y border-[#ded8cb] scroll-mt-24 overflow-x-clip">
+      <ScrollReveal className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
           <div className="space-y-2">
@@ -64,13 +65,13 @@ export function FeaturedProjects({ projects, locale }: FeaturedProjectsProps) {
             </p>
           </div>
 
-          <a
-            href={`/${locale}/projects`}
+          <Link
+            href="/projects"
             className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white hover:bg-[#f0eee8] text-[#222222] font-mono text-xs border border-[#ded8cb] shadow-xs transition-all whitespace-nowrap self-start md:self-auto font-bold"
           >
             <span>{isId ? "Lihat Semua Proyek" : "View All Projects"}</span>
             <span className="text-blue-600">→</span>
-          </a>
+          </Link>
         </div>
 
         {projects.length === 0 ? (
@@ -104,7 +105,7 @@ export function FeaturedProjects({ projects, locale }: FeaturedProjectsProps) {
 
                 <div className="space-y-2 mb-5">
                   <h3 className="font-serif font-bold text-2xl sm:text-3xl text-[#222222] group-hover:text-blue-600 transition-colors">
-                    <Link href={`/${locale}/projects`} className="hover:underline">
+                    <Link href="/projects" className="hover:underline">
                       {isId ? flagship.title_id : flagship.title_en}
                     </Link>
                   </h3>
@@ -197,7 +198,7 @@ export function FeaturedProjects({ projects, locale }: FeaturedProjectsProps) {
                     </div>
 
                     <h3 className="font-serif font-bold text-xl sm:text-2xl text-[#222222] group-hover:text-blue-600 transition-colors mb-2">
-                      <Link href={`/${locale}/projects`} className="hover:underline">
+                      <Link href="/projects" className="hover:underline">
                         {title}
                       </Link>
                     </h3>
@@ -259,7 +260,7 @@ export function FeaturedProjects({ projects, locale }: FeaturedProjectsProps) {
           </div>
         </div>
         )}
-      </div>
+      </ScrollReveal>
     </section>
   );
 }

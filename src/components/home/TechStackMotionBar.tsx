@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 
 interface TechItem {
   id: string;
@@ -185,9 +185,9 @@ export function TechStackMotionBar() {
   const infiniteRow2 = [...row2, ...row2, ...row2, ...row2];
 
   return (
-    <section className="w-full relative z-20 py-12 sm:py-18 overflow-hidden select-none">
+    <section className="w-full relative z-20 py-12 sm:py-18 overflow-x-clip select-none">
       {/* Background Subtle Accent with Grid Borders */}
-      <div className="absolute inset-0 bg-white/40 backdrop-blur-xs border-y border-[#ded8cb]/80 pointer-events-none" />
+      <div className="absolute inset-0 bg-white/55 border-y border-[#ded8cb]/80 pointer-events-none" />
 
       {/* Section Header with Refined Typography & Category Filter Tags */}
       <div className="max-w-4xl mx-auto px-4 text-center mb-8 sm:mb-10 relative z-10">
@@ -266,9 +266,9 @@ export function TechStackMotionBar() {
               <div
                 key={`row1-${tech.id}-${idx}`}
                 onClick={() => handleCardClick(tech)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-2xl bg-white/95 backdrop-blur-sm border transition-all duration-300 cursor-pointer group shrink-0 ${
+                className={`flex items-center gap-3 px-4 py-3 rounded-2xl bg-white border transition-[transform,border-color,box-shadow,opacity,background-color] duration-200 cursor-pointer group shrink-0 ${
                   isSelected
-                    ? "border-[#2563eb] ring-2 ring-[#2563eb]/20 shadow-md scale-102 bg-blue-50/20"
+                    ? "border-[#2563eb] ring-2 ring-[#2563eb]/20 shadow-md scale-102 bg-blue-50/40"
                     : isMatch
                     ? "border-[#ded8cb] shadow-xs hover:border-[#2563eb] hover:shadow-md hover:-translate-y-1.5"
                     : "opacity-45 border-[#ded8cb]/50 grayscale hover:grayscale-0 hover:opacity-100"
@@ -315,9 +315,9 @@ export function TechStackMotionBar() {
               <div
                 key={`row2-${tech.id}-${idx}`}
                 onClick={() => handleCardClick(tech)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-2xl bg-white/95 backdrop-blur-sm border transition-all duration-300 cursor-pointer group shrink-0 ${
+                className={`flex items-center gap-3 px-4 py-3 rounded-2xl bg-white border transition-[transform,border-color,box-shadow,opacity,background-color] duration-200 cursor-pointer group shrink-0 ${
                   isSelected
-                    ? "border-[#2563eb] ring-2 ring-[#2563eb]/20 shadow-md scale-102 bg-blue-50/20"
+                    ? "border-[#2563eb] ring-2 ring-[#2563eb]/20 shadow-md scale-102 bg-blue-50/40"
                     : isMatch
                     ? "border-[#ded8cb] shadow-xs hover:border-[#2563eb] hover:shadow-md hover:-translate-y-1.5"
                     : "opacity-45 border-[#ded8cb]/50 grayscale hover:grayscale-0 hover:opacity-100"

@@ -56,6 +56,7 @@
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 96px;
     background-color: var(--surface);
     color: var(--charcoal);
     -webkit-tap-highlight-color: transparent;
@@ -65,7 +66,12 @@
     background-color: var(--surface);
     color: var(--charcoal);
     font-family: var(--font-sans);
-    overflow-x: hidden;
+    overflow-x: clip;
+  }
+
+  button,
+  a {
+    touch-action: manipulation;
   }
 
   ::selection {
@@ -308,19 +314,19 @@
 /* Infinite gliding tickers for Tech Stack Motion */
 @keyframes glide-left {
   0% {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
   100% {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
 @keyframes glide-right {
   0% {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
   100% {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -334,18 +340,70 @@
   will-change: transform;
 }
 
+@media (hover: hover) {
+  .animate-glide-left:hover,
+  .animate-glide-right:hover {
+    animation-play-state: paused;
+  }
+}
+
 @keyframes icon-float-subtle {
   0%, 100% {
-    transform: translateY(0px) rotate(0deg);
+    transform: translate3d(0, 0, 0) rotate(0deg);
   }
   50% {
-    transform: translateY(-3.5px) rotate(1.5deg);
+    transform: translate3d(0, -3.5px, 0) rotate(1.5deg);
   }
 }
 
 .animate-icon-float {
   animation: icon-float-subtle 3s ease-in-out infinite;
   will-change: transform;
+}
+
+/* Smooth GPU-accelerated modal, drawer, and dropdown entrances */
+@keyframes ui-enter {
+  from {
+    opacity: var(--enter-opacity, 1);
+    transform: translate3d(var(--enter-x, 0), var(--enter-y, 0), 0) scale(var(--enter-scale, 1));
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+.animate-in {
+  --enter-opacity: 1;
+  --enter-scale: 1;
+  --enter-x: 0;
+  --enter-y: 0;
+  animation: ui-enter 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.fade-in {
+  --enter-opacity: 0;
+}
+
+.zoom-in-95 {
+  --enter-scale: 0.96;
+}
+
+.slide-in-from-top-2 {
+  --enter-y: -8px;
+}
+
+.slide-in-from-top-3 {
+  --enter-y: -12px;
+}
+
+.slide-in-from-bottom {
+  --enter-y: 12px;
+}
+
+.animate-fade-in {
+  --enter-opacity: 0;
+  animation: ui-enter 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -365,7 +423,19 @@
   .cursor-float-4,
   .animate-soft-float,
   .animate-soft-float-rev,
-  .animate-cursor-blink {
+  .animate-cursor-blink,
+  .animate-marquee-left,
+  .animate-marquee-right,
+  .animate-glide-left,
+  .animate-glide-right,
+  .animate-icon-float,
+  .animate-float-sticker-1,
+  .animate-float-sticker-2,
+  .neon-glow-blue,
+  .text-shimmer-gleam,
+  .text-shimmer-blue,
+  .animate-in,
+  .animate-fade-in {
     animation: none !important;
   }
   .kinetic-char {

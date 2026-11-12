@@ -2,9 +2,11 @@
 
 import React from "react";
 import Image from "next/image";
+import { Link } from "@/lib/i18n/navigation";
 import { useTranslations } from "next-intl";
 import type { Achievement } from "@/types/content";
 import { getStoragePublicUrl } from "@/lib/supabase/storage";
+import { ScrollReveal } from "@/components/motion/MotionProviders";
 
 interface MilestonesProps {
   achievements: Achievement[];
@@ -25,7 +27,8 @@ export function Milestones({ achievements, locale }: MilestonesProps) {
   ];
 
   return (
-    <section id="achievements" className="w-full py-16 sm:py-20 max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
+    <section id="achievements" className="w-full py-16 sm:py-20 max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 scroll-mt-24">
+      <ScrollReveal>
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
         <div className="space-y-2">
           <div className="inline-flex items-center gap-1.5 font-mono text-xs font-bold text-blue-600 uppercase tracking-widest">
@@ -39,13 +42,13 @@ export function Milestones({ achievements, locale }: MilestonesProps) {
           <p className="font-sans text-sm sm:text-base text-[#6b6863] max-w-md">
             {t("subtitle")}
           </p>
-          <a
-            href={`/${locale}/achievements`}
+          <Link
+            href="/achievements"
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white hover:bg-[#f0eee8] text-[#222222] font-mono text-xs border border-[#ded8cb] shadow-xs transition-all whitespace-nowrap self-start sm:self-auto font-bold"
           >
             <span>{t("exploreAll")}</span>
             <span className="text-blue-600">→</span>
-          </a>
+          </Link>
         </div>
       </div>
 
@@ -95,9 +98,9 @@ export function Milestones({ achievements, locale }: MilestonesProps) {
                 <div className="space-y-1">
                   <div className="flex items-center gap-2 flex-wrap">
                     <h3 className="font-serif font-bold text-base sm:text-lg text-[#222222] hover:text-blue-600 transition-colors">
-                      <a href={`/${locale}/achievements`}>
+                      <Link href="/achievements">
                         {title}
-                      </a>
+                      </Link>
                     </h3>
                     <span className="px-2 py-0.5 rounded bg-blue-100 border border-blue-200/60 font-mono text-[10px] uppercase text-blue-900 font-bold">
                       {item.category || "Honors"}
@@ -143,6 +146,7 @@ export function Milestones({ achievements, locale }: MilestonesProps) {
         })}
       </div>
       )}
+      </ScrollReveal>
     </section>
   );
 }

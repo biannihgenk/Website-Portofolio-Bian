@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 interface EditorialHeroProps {
   displayName?: string;
@@ -31,8 +31,14 @@ export function EditorialHero({
       className="relative w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-12 sm:py-20 lg:py-24 overflow-hidden lg:overflow-visible"
     >
       {/* Soft Ambient Background Glow Accents */}
-      <div className="absolute -top-24 -right-20 w-96 h-96 bg-blue-100/30 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-1/2 -left-20 w-80 h-80 bg-indigo-50/25 rounded-full blur-3xl pointer-events-none" />
+      <div
+        className="absolute -top-24 -right-20 w-96 h-96 rounded-full pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(219,234,254,0.35) 0%, transparent 70%)" }}
+      />
+      <div
+        className="absolute top-1/2 -left-20 w-80 h-80 rounded-full pointer-events-none"
+        style={{ background: "radial-gradient(circle, rgba(224,231,255,0.28) 0%, transparent 70%)" }}
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center relative z-10">
         {/* ───────────────────────────────────────────────────────────── */}
