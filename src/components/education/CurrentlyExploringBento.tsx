@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 
 interface PacketLog {
   id: number;
@@ -87,11 +87,11 @@ export function CurrentlyExploringBento() {
   };
 
   return (
-    <section className="flex flex-col gap-6 w-full" id="vocational-lab-station">
+    <section className="flex flex-col gap-6 w-full scroll-mt-28" id="vocational-lab-station">
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 border-b border-[#ded8cb]">
         <div>
-          <div className="inline-flex items-center gap-2 mb-2">
+          <div className="inline-flex flex-wrap items-center gap-2 mb-2">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
             <span className="font-mono text-xs font-bold text-[#2563eb] uppercase tracking-wider bg-[#dbeafe] px-3 py-1 rounded-full border border-[#bfdbfe]">
               LAB SIMULATOR • INTERACTIVE STATION
@@ -109,11 +109,11 @@ export function CurrentlyExploringBento() {
         </div>
 
         {/* Tab Switcher */}
-        <div className="inline-flex p-1 bg-[#f5f2ea] rounded-2xl border border-[#ded8cb] shadow-xs self-start sm:self-auto">
+        <div className="flex flex-wrap sm:inline-flex gap-1 p-1 bg-[#f5f2ea] rounded-2xl border border-[#ded8cb] shadow-xs self-start sm:self-auto max-w-full">
           <button
             type="button"
             onClick={() => setActiveTab("topology")}
-            className={`px-4 py-2 text-xs font-mono font-bold rounded-xl transition-all flex items-center gap-1.5 ${
+            className={`px-3.5 sm:px-4 py-2 text-xs font-mono font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer ${
               activeTab === "topology"
                 ? "bg-white text-[#2563eb] shadow-xs"
                 : "text-[#686660] hover:text-[#222222]"
@@ -124,7 +124,7 @@ export function CurrentlyExploringBento() {
           <button
             type="button"
             onClick={() => setActiveTab("containers")}
-            className={`px-4 py-2 text-xs font-mono font-bold rounded-xl transition-all flex items-center gap-1.5 ${
+            className={`px-3.5 sm:px-4 py-2 text-xs font-mono font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer ${
               activeTab === "containers"
                 ? "bg-white text-[#2563eb] shadow-xs"
                 : "text-[#686660] hover:text-[#222222]"
@@ -135,7 +135,7 @@ export function CurrentlyExploringBento() {
           <button
             type="button"
             onClick={() => setActiveTab("ai_bench")}
-            className={`px-4 py-2 text-xs font-mono font-bold rounded-xl transition-all flex items-center gap-1.5 ${
+            className={`px-3.5 sm:px-4 py-2 text-xs font-mono font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer ${
               activeTab === "ai_bench"
                 ? "bg-white text-[#2563eb] shadow-xs"
                 : "text-[#686660] hover:text-[#222222]"
@@ -424,19 +424,19 @@ export function CurrentlyExploringBento() {
                 <label className="font-mono text-xs font-bold text-[#222222]">
                   PROMPT UJI COBA TEKNIS:
                 </label>
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <input
                     type="text"
                     value={aiPrompt}
                     onChange={(e) => setAiPrompt(e.target.value)}
-                    className="flex-1 px-4 py-2.5 bg-white border border-[#ded8cb] rounded-xl font-sans text-sm focus:outline-none focus:border-[#2563eb]"
+                    className="flex-1 min-w-0 px-4 py-2.5 bg-white border border-[#ded8cb] rounded-xl font-sans text-sm focus:outline-none focus:border-[#2563eb]"
                     placeholder="Tulis pertanyaan seputar networking atau coding..."
                   />
                   <button
                     type="button"
                     onClick={handleRunAi}
                     disabled={isInferencing}
-                    className="px-5 py-2.5 bg-[#2563eb] text-white font-mono text-xs font-bold rounded-xl hover:bg-[#1d4ed8] shadow-xs transition-all disabled:opacity-50 shrink-0"
+                    className="px-5 py-2.5 bg-[#2563eb] text-white font-mono text-xs font-bold rounded-xl hover:bg-[#1d4ed8] shadow-xs transition-all disabled:opacity-50 shrink-0 cursor-pointer"
                   >
                     {isInferencing ? "Memproses..." : "Jalankan Inferensi ↗"}
                   </button>
@@ -444,9 +444,9 @@ export function CurrentlyExploringBento() {
               </div>
 
               {/* Output Display Box */}
-              <div className="p-5 rounded-2xl bg-[#1e1e1e] text-[#f5f2ea] border border-[#333333] font-mono text-xs min-h-[140px] flex flex-col justify-between">
+              <div className="p-5 rounded-2xl bg-[#1e1e1e] text-[#f5f2ea] border border-[#333333] font-mono text-xs min-h-[140px] flex flex-col justify-between gap-3">
                 <div>
-                  <div className="flex items-center justify-between text-[#888888] pb-2 border-b border-[#333333] text-[11px]">
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-[#888888] pb-2 border-b border-[#333333] text-[11px]">
                     <span>INFERENCE STREAM // TOKEN GENERATION</span>
                     <span className="text-emerald-400">{isInferencing ? "● GENERATING" : "IDLE"}</span>
                   </div>
@@ -454,7 +454,7 @@ export function CurrentlyExploringBento() {
                     {aiOutput || "Klik 'Jalankan Inferensi' di atas untuk melihat respon model AI cerdas terkait materi TKJ!"}
                   </p>
                 </div>
-                <div className="pt-3 border-t border-[#333333]/80 text-[10px] text-[#888888] flex justify-between">
+                <div className="pt-3 border-t border-[#333333]/80 text-[10px] text-[#888888] flex flex-wrap gap-2 justify-between">
                   <span>Engine: Next.js Server Function • AI Sandbox</span>
                   <span>Latency: ~12ms</span>
                 </div>

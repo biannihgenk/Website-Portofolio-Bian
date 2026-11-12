@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { SubpageBreadcrumb } from "@/components/layout/SubpageBreadcrumb";
 
 type TechTrack = "fullstack" | "network" | "ai";
@@ -177,13 +177,13 @@ export function WorkbenchHero() {
 
               {/* Console Code Viewport */}
               <div className="bg-[#18181b] rounded-xl p-4 text-white font-mono text-xs space-y-2.5 border border-white/10 shadow-inner">
-                <div className="flex items-center justify-between text-zinc-400 text-[11px] pb-1 border-b border-zinc-800">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-zinc-400 text-[11px] pb-1 border-b border-zinc-800">
                   <span className="text-[#60a5fa]">{currentTrack.badge}</span>
                   <span className="text-emerald-400 font-bold">{currentTrack.metric}</span>
                 </div>
 
-                <div className="flex items-center gap-2 text-emerald-300">
-                  <span className="text-zinc-500">$</span>
+                <div className="flex items-center gap-2 text-emerald-300 min-w-0">
+                  <span className="text-zinc-500 shrink-0">$</span>
                   <span className="truncate">{currentTrack.command}</span>
                 </div>
 

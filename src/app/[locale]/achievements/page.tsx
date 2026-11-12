@@ -92,11 +92,23 @@ export default async function AchievementsPage({
         email={contactEmail}
       />
 
-      <main className="w-full pt-20 sm:pt-24 bg-transparent overflow-hidden">
+      <main className="w-full pt-20 sm:pt-24 bg-transparent overflow-x-clip">
         {/* Subtle warm glow circles */}
         <div className="relative w-full">
-          <div className="absolute -top-32 -left-20 w-96 h-96 bg-[#f3b9a7]/20 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute top-48 -right-24 w-96 h-96 bg-[#bfdbfe]/30 rounded-full blur-3xl pointer-events-none" />
+          <div
+            className="absolute -top-32 -left-20 w-96 h-96 rounded-full pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(243,185,167,0.22) 0%, rgba(243,185,167,0) 70%)",
+            }}
+          />
+          <div
+            className="absolute top-48 -right-24 w-96 h-96 rounded-full pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(191,219,254,0.32) 0%, rgba(191,219,254,0) 70%)",
+            }}
+          />
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-8 sm:py-12 relative z-10">
             {/* SECTION 1: HERO - JEJAK PROSES SCRAPBOOK */}

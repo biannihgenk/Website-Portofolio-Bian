@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/navigation";
 import { useTranslations } from "next-intl";
 import type { BlogPost, BlogCategory } from "@/types/content";
 import { getStoragePublicUrl } from "@/lib/supabase/storage";
@@ -140,7 +140,10 @@ export function BlogDirectory({ posts, categories, locale }: BlogDirectoryProps)
       {/* ───────────────────────────────────────────────────────────── */}
       {/* 1. CATEGORY DISCOVERY & MINIMAL SEARCH FILTER BAR */}
       {/* ───────────────────────────────────────────────────────────── */}
-      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 mt-8 sm:mt-12">
+      <section
+        id="blog-directory-section"
+        className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 mt-8 sm:mt-12 scroll-mt-28"
+      >
         <div className="bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-scrapbook border border-[#ded8cb] flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
           {/* Dynamic Filter Chips */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0 scrollbar-none">
@@ -151,7 +154,7 @@ export function BlogDirectory({ posts, categories, locale }: BlogDirectoryProps)
                   key={cat.slug}
                   type="button"
                   onClick={() => setActiveCategory(cat.slug)}
-                  className={`inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-full font-mono text-xs uppercase font-bold transition-all shrink-0 shadow-2xs ${
+                  className={`inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-full font-mono text-xs uppercase font-bold transition-all shrink-0 shadow-2xs cursor-pointer ${
                     isActive
                       ? "bg-[#222222] text-white shadow-sm"
                       : "bg-[#f5f3ee] text-[#444748] hover:text-[#222222] hover:bg-[#eae8e2] border border-[#ded8cb]/80"
@@ -171,7 +174,7 @@ export function BlogDirectory({ posts, categories, locale }: BlogDirectoryProps)
           </div>
 
           {/* Search Input & Sort Selector */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 shrink-0">
             {/* Search Input with Cmd+K hint */}
             <div className="relative flex-1 sm:w-64">
               <svg
@@ -198,19 +201,29 @@ export function BlogDirectory({ posts, categories, locale }: BlogDirectoryProps)
             </div>
 
             {/* Sort Selector */}
-            <div className="relative">
+            <div className="relative w-full sm:w-auto">
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as "newest" | "long" | "recommended")}
-                className="appearance-none bg-[#f5f2ea] font-mono text-xs text-[#222222] pl-3.5 pr-8 py-2 rounded-full cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#2563eb] border border-[#ded8cb] shadow-2xs font-medium"
+                className="w-full sm:w-auto appearance-none bg-[#f5f2ea] font-mono text-xs text-[#222222] pl-3.5 pr-8 py-2 rounded-full cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#2563eb] border border-[#ded8cb] shadow-2xs font-medium"
               >
                 <option value="newest">{t("sortNewest")}</option>
                 <option value="long">{t("sortLongReads")}</option>
                 <option value="recommended">{t("sortBookmarked")}</option>
               </select>
-              <span className="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-[#686660] text-[16px]">
-                unfold_more
-              </span>
+              <svg
+                aria-hidden="true"
+                className="w-3.5 h-3.5 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#686660]"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="7 15 12 20 17 15" />
+                <polyline points="7 9 12 4 17 9" />
+              </svg>
             </div>
           </div>
         </div>
@@ -342,7 +355,7 @@ export function BlogDirectory({ posts, categories, locale }: BlogDirectoryProps)
 
                     <div className="flex items-center gap-2">
                       <Link
-                        href={`/${locale}/blog/${post.slug}`}
+                        href={`/blog/${post.slug}`}
                         onClick={(e) => e.stopPropagation()}
                         className="font-mono text-[11px] text-[#2563eb] hover:underline font-semibold"
                         title={isId ? "Buka di halaman tersendiri" : "Open standalone page"}
@@ -381,7 +394,7 @@ export function BlogDirectory({ posts, categories, locale }: BlogDirectoryProps)
                   setActiveCategory("all");
                   setSearchQuery("");
                 }}
-                className="px-4 py-2 rounded-full font-mono text-xs bg-[#f5f3ee] hover:bg-[#dbeafe] text-[#222222] font-bold border border-[#ded8cb] transition-colors"
+                className="px-4 py-2 rounded-full font-mono text-xs bg-[#f5f3ee] hover:bg-[#dbeafe] text-[#222222] font-bold border border-[#ded8cb] transition-colors cursor-pointer"
               >
                 Reset Filter
               </button>

@@ -84,7 +84,7 @@ export function EducationTimeline({
   ];
 
   return (
-    <section className="flex flex-col gap-8 w-full" id="timeline-education">
+    <section className="flex flex-col gap-8 w-full scroll-mt-28" id="timeline-education">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
@@ -178,7 +178,7 @@ export function EducationTimeline({
                   key={comp}
                   type="button"
                   onClick={() => openCompetencyModal(comp, "smk")}
-                  className="px-2.5 py-1 rounded-md bg-[#f5f3ee] hover:bg-[#dbeafe]/60 font-mono text-xs text-[#222222] border border-[#ded8cb] transition-all hover:scale-105 active:scale-95 shadow-xs flex items-center gap-1 group/btn"
+                  className="px-2.5 py-1 rounded-md bg-[#f5f3ee] hover:bg-[#dbeafe]/60 font-mono text-xs text-[#222222] border border-[#ded8cb] transition-all hover:scale-105 active:scale-95 shadow-xs flex items-center gap-1 group/btn cursor-pointer"
                 >
                   <span>{comp}</span>
                   <span className="text-[10px] text-[#2563eb] opacity-0 group-hover/btn:opacity-100 transition-opacity">
@@ -239,7 +239,7 @@ export function EducationTimeline({
                   key={comp}
                   type="button"
                   onClick={() => openCompetencyModal(comp, "mts")}
-                  className="px-2.5 py-1 rounded-md bg-[#f5f3ee] hover:bg-[#f3b9a7]/50 font-mono text-xs text-[#222222] border border-[#ded8cb] transition-all hover:scale-105 active:scale-95 shadow-xs flex items-center gap-1 group/btn"
+                  className="px-2.5 py-1 rounded-md bg-[#f5f3ee] hover:bg-[#f3b9a7]/50 font-mono text-xs text-[#222222] border border-[#ded8cb] transition-all hover:scale-105 active:scale-95 shadow-xs flex items-center gap-1 group/btn cursor-pointer"
                 >
                   <span>{comp}</span>
                   <span className="text-[10px] text-[#2563eb] opacity-0 group-hover/btn:opacity-100 transition-opacity">

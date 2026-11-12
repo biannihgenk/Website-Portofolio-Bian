@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { SubpageBreadcrumb } from "@/components/layout/SubpageBreadcrumb";
 
 type FilmFilter = "warm" | "teal" | "bw";
@@ -204,7 +204,7 @@ export function GalleryHero() {
                     exit={{ opacity: 0, y: -8 }}
                     className="absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap bg-[#0b0c0c] text-white text-[11px] font-mono px-3.5 py-1.5 rounded-full shadow-lg z-40 border border-white/15"
                   >
-                    Frame ke-{shotsCount - 1} terekam di pratinjau
+                    Frame ke-{shotsCount === 1 ? 36 : shotsCount - 1} terekam di pratinjau
                   </motion.div>
                 )}
               </AnimatePresence>

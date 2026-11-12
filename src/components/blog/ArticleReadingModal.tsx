@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/navigation";
 import { useTranslations } from "next-intl";
 import type { BlogPost } from "@/types/content";
 import { getStoragePublicUrl } from "@/lib/supabase/storage";
@@ -24,17 +24,17 @@ export function ArticleReadingModal({
   const isId = locale === "id";
 
   useEffect(() => {
+    if (!isOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
     }
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-      window.addEventListener("keydown", handleKeyDown);
-    } else {
-      document.body.style.overflow = "unset";
-    }
+
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = prevOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen, onClose]);
@@ -91,7 +91,7 @@ export function ArticleReadingModal({
 
           <div className="flex items-center gap-3">
             <Link
-              href={`/${locale}/blog/${post.slug}`}
+              href={`/blog/${post.slug}`}
               className="font-mono text-xs text-[#2563eb] hover:underline font-bold flex items-center gap-1"
             >
               <span>{isId ? "Buka Tab Penuh" : "Open Full Page"}</span>
@@ -100,7 +100,7 @@ export function ArticleReadingModal({
             <button
               type="button"
               onClick={onClose}
-              className="w-8 h-8 rounded-full bg-white hover:bg-[#eae8e2] text-[#222222] flex items-center justify-center transition-colors shadow-xs border border-[#ded8cb]"
+              className="w-8 h-8 rounded-full bg-white hover:bg-[#eae8e2] text-[#222222] flex items-center justify-center transition-colors shadow-xs border border-[#ded8cb] cursor-pointer"
               aria-label="Tutup Catatan"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -222,7 +222,7 @@ export function ArticleReadingModal({
 
             <div className="flex items-center gap-2 w-full sm:w-auto">
               <Link
-                href={`/${locale}/blog/${post.slug}`}
+                href={`/blog/${post.slug}`}
                 className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full font-mono text-xs font-bold bg-[#f5f3ee] hover:bg-[#dbeafe] text-[#222222] border border-[#ded8cb] transition-colors"
               >
                 <span>Halaman Artikel</span>
@@ -231,7 +231,7 @@ export function ArticleReadingModal({
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 bg-[#222222] text-white px-5 py-2 rounded-full font-mono text-xs uppercase font-bold hover:bg-[#2563eb] transition-colors shadow-xs"
+                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 bg-[#222222] text-white px-5 py-2 rounded-full font-mono text-xs uppercase font-bold hover:bg-[#2563eb] transition-colors shadow-xs cursor-pointer"
               >
                 <span>✓</span>
                 <span>{t("modalDone")}</span>

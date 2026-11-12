@@ -75,7 +75,7 @@ export function GalleryGrid({ initialItems, onOpenLightbox }: GalleryGridProps) 
                   key={cat.key}
                   type="button"
                   onClick={() => setActiveFilter(cat.key)}
-                  className={`px-3.5 py-1.5 rounded-full font-sans text-xs sm:text-sm font-medium transition-all flex items-center gap-2 shadow-xs ${
+                  className={`px-3.5 py-1.5 rounded-full font-sans text-xs sm:text-sm font-medium transition-all flex items-center gap-2 shadow-xs cursor-pointer ${
                     isActive
                       ? "bg-[#0b0c0c] text-white shadow-sm"
                       : "text-[#444748] hover:text-[#0b0c0c] hover:bg-[#f0eee8]"
@@ -107,7 +107,7 @@ export function GalleryGrid({ initialItems, onOpenLightbox }: GalleryGridProps) 
               <button
                 type="button"
                 onClick={() => setViewMode("masonry")}
-                className={`p-1.5 sm:p-2 rounded-full transition-all flex items-center justify-center ${
+                className={`p-1.5 sm:p-2 rounded-full transition-all flex items-center justify-center cursor-pointer ${
                   viewMode === "masonry"
                     ? "bg-white text-[#0b0c0c] shadow-xs font-bold"
                     : "text-[#686660] hover:text-[#0b0c0c]"
@@ -126,7 +126,7 @@ export function GalleryGrid({ initialItems, onOpenLightbox }: GalleryGridProps) 
               <button
                 type="button"
                 onClick={() => setViewMode("grid")}
-                className={`p-1.5 sm:p-2 rounded-full transition-all flex items-center justify-center ${
+                className={`p-1.5 sm:p-2 rounded-full transition-all flex items-center justify-center cursor-pointer ${
                   viewMode === "grid"
                     ? "bg-white text-[#0b0c0c] shadow-xs font-bold"
                     : "text-[#686660] hover:text-[#0b0c0c]"
@@ -172,7 +172,7 @@ export function GalleryGrid({ initialItems, onOpenLightbox }: GalleryGridProps) 
             <button
               type="button"
               onClick={() => setActiveFilter("all")}
-              className="px-4 py-2 rounded-full bg-[#0b0c0c] text-white text-xs font-mono font-medium hover:bg-[#2563eb] transition-colors"
+              className="px-4 py-2 rounded-full bg-[#0b0c0c] text-white text-xs font-mono font-medium hover:bg-[#2563eb] transition-colors cursor-pointer"
             >
               Reset Filter
             </button>
@@ -193,8 +193,16 @@ export function GalleryGrid({ initialItems, onOpenLightbox }: GalleryGridProps) 
               return (
                 <div
                   key={item.id}
+                  role="button"
+                  tabIndex={0}
                   onClick={() => onOpenLightbox(globalIndex >= 0 ? globalIndex : index)}
-                  className={`group relative bg-white p-3 rounded-2xl shadow-xs hover:shadow-md transition-all duration-300 cursor-pointer border border-[#ded8cb] ${
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      onOpenLightbox(globalIndex >= 0 ? globalIndex : index);
+                    }
+                  }}
+                  className={`group relative bg-white p-3 rounded-2xl shadow-xs hover:shadow-md transition-all duration-300 cursor-pointer border border-[#ded8cb] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb] ${
                     isLargePortrait ? "md:row-span-2" : ""
                   } hover:-translate-y-1`}
                 >
@@ -235,7 +243,7 @@ export function GalleryGrid({ initialItems, onOpenLightbox }: GalleryGridProps) 
                     <button
                       type="button"
                       onClick={(e) => toggleCardFavorite(e, item.id)}
-                      className={`absolute bottom-2.5 right-2.5 p-1.5 rounded-full shadow-md backdrop-blur-xs transition-transform hover:scale-110 active:scale-90 ${
+                      className={`absolute bottom-2.5 right-2.5 p-1.5 rounded-full shadow-md backdrop-blur-xs transition-transform hover:scale-110 active:scale-90 cursor-pointer ${
                         isFav ? "bg-white text-[#ba1a1a]" : "bg-black/40 text-white hover:bg-black/60"
                       }`}
                       title={isFav ? t("heartedReaction") : t("heartReaction")}

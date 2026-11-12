@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/navigation";
 import { useTranslations } from "next-intl";
 import type { BlogPost } from "@/types/content";
 import { getStoragePublicUrl } from "@/lib/supabase/storage";
@@ -69,10 +69,20 @@ export function ArticleReadingView({
   // Split markdown into sections
   const blocks = (rawContent || "").split("\n\n").filter(Boolean);
 
-  // Extract table of contents headings
-  const tocHeadings = blocks
-    .filter((b) => b.startsWith("## "))
-    .map((b) => b.replace("## ", "").trim());
+  // Extract table of contents headings with deterministic anchor IDs
+  const tocEntries: Array<{ id: string; heading: string; blockIndex: number }> = [];
+  const h2IdByBlockIndex = new Map<number, string>();
+  blocks.forEach((b, idx) => {
+    if (b.startsWith("## ")) {
+      const id = `sec-${tocEntries.length}`;
+      tocEntries.push({
+        id,
+        heading: b.replace("## ", "").trim(),
+        blockIndex: idx,
+      });
+      h2IdByBlockIndex.set(idx, id);
+    }
+  });
 
   return (
     <article className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
@@ -80,11 +90,11 @@ export function ArticleReadingView({
       {/* 1. BREADCRUMB & BACK NAVIGATION */}
       {/* ───────────────────────────────────────────────────────────── */}
       <nav aria-label="Breadcrumb" className="flex items-center gap-2 font-mono text-xs text-[#686660] mb-6 sm:mb-8 flex-wrap">
-        <Link href={`/${locale}`} className="hover:text-[#222222] transition-colors">
+        <Link href="/" className="hover:text-[#222222] transition-colors">
           {t("breadcrumbHome")}
         </Link>
         <span>/</span>
-        <Link href={`/${locale}/blog`} className="hover:text-[#222222] transition-colors">
+        <Link href="/blog" className="hover:text-[#222222] transition-colors">
           {t("breadcrumbBlog")}
         </Link>
         <span>/</span>
@@ -139,13 +149,13 @@ export function ArticleReadingView({
             <button
               type="button"
               onClick={handleShare}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-mono text-xs bg-white hover:bg-[#f0eee8] text-[#222222] border border-[#ded8cb] transition-colors shadow-2xs"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-mono text-xs bg-white hover:bg-[#f0eee8] text-[#222222] border border-[#ded8cb] transition-colors shadow-2xs cursor-pointer"
             >
               <span>🔗</span>
               <span>{copied ? t("copied") : t("shareNote")}</span>
             </button>
             <Link
-              href={`/${locale}/blog`}
+              href="/blog"
               className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-mono text-xs bg-[#f5f3ee] hover:bg-[#dbeafe] text-[#222222] border border-[#ded8cb] transition-colors"
             >
               <span>{t("backToNotes")}</span>
@@ -188,19 +198,24 @@ export function ArticleReadingView({
       {/* ───────────────────────────────────────────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start mt-8">
         {/* Sticky Table of Contents Sidebar */}
-        {tocHeadings.length > 0 && (
+        {tocEntries.length > 0 && (
           <aside className="hidden lg:block lg:col-span-4 sticky top-28 space-y-4 bg-white p-5 rounded-2xl border border-[#ded8cb] shadow-xs">
             <div className="flex items-center gap-1.5 text-[#2563eb] font-mono text-xs uppercase font-bold tracking-wider">
               <span>📑</span>
               <span>{t("tableOfContents")}</span>
             </div>
             <ul className="space-y-2.5 font-sans text-xs text-[#444748] border-l-2 border-[#f0eee8] pl-3">
-              {tocHeadings.map((heading, idx) => (
-                <li key={idx} className="hover:text-[#2563eb] transition-colors leading-snug">
-                  <span className="font-mono text-[10px] text-[#2563eb] font-bold mr-1.5">
-                    0{idx + 1}.
-                  </span>
-                  <span>{heading}</span>
+              {tocEntries.map((entry, idx) => (
+                <li key={entry.id}>
+                  <a
+                    href={`#${entry.id}`}
+                    className="flex items-start gap-1.5 hover:text-[#2563eb] transition-colors leading-snug"
+                  >
+                    <span className="font-mono text-[10px] text-[#2563eb] font-bold shrink-0 mt-0.5">
+                      {String(idx + 1).padStart(2, "0")}.
+                    </span>
+                    <span>{entry.heading}</span>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -213,17 +228,19 @@ export function ArticleReadingView({
         )}
 
         {/* Reading Article Body */}
-        <div className={`${tocHeadings.length > 0 ? "lg:col-span-8" : "lg:col-span-12 max-w-3xl mx-auto"} space-y-6 text-[#222222]`}>
+        <div className={`${tocEntries.length > 0 ? "lg:col-span-8" : "lg:col-span-12 max-w-3xl mx-auto"} space-y-6 text-[#222222]`}>
           {blocks.map((block, index) => {
             // Heading H2
             if (block.startsWith("## ")) {
               const text = block.replace("## ", "").trim();
+              const secId = h2IdByBlockIndex.get(index);
               return (
                 <h2
                   key={index}
-                  className="font-serif text-2xl sm:text-3xl text-[#222222] font-bold pt-6 pb-2 border-b border-[#f0eee8] flex items-center gap-2"
+                  id={secId}
+                  className="font-serif text-2xl sm:text-3xl text-[#222222] font-bold pt-6 pb-2 border-b border-[#f0eee8] flex items-center gap-2 scroll-mt-28"
                 >
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#2563eb]" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#2563eb] shrink-0" />
                   <span>{text}</span>
                 </h2>
               );
@@ -265,7 +282,7 @@ export function ArticleReadingView({
                     <button
                       type="button"
                       onClick={() => handleCopyCode(rawSnippet, index)}
-                      className="px-2.5 py-0.5 rounded bg-white/10 hover:bg-white/20 text-[#fbf9f3] text-[11px] transition-colors flex items-center gap-1"
+                      className="px-2.5 py-0.5 rounded bg-white/10 hover:bg-white/20 text-[#fbf9f3] text-[11px] transition-colors flex items-center gap-1 cursor-pointer"
                     >
                       <span>{codeCopiedIndex === index ? "✓ Copied" : "Copy"}</span>
                     </button>
@@ -347,11 +364,11 @@ export function ArticleReadingView({
                 {t("authorBio")}
               </p>
               <div className="flex items-center justify-center sm:justify-start gap-3 pt-1 font-mono text-xs text-[#2563eb]">
-                <Link href={`/${locale}/profile`} className="hover:underline font-bold">
+                <Link href="/profile" className="hover:underline font-bold">
                   Tentang Bian →
                 </Link>
                 <span>•</span>
-                <Link href={`/${locale}/projects`} className="hover:underline font-bold">
+                <Link href="/projects" className="hover:underline font-bold">
                   Daftar Proyek →
                 </Link>
               </div>
@@ -390,7 +407,7 @@ export function ArticleReadingView({
               return (
                 <Link
                   key={rel.id}
-                  href={`/${locale}/blog/${rel.slug}`}
+                  href={`/blog/${rel.slug}`}
                   className="bg-white rounded-2xl overflow-hidden shadow-scrapbook border border-[#ded8cb] p-4 flex flex-col justify-between hover:shadow-scrapbook-lg hover:-translate-y-1 transition-all group"
                 >
                   <div className="space-y-3">

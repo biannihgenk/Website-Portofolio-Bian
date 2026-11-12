@@ -91,12 +91,30 @@ export default async function GalleryPage({
         email={contactEmail}
       />
 
-      <main className="w-full pt-20 sm:pt-24 bg-transparent overflow-hidden min-h-screen">
+      <main className="w-full pt-20 sm:pt-24 bg-transparent overflow-x-clip min-h-screen">
         {/* Subtle Ambient Background Accents */}
-        <div className="w-full relative overflow-hidden py-4 sm:py-6">
-          <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-[#dbeafe]/30 blur-3xl pointer-events-none" />
-          <div className="absolute top-1/3 -left-20 w-80 h-80 rounded-full bg-[#f3b9a7]/20 blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-20 right-10 w-96 h-96 rounded-full bg-[#bfdbfe]/20 blur-3xl pointer-events-none" />
+        <div className="w-full relative overflow-x-clip py-4 sm:py-6">
+          <div
+            className="absolute -top-20 -right-20 w-96 h-96 rounded-full pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(219,234,254,0.35) 0%, rgba(219,234,254,0) 70%)",
+            }}
+          />
+          <div
+            className="absolute top-1/3 -left-20 w-80 h-80 rounded-full pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(243,185,167,0.22) 0%, rgba(243,185,167,0) 70%)",
+            }}
+          />
+          <div
+            className="absolute -bottom-20 right-10 w-96 h-96 rounded-full pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(191,219,254,0.24) 0%, rgba(191,219,254,0) 70%)",
+            }}
+          />
 
           {/* MAIN GALLERY CONTAINER */}
           <div className="relative z-10">

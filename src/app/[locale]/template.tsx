@@ -7,3 +7,4 @@ export default function LocaleTemplate({
 }) {
   return <RouteTransition>{children}</RouteTransition>;
 }
+

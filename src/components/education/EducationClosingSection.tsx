@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/navigation";
 import { useTranslations } from "next-intl";
 
 interface EducationClosingSectionProps {
@@ -12,6 +12,7 @@ interface EducationClosingSectionProps {
 export function EducationClosingSection({
   locale,
 }: EducationClosingSectionProps) {
+  void locale;
   const t = useTranslations("educationPage");
 
   return (
@@ -34,7 +35,7 @@ export function EducationClosingSection({
 
           <div className="flex flex-wrap items-center gap-3 pt-3">
             <Link
-              href={`/${locale}/projects`}
+              href="/projects"
               className="px-6 py-3 rounded-xl bg-[#222222] text-white font-sans text-sm font-semibold transition-all hover:bg-[#2563eb] shadow-xs flex items-center gap-2"
             >
               <span>{t("closingBtnProjects")}</span>
@@ -45,7 +46,7 @@ export function EducationClosingSection({
             </Link>
 
             <Link
-              href={`/${locale}#contact`}
+              href="/#contact"
               className="px-6 py-3 rounded-xl bg-[#f0eee8] hover:bg-[#eae8e2] text-[#222222] font-sans text-sm font-semibold transition-colors flex items-center gap-2 border border-[#ded8cb]"
             >
               <span>{t("closingBtnContact")}</span>

@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/navigation";
 import { useTranslations } from "next-intl";
 
 interface ProcessCreedProps {
@@ -10,13 +10,20 @@ interface ProcessCreedProps {
 }
 
 export function ProcessCreed({ locale }: ProcessCreedProps) {
+  void locale;
   const t = useTranslations("projectsPage");
 
   return (
     <section className="w-full mt-12 sm:mt-16 pt-4">
       <div className="relative bg-[#f5f2ea] rounded-3xl p-6 sm:p-10 lg:p-12 overflow-hidden shadow-xs border border-[#ded8cb]">
         {/* Ambient faint decorative glow */}
-        <div className="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-[#dbeafe]/40 blur-3xl pointer-events-none" />
+        <div
+          className="absolute -right-20 -bottom-20 w-80 h-80 rounded-full pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(219,234,254,0.5) 0%, rgba(219,234,254,0) 70%)",
+          }}
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
           {/* Text and Action Buttons (Col 8) */}
@@ -37,7 +44,7 @@ export function ProcessCreed({ locale }: ProcessCreedProps) {
 
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <Link
-                href={`/${locale}`}
+                href="/"
                 className="px-5 py-3 rounded-xl bg-[#222222] text-white font-sans text-sm font-semibold hover:bg-[#2563eb] transition-all shadow-xs flex items-center gap-2"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -47,7 +54,7 @@ export function ProcessCreed({ locale }: ProcessCreedProps) {
                 <span>{t("creedBtnHome")}</span>
               </Link>
               <Link
-                href={`/${locale}#blog`}
+                href="/#blog"
                 className="px-5 py-3 rounded-xl bg-white hover:bg-[#eae8e2] text-[#222222] font-sans text-sm font-semibold transition-all shadow-xs flex items-center gap-2 border border-[#ded8cb]"
               >
                 <svg className="w-4 h-4 text-[#2563eb]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

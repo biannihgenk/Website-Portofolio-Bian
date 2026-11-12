@@ -124,11 +124,18 @@ export default async function ProfilePage({
       />
 
       <main className="w-full pt-20 sm:pt-24 bg-transparent">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-8 sm:py-12">
-          {/* Top Eyebrow & Intro Banner */}
-          <ProfileIntroBanner school={school} />
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-6 sm:py-10">
+          {/* Subpage Profile Hero & Personal Dossier */}
+          <ProfileIntroBanner
+            fullName={displayName}
+            nickname={nickname}
+            school={school}
+            studyProgram={studyProgram}
+            location={location}
+            avatarUrl={avatarUrl}
+          />
 
-          {/* Visual Centerpiece: The Scrapbook Gallery & Identity Showcase */}
+          {/* Learning Pillars & Field Perspectives */}
           <ProfileGalleryShowcase avatarUrl={avatarUrl} />
 
           {/* Section 02: The Living Biodata Board */}

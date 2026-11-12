@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/navigation";
 import { useTranslations } from "next-intl";
 
 interface ToBeContinuedSectionProps {
@@ -10,13 +10,20 @@ interface ToBeContinuedSectionProps {
 }
 
 export function ToBeContinuedSection({ locale }: ToBeContinuedSectionProps) {
+  void locale;
   const t = useTranslations("achievementsPage");
 
   return (
     <section className="mt-16 sm:mt-20 w-full">
       <div className="relative bg-[#f5f2ea] rounded-3xl p-8 sm:p-10 lg:p-12 shadow-xs border border-[#ded8cb] overflow-hidden">
         {/* Ambient doodle spark glow */}
-        <div className="absolute -top-12 -right-12 w-48 h-48 bg-[#f3b9a7]/30 rounded-full blur-2xl pointer-events-none" />
+        <div
+          className="absolute -top-12 -right-12 w-48 h-48 rounded-full pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(243,185,167,0.35) 0%, rgba(243,185,167,0) 70%)",
+          }}
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
           {/* Left Narrative (Col 8) */}
@@ -41,7 +48,7 @@ export function ToBeContinuedSection({ locale }: ToBeContinuedSectionProps) {
             {/* CTA Buttons */}
             <div className="flex flex-wrap items-center gap-3 pt-3">
               <Link
-                href={`/${locale}#contact`}
+                href="/#contact"
                 className="px-6 py-3 rounded-full bg-[#222222] text-white font-sans text-sm font-semibold shadow-xs hover:bg-[#2563eb] transition-all flex items-center gap-2"
               >
                 <span>{t("continuedBtnCollab")}</span>
@@ -51,7 +58,7 @@ export function ToBeContinuedSection({ locale }: ToBeContinuedSectionProps) {
                 </svg>
               </Link>
               <Link
-                href={`/${locale}/projects`}
+                href="/projects"
                 className="px-6 py-3 rounded-full bg-white text-[#222222] font-sans text-sm font-semibold shadow-xs hover:bg-[#f0eee8] transition-all flex items-center gap-2 border border-[#ded8cb]"
               >
                 <span>{t("continuedBtnProjects")}</span>

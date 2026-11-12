@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { motion } from "motion/react";
+import { useLocale } from "next-intl";
+import { motion, useReducedMotion } from "motion/react";
 import { SchoolLocationMap } from "./SchoolLocationMap";
 
 interface BiodataBoardProps {
@@ -19,12 +20,18 @@ export function BiodataBoard({
   studyProgram = "Teknik Komputer dan Jaringan (TKJ)",
   location = "Malang, Jawa Timur, Indonesia",
 }: BiodataBoardProps) {
+  const locale = useLocale();
+  const isId = locale === "id";
+  const shouldReduceMotion = useReducedMotion();
+
   const cards = [
     {
       code: "IDENTITY // 01",
-      title: "Nama Lengkap & Panggilan",
+      title: isId ? "Nama Lengkap & Panggilan" : "Full Name & Call Sign",
       main: fullName,
-      details: [`Panggilan: ${nickname}`, "Alias Tech: Debian", "Angkatan: Moklet A'35 (Kelas X TKJ)"],
+      details: isId
+        ? [`Panggilan: ${nickname}`, "Alias Tech: Debian", "Angkatan: Moklet A'35 (Kelas X TKJ)"]
+        : [`Nickname: ${nickname}`, "Tech Alias: Debian", "Cohort: Moklet A'35 (Grade X TKJ)"],
       icon: (
         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -35,10 +42,12 @@ export function BiodataBoard({
     },
     {
       code: "ACADEMIC // 02",
-      title: "Pendidikan & Institusi",
+      title: isId ? "Pendidikan & Institusi" : "Institution & Program",
       main: school,
       sub: studyProgram,
-      desc: "Menempuh pendidikan vokasi teknologi jaringan, mendalami routing BGP/OSPF, arsitektur server Linux, dan rekayasa perangkat lunak modern.",
+      desc: isId
+        ? "Menempuh pendidikan vokasi teknologi jaringan, mendalami routing BGP/OSPF, arsitektur server Linux, dan rekayasa perangkat lunak modern."
+        : "Pursuing vocational network engineering, covering BGP/OSPF routing, Linux server architectures, and modern full-stack software development.",
       icon: (
         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
@@ -49,10 +58,12 @@ export function BiodataBoard({
     },
     {
       code: "DOMISILI // 03",
-      title: "Lokasi & Tempat Tinggal",
+      title: isId ? "Lokasi & Basis Aktivitas" : "Location & Base",
       main: location,
-      sub: "Jawa Timur, Indonesia (POS 65139)",
-      desc: "Berdomisili dekat kampus SMK Telkom Malang, terbiasa beraktivitas di ekosistem kreatif dan tech community Malang.",
+      sub: isId ? "Jawa Timur, Indonesia (POS 65139)" : "East Java, Indonesia (65139)",
+      desc: isId
+        ? "Berdomisili dekat kampus SMK Telkom Malang, aktif di laboratorium kejuruan Sawojajar dan komunitas teknologi Malang."
+        : "Based near SMK Telkom Malang, actively practicing in Sawojajar vocational network labs and local engineering communities.",
       icon: (
         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
@@ -64,10 +75,14 @@ export function BiodataBoard({
     },
     {
       code: "CORE FOCUS // 04",
-      title: "Spesialisasi & Eksplorasi",
+      title: isId ? "Spesialisasi & Eksplorasi" : "Core Focus Areas",
       main: "Computer Networks & AI Systems",
-      sub: "Hardware, Routing Protocol & Full-Stack Apps",
-      desc: "Fokus pada integrasi arsitektur jaringan handal dengan aplikasi cerdas berbasis AI dan antarmuka web modern yang responsif.",
+      sub: isId
+        ? "Hardware, Routing Protocol & Full-Stack Apps"
+        : "Hardware, Routing Protocols & Full-Stack Apps",
+      desc: isId
+        ? "Fokus pada integrasi arsitektur jaringan andal dengan aplikasi cerdas berbasis AI dan antarmuka web modern yang responsif."
+        : "Focused on bridging reliable network architectures with practical AI automation and responsive modern web interfaces.",
       icon: (
         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
@@ -80,8 +95,8 @@ export function BiodataBoard({
     },
     {
       code: "TECH TOOLBOX // 05",
-      title: "Alat & Ekosistem Harian",
-      main: "Pondasi Infrastruktur & Code",
+      title: isId ? "Alat & Ekosistem Harian" : "Daily Ecosystem & Stack",
+      main: isId ? "Pondasi Infrastruktur & Code" : "Infrastructure & Code Stack",
       tags: [
         "MikroTik RouterOS",
         "Linux Debian/Ubuntu",
@@ -100,9 +115,11 @@ export function BiodataBoard({
     },
     {
       code: "OFF-SCREEN // 06",
-      title: "Aktivitas di Luar Layar",
-      main: "Mindful Reset & Hobby",
-      desc: "Menikmati seduhan kopi di kedai lokal, bersepeda santai di udara sejuk Malang, dan memotret lanskap alam pedesaan Jawa Timur.",
+      title: isId ? "Aktivitas di Luar Layar" : "Off-Screen Routine",
+      main: isId ? "Mindful Reset & Minat" : "Mindful Reset & Interests",
+      desc: isId
+        ? "Menikmati seduhan kopi, bersepeda santai di udara sejuk Malang, dan mendokumentasikan lanskap alam Jawa Timur."
+        : "Quiet coffee sessions, cycling around Malang, and capturing documentary landscape photography across East Java.",
       icon: (
         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
@@ -117,14 +134,14 @@ export function BiodataBoard({
   ];
 
   return (
-    <section className="w-full my-12 sm:my-16">
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-2.5">
-          <span className="font-mono text-xs uppercase bg-[#bfdbfe] text-[#1e40af] px-3 py-1 rounded-full font-bold">
-            BIODATA RESMI
+    <section id="biodata-board" className="w-full my-12 sm:my-16 scroll-mt-28">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-7">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <span className="font-mono text-[11px] uppercase bg-[#dbeafe]/80 text-[#1e40af] border border-[#bfdbfe] px-3 py-1 rounded-full font-bold">
+            {isId ? "BIODATA RESMI" : "OFFICIAL BIODATA"}
           </span>
-          <h2 className="font-serif text-2xl sm:text-3xl text-[#222222] font-bold">
-            Living Biodata Board
+          <h2 className="font-serif text-2xl sm:text-3xl text-[#111827] font-bold tracking-tight">
+            {isId ? "Spesifikasi Identitas & Teknis" : "Identity & Technical Specifications"}
           </h2>
         </div>
         <span className="font-mono text-xs text-[#6b6863] hidden sm:inline-block">
@@ -133,14 +150,17 @@ export function BiodataBoard({
       </div>
 
       {/* 6 Grid Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {cards.map((card) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+        {cards.map((card, idx) => (
           <motion.div
             key={card.code}
-            whileHover={{ y: -4, scale: 1.01 }}
-            transition={{ type: "spring", stiffness: 350, damping: 25 }}
-            className={`p-6 rounded-2xl border border-[#ded8cb] shadow-scrapbook relative group hover:shadow-scrapbook-lg transition-all duration-200 ${
-              card.highlight ? "bg-[#f3b9a7]/20" : "bg-white"
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: "some" }}
+            transition={{ duration: 0.35, delay: Math.min(idx * 0.04, 0.2) }}
+            whileHover={shouldReduceMotion ? undefined : { y: -3 }}
+            className={`p-6 rounded-2xl border border-[#ded8cb] hover:border-[#2563eb]/45 shadow-xs hover:shadow-md relative transition-all duration-200 ${
+              card.highlight ? "bg-[#fbf9f3]" : "bg-white/95"
             }`}
           >
             <div className="flex items-center justify-between mb-3">
@@ -148,9 +168,9 @@ export function BiodataBoard({
                 {card.code}
               </span>
               <div
-                className={`w-7 h-7 rounded-lg flex items-center justify-center ${
+                className={`w-8 h-8 rounded-xl border border-[#ded8cb] flex items-center justify-center ${
                   card.highlight
-                    ? "bg-white text-[#1e0300]"
+                    ? "bg-white text-[#111827]"
                     : "bg-[#f5f3ee] text-[#2563eb]"
                 }`}
               >
@@ -162,7 +182,7 @@ export function BiodataBoard({
               {card.title}
             </h3>
 
-            <p className="font-serif text-lg sm:text-xl font-bold text-[#222222] mb-1">
+            <p className="font-serif text-lg sm:text-xl font-bold text-[#111827] mb-1 leading-snug">
               {card.main}
             </p>
 
@@ -179,11 +199,11 @@ export function BiodataBoard({
             )}
 
             {card.details && (
-              <div className="flex flex-wrap gap-1.5 pt-2">
+              <div className="flex flex-wrap gap-1.5 pt-2.5">
                 {card.details.map((detail) => (
                   <span
                     key={detail}
-                    className="bg-[#f5f2ea] border border-[#ded8cb] font-mono text-[11px] px-2.5 py-0.5 rounded-md text-[#222222]"
+                    className="bg-[#f5f2ea] border border-[#ded8cb] font-mono text-[11px] px-2.5 py-0.5 rounded-md text-[#111827]"
                   >
                     {detail}
                   </span>
@@ -192,11 +212,11 @@ export function BiodataBoard({
             )}
 
             {card.tags && (
-              <div className="flex flex-wrap gap-1.5 pt-2">
+              <div className="flex flex-wrap gap-1.5 pt-2.5">
                 {card.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="bg-[#f5f2ea] border border-[#ded8cb] font-mono text-[11px] px-2.5 py-1 rounded-md text-[#222222]"
+                    className="bg-[#f5f2ea] border border-[#ded8cb] font-mono text-[11px] px-2.5 py-1 rounded-md text-[#111827]"
                   >
                     {tag}
                   </span>

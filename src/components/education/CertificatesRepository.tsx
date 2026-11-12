@@ -184,7 +184,7 @@ export function CertificatesRepository({
   }
 
   return (
-    <section className="flex flex-col gap-8 w-full" id="certificates-training">
+    <section className="flex flex-col gap-8 w-full scroll-mt-28" id="certificates-training">
       {/* Section Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
@@ -206,7 +206,7 @@ export function CertificatesRepository({
           <button
             type="button"
             onClick={() => setActiveFilter("all")}
-            className={`px-4 py-2 rounded-full font-mono text-xs font-bold transition-all shadow-xs ${
+            className={`px-4 py-2 rounded-full font-mono text-xs font-bold transition-all shadow-xs cursor-pointer ${
               activeFilter === "all"
                 ? "bg-[#222222] text-white"
                 : "bg-white text-[#444748] hover:bg-[#f0eee8] border border-[#ded8cb]"
@@ -222,7 +222,7 @@ export function CertificatesRepository({
                 key={cat}
                 type="button"
                 onClick={() => setActiveFilter(cat)}
-                className={`px-4 py-2 rounded-full font-mono text-xs font-bold transition-all shadow-xs ${
+                className={`px-4 py-2 rounded-full font-mono text-xs font-bold transition-all shadow-xs cursor-pointer ${
                   isActive
                     ? "bg-[#222222] text-white"
                     : "bg-white text-[#444748] hover:bg-[#f0eee8] border border-[#ded8cb]"
@@ -262,8 +262,16 @@ export function CertificatesRepository({
           {filteredCerts.map((cert) => (
             <div
               key={cert.id}
+              role="button"
+              tabIndex={0}
               onClick={() => handleOpenCard(cert)}
-              className="cert-card bg-white rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col justify-between transition-all duration-300 hover:shadow-scrapbook hover:-translate-y-1 overflow-hidden border border-[#ded8cb] cursor-pointer group"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  handleOpenCard(cert);
+                }
+              }}
+              className="cert-card bg-white rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col justify-between transition-all duration-300 hover:shadow-scrapbook hover:-translate-y-1 overflow-hidden border border-[#ded8cb] cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]"
             >
               <div className="flex flex-col gap-3.5">
                 {/* Certificate Preview Box */}

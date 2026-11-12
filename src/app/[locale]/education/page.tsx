@@ -8,7 +8,6 @@ import { Footer } from "@/components/layout/Footer";
 import { EducationHero } from "@/components/education/EducationHero";
 import { EducationTimeline } from "@/components/education/EducationTimeline";
 import { CertificatesRepository } from "@/components/education/CertificatesRepository";
-import { CurrentlyExploringBento } from "@/components/education/CurrentlyExploringBento";
 import { TechStackMotionBar } from "@/components/home/TechStackMotionBar";
 import { ContactSection } from "@/components/home/ContactSection";
 
@@ -95,13 +94,25 @@ export default async function EducationPage({
         email={contactEmail}
       />
 
-      <main className="w-full pt-20 sm:pt-24 bg-transparent overflow-hidden min-h-screen">
+      <main className="w-full pt-20 sm:pt-24 bg-transparent overflow-x-clip min-h-screen">
         {/* Subtle Background Ambient Accents */}
-        <div className="w-full relative overflow-hidden py-6 sm:py-10">
-          <div className="absolute -top-24 -right-20 w-96 h-96 rounded-full bg-[#dbeafe]/30 blur-3xl pointer-events-none" />
-          <div className="absolute top-1/2 -left-20 w-80 h-80 rounded-full bg-[#f3b9a7]/20 blur-3xl pointer-events-none" />
+        <div className="w-full relative overflow-x-clip py-6 sm:py-10">
+          <div
+            className="absolute -top-24 -right-20 w-96 h-96 rounded-full pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(219,234,254,0.35) 0%, rgba(219,234,254,0) 70%)",
+            }}
+          />
+          <div
+            className="absolute top-1/2 -left-20 w-80 h-80 rounded-full pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(243,185,167,0.22) 0%, rgba(243,185,167,0) 70%)",
+            }}
+          />
 
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-12 relative z-10 flex flex-col gap-16 md:gap-24">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-12 pb-10 sm:pb-16 relative z-10 flex flex-col gap-16 md:gap-24">
             {/* 1. HERO SECTION: "My Learning Journey" */}
             <EducationHero />
 
@@ -114,9 +125,6 @@ export default async function EducationPage({
               educationList={educationList}
               locale={locale}
             />
-
-            {/* 4. "CURRENTLY EXPLORING" (Honest Skill Tracker Bento) */}
-            <CurrentlyExploringBento />
           </div>
 
           {/* Tech Stack Interactive Motion Ticker */}

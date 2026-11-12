@@ -225,7 +225,7 @@ export function ProjectsDirectory({
   }
 
   return (
-    <section className="w-full mb-12 sm:mb-16 pt-4" id="project-directory">
+    <section className="w-full mb-12 sm:mb-16 pt-4 scroll-mt-28" id="project-directory">
       {/* Directory Section Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6">
         <div>
@@ -264,7 +264,7 @@ export function ProjectsDirectory({
                 key={btn.key}
                 type="button"
                 onClick={() => setActiveFilter(btn.key)}
-                className={`px-4 py-1.5 rounded-full text-xs sm:text-[13px] font-mono font-medium transition-all shadow-xs ${
+                className={`px-4 py-1.5 rounded-full text-xs sm:text-[13px] font-mono font-medium transition-all shadow-xs cursor-pointer ${
                   isActive
                     ? "bg-[#222222] text-white shadow-xs"
                     : "bg-white text-[#444748] hover:bg-[#eae8e2] border border-[#ded8cb]"
@@ -304,7 +304,7 @@ export function ProjectsDirectory({
           <button
             type="button"
             onClick={() => setActiveFilter("all")}
-            className="px-4 py-1.5 rounded-full bg-[#222222] text-white font-mono text-xs hover:bg-[#2563eb] transition-colors"
+            className="px-4 py-1.5 rounded-full bg-[#222222] text-white font-mono text-xs hover:bg-[#2563eb] transition-colors cursor-pointer"
           >
             Reset Filter
           </button>

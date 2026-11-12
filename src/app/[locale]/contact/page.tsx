@@ -93,9 +93,21 @@ export default async function ContactPage({
 
       <main className="w-full pt-20 sm:pt-24 bg-transparent min-h-screen">
         {/* Subtle Ambient Background Gradients */}
-        <div className="w-full relative overflow-hidden py-4 sm:py-6">
-          <div className="absolute -top-24 -right-20 w-96 h-96 rounded-full bg-[#dbeafe]/30 blur-3xl pointer-events-none" />
-          <div className="absolute top-1/3 -left-20 w-80 h-80 rounded-full bg-[#f3b9a7]/20 blur-3xl pointer-events-none" />
+        <div className="w-full relative overflow-x-clip py-4 sm:py-6">
+          <div
+            className="absolute -top-24 -right-20 w-96 h-96 rounded-full pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(219,234,254,0.35) 0%, rgba(219,234,254,0) 70%)",
+            }}
+          />
+          <div
+            className="absolute top-1/3 -left-20 w-80 h-80 rounded-full pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(243,185,167,0.22) 0%, rgba(243,185,167,0) 70%)",
+            }}
+          />
 
           {/* EXECUTIVE SUB-PAGE HERO FOR CONTACT */}
           <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 pt-4 sm:pt-6 pb-8">

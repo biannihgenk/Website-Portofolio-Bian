@@ -87,14 +87,12 @@ export function GalleryLightboxModal({
   );
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-      window.addEventListener("keydown", handleKeyDown);
-    } else {
-      document.body.style.overflow = "";
-    }
+    if (!isOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = prevOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen, handleKeyDown]);
@@ -144,7 +142,7 @@ export function GalleryLightboxModal({
             <button
               type="button"
               onClick={() => toggleFavorite(item.id)}
-              className={`p-2 rounded-full transition-all shadow-xs flex items-center justify-center ${
+              className={`p-2 rounded-full transition-all shadow-xs flex items-center justify-center cursor-pointer ${
                 isFavorited
                   ? "bg-[#f3b9a7] text-[#ba1a1a]"
                   : "bg-white text-[#444748] hover:bg-[#f5f3ee]"
@@ -167,7 +165,7 @@ export function GalleryLightboxModal({
             <button
               type="button"
               onClick={() => setIsZoomed((prev) => !prev)}
-              className="p-2 rounded-full bg-white text-[#1b1c19] hover:bg-[#f0eee8] transition-all shadow-xs flex items-center justify-center border border-[#ded8cb]"
+              className="p-2 rounded-full bg-white text-[#1b1c19] hover:bg-[#f0eee8] transition-all shadow-xs flex items-center justify-center border border-[#ded8cb] cursor-pointer"
               title={isZoomed ? t("lightboxZoomOut") : t("lightboxZoom")}
               aria-label={t("lightboxZoom")}
             >
@@ -196,7 +194,7 @@ export function GalleryLightboxModal({
                 setIsZoomed(false);
                 onPrev();
               }}
-              className="p-2 rounded-full bg-white text-[#1b1c19] hover:bg-[#0b0c0c] hover:text-white transition-all shadow-xs flex items-center justify-center border border-[#ded8cb]"
+              className="p-2 rounded-full bg-white text-[#1b1c19] hover:bg-[#0b0c0c] hover:text-white transition-all shadow-xs flex items-center justify-center border border-[#ded8cb] cursor-pointer"
               title={t("lightboxPrev")}
               aria-label={t("lightboxPrev")}
             >
@@ -212,7 +210,7 @@ export function GalleryLightboxModal({
                 setIsZoomed(false);
                 onNext();
               }}
-              className="p-2 rounded-full bg-white text-[#1b1c19] hover:bg-[#0b0c0c] hover:text-white transition-all shadow-xs flex items-center justify-center border border-[#ded8cb]"
+              className="p-2 rounded-full bg-white text-[#1b1c19] hover:bg-[#0b0c0c] hover:text-white transition-all shadow-xs flex items-center justify-center border border-[#ded8cb] cursor-pointer"
               title={t("lightboxNext")}
               aria-label={t("lightboxNext")}
             >
@@ -225,7 +223,7 @@ export function GalleryLightboxModal({
             <button
               type="button"
               onClick={onClose}
-              className="p-2 rounded-full bg-white text-[#1b1c19] hover:bg-[#ba1a1a] hover:text-white transition-all shadow-xs ml-1 border border-[#ded8cb]"
+              className="p-2 rounded-full bg-white text-[#1b1c19] hover:bg-[#ba1a1a] hover:text-white transition-all shadow-xs ml-1 border border-[#ded8cb] cursor-pointer"
               title={t("lightboxClose")}
               aria-label={t("lightboxClose")}
             >
@@ -265,7 +263,7 @@ export function GalleryLightboxModal({
               onPrev();
             }}
             aria-label={t("lightboxPrev")}
-            className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 hover:bg-black/75 text-white flex items-center justify-center backdrop-blur-xs transition-opacity shadow-lg"
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 hover:bg-black/75 text-white flex items-center justify-center backdrop-blur-xs transition-opacity shadow-lg cursor-pointer"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <polyline points="15 18 9 12 15 6" />
@@ -279,7 +277,7 @@ export function GalleryLightboxModal({
               onNext();
             }}
             aria-label={t("lightboxNext")}
-            className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 hover:bg-black/75 text-white flex items-center justify-center backdrop-blur-xs transition-opacity shadow-lg"
+            className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 hover:bg-black/75 text-white flex items-center justify-center backdrop-blur-xs transition-opacity shadow-lg cursor-pointer"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <polyline points="9 18 15 12 9 6" />
@@ -298,7 +296,7 @@ export function GalleryLightboxModal({
             </p>
           </div>
 
-          <div className="shrink-0 flex items-center gap-3 font-mono text-xs text-[#686660]">
+          <div className="shrink-0 flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-xs text-[#686660]">
             <span className="flex items-center gap-1">
               <svg className="w-3.5 h-3.5 text-[#2563eb]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
@@ -319,7 +317,7 @@ export function GalleryLightboxModal({
             <button
               type="button"
               onClick={copyPhotoLink}
-              className="text-[#2563eb] hover:underline flex items-center gap-1"
+              className="text-[#2563eb] hover:underline flex items-center gap-1 cursor-pointer"
               title="Copy photo URL"
             >
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

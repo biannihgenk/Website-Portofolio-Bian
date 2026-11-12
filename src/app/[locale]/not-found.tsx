@@ -1,11 +1,23 @@
-import Link from "next/link";
+import { Link } from "@/lib/i18n/navigation";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-transparent text-[#222222] flex flex-col justify-center items-center px-4 sm:px-6 py-16 relative selection:bg-[#dbeafe]">
+    <div className="min-h-screen bg-transparent text-[#222222] flex flex-col justify-center items-center px-4 sm:px-6 py-16 relative selection:bg-[#dbeafe] overflow-x-clip">
       {/* Background ambient accents */}
-      <div className="absolute top-1/4 left-1/4 w-72 h-72 rounded-full bg-[#e8eedb]/50 blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-[#fceee8]/50 blur-3xl pointer-events-none" />
+      <div
+        className="absolute top-1/4 left-1/4 w-72 h-72 rounded-full pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(232,238,219,0.6) 0%, rgba(232,238,219,0) 70%)",
+        }}
+      />
+      <div
+        className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(252,238,232,0.6) 0%, rgba(252,238,232,0) 70%)",
+        }}
+      />
 
       <div className="relative max-w-xl w-full text-center">
         {/* Scrapbook stamp */}

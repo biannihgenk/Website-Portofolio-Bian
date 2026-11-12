@@ -158,7 +158,7 @@ export function AchievementsDirectory({
   }
 
   return (
-    <section className="w-full my-8 sm:my-12" id="achievements-directory">
+    <section className="w-full my-8 sm:my-12 scroll-mt-28" id="achievements-directory">
       {/* Search & Filter Header Strip */}
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-8 bg-white p-4 sm:p-5 rounded-2xl border border-[#ded8cb] shadow-xs">
         {/* Search Bar */}
@@ -184,7 +184,7 @@ export function AchievementsDirectory({
             <button
               type="button"
               onClick={() => setSearchQuery("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-mono text-[#686660] hover:text-[#222222]"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-mono text-[#686660] hover:text-[#222222] cursor-pointer"
             >
               clear
             </button>
@@ -198,7 +198,7 @@ export function AchievementsDirectory({
             <button
               type="button"
               onClick={() => setSortOrder(sortOrder === "newest" ? "oldest" : "newest")}
-              className="font-bold text-[#222222] hover:text-[#2563eb] underline ml-1"
+              className="font-bold text-[#222222] hover:text-[#2563eb] underline ml-1 cursor-pointer"
             >
               {sortOrder === "newest" ? t("sortNewest") : t("sortOldest")}
             </button>
@@ -215,7 +215,7 @@ export function AchievementsDirectory({
               key={tab.key}
               type="button"
               onClick={() => setActiveFilter(tab.key)}
-              className={`px-4 py-2 rounded-full font-mono text-xs font-semibold whitespace-nowrap transition-all shadow-xs flex items-center gap-2 ${
+              className={`px-4 py-2 rounded-full font-mono text-xs font-semibold whitespace-nowrap transition-all shadow-xs flex items-center gap-2 cursor-pointer ${
                 isActive
                   ? "bg-[#222222] text-white"
                   : "bg-white text-[#444748] hover:bg-[#eae8e2] border border-[#ded8cb]"
@@ -258,7 +258,7 @@ export function AchievementsDirectory({
               setActiveFilter("all");
               setSearchQuery("");
             }}
-            className="px-4 py-1.5 rounded-full bg-[#222222] text-white font-mono text-xs hover:bg-[#2563eb] transition-colors"
+            className="px-4 py-1.5 rounded-full bg-[#222222] text-white font-mono text-xs hover:bg-[#2563eb] transition-colors cursor-pointer"
           >
             Reset Filter
           </button>

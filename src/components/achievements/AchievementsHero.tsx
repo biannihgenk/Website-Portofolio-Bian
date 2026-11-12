@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { SubpageBreadcrumb } from "@/components/layout/SubpageBreadcrumb";
 
 export function AchievementsHero() {
@@ -231,7 +231,7 @@ export function AchievementsHero() {
             <div className="mt-3.5 pt-3 border-t border-[#ded8cb]/80 flex items-center justify-between text-xs font-mono">
               <span className="text-[#686660] text-[11px]">Status: Terkualifikasi</span>
               <a
-                href="#achievements-list"
+                href="#achievements-directory"
                 className="text-[#2563eb] hover:text-[#1d4ed8] font-bold flex items-center gap-1 transition-colors text-[11px]"
               >
                 <span>Lihat Arsip Lengkap</span>

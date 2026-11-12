@@ -36,19 +36,19 @@ export function ProjectDetailModal({
 
   // Handle ESC key to close modal
   useEffect(() => {
+    if (!isOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
         onClose();
       }
     }
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-      window.addEventListener("keydown", handleKeyDown);
-    } else {
-      document.body.style.overflow = "unset";
-    }
+
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = prevOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen, onClose]);
@@ -70,7 +70,7 @@ export function ProjectDetailModal({
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-5 right-5 w-9 h-9 rounded-full bg-[#f0eee8] hover:bg-[#eae8e2] flex items-center justify-center text-[#222222] transition-colors focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
+          className="absolute top-5 right-5 w-9 h-9 rounded-full bg-[#f0eee8] hover:bg-[#eae8e2] flex items-center justify-center text-[#222222] transition-colors focus:outline-none focus:ring-2 focus:ring-[#2563eb] cursor-pointer"
           aria-label="Close blueprint modal"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -195,7 +195,7 @@ export function ProjectDetailModal({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 rounded-lg bg-[#222222] text-white font-mono text-xs hover:bg-[#2563eb] transition-all shadow-xs"
+                className="px-4 py-2 rounded-lg bg-[#222222] text-white font-mono text-xs hover:bg-[#2563eb] transition-all shadow-xs cursor-pointer"
               >
                 {t("modalClose")}
               </button>

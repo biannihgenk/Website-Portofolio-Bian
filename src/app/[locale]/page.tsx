@@ -28,6 +28,7 @@ import { FeaturedProjects } from "@/components/home/FeaturedProjects";
 import { Milestones } from "@/components/home/Milestones";
 import { GalleryScrapbook } from "@/components/home/GalleryScrapbook";
 import { BlogNotebook } from "@/components/home/BlogNotebook";
+import { IdentityHubShowcase } from "@/components/home/IdentityHubShowcase";
 import { ContactSection } from "@/components/home/ContactSection";
 
 interface GeneralSettingValue {
@@ -170,6 +171,16 @@ export default async function HomePage({
 
         {/* 9. NOTEBOOK & DEVLOGS */}
         <BlogNotebook posts={posts} locale={locale} />
+
+        {/* 9.5 CONNECTED IDENTITY HUB (Real Cutout Portrait & Floating Channels) */}
+        <IdentityHubShowcase
+          locale={locale}
+          githubUrl={githubUrl}
+          linkedinUrl={linkedinUrl}
+          instagramUrl={instagramUrl}
+          email={contactEmail}
+          school={school}
+        />
 
         {/* 10. CONTACT / CLOSING */}
         <ContactSection

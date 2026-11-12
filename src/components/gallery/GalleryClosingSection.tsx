@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/navigation";
 import { useTranslations } from "next-intl";
 
 interface GalleryClosingSectionProps {
@@ -9,6 +9,7 @@ interface GalleryClosingSectionProps {
 }
 
 export function GalleryClosingSection({ locale }: GalleryClosingSectionProps) {
+  void locale;
   const t = useTranslations("galleryPage");
 
   return (
@@ -41,7 +42,7 @@ export function GalleryClosingSection({ locale }: GalleryClosingSectionProps) {
         {/* Action Buttons */}
         <div className="flex flex-wrap items-center gap-3 shrink-0 relative z-10 w-full sm:w-auto">
           <Link
-            href={`/${locale}/projects`}
+            href="/projects"
             className="px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-[#0b0c0c] text-white font-sans text-xs sm:text-sm font-medium hover:bg-[#2563eb] transition-all shadow-sm flex items-center justify-center gap-2 group w-full sm:w-auto"
           >
             <span>{t("closingBtnProjects")}</span>
@@ -58,7 +59,7 @@ export function GalleryClosingSection({ locale }: GalleryClosingSectionProps) {
           </Link>
 
           <Link
-            href={`/${locale}`}
+            href="/"
             className="px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-white text-[#0b0c0c] font-sans text-xs sm:text-sm font-medium hover:bg-[#f0eee8] transition-all shadow-xs flex items-center justify-center gap-2 border border-[#ded8cb] w-full sm:w-auto"
           >
             <svg className="w-4 h-4 text-[#2563eb]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

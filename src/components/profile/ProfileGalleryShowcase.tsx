@@ -1,153 +1,201 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { useLocale } from "next-intl";
+import { motion, useReducedMotion } from "motion/react";
+import { Link } from "@/lib/i18n/navigation";
 
 interface ProfileGalleryShowcaseProps {
   avatarUrl?: string | null;
 }
 
 export function ProfileGalleryShowcase({ avatarUrl }: ProfileGalleryShowcaseProps) {
+  void avatarUrl;
   const locale = useLocale();
   const isId = locale === "id";
-  const [activeView, setActiveView] = useState<"campus" | "avatar">("campus");
+  const shouldReduceMotion = useReducedMotion();
 
-  const campusPhotoUrl = "/images/debian_real_landscape.jpg";
-  const avatar3dUrl = "/images/debian_avatar_3d.jpg";
-  const portraitUrl = avatarUrl || "/images/Foto Bian.png";
+  const focusPillars = [
+    {
+      index: "01",
+      title: isId ? "Infrastruktur & Routing Jaringan" : "Network Infrastructure & Routing",
+      detail: isId
+        ? "Perancangan subnetting, VLAN terstruktur, MikroTik RouterOS, dan dasar Cisco IOS."
+        : "Structured subnetting, VLAN segmentation, MikroTik RouterOS, and Cisco IOS fundamentals.",
+      tag: "MikroTik • Cisco",
+    },
+    {
+      index: "02",
+      title: isId ? "Administrasi Server Linux & Kontainer" : "Linux Server & Container Ops",
+      detail: isId
+        ? "Konfigurasi daemon Debian 12 (DNS, DHCP, Nginx, SSH) dan lingkungan Docker terisolasi."
+        : "Debian 12 server daemon configuration (DNS, DHCP, Nginx, SSH) and isolated Docker hosts.",
+      tag: "Debian • Docker",
+    },
+    {
+      index: "03",
+      title: isId ? "Pengembangan Web & Automasi AI" : "Full-Stack Web & AI Tooling",
+      detail: isId
+        ? "Membangun antarmuka bersih berbasis Next.js TypeScript, skema SQL, dan skrip otomasi."
+        : "Crafting clean Next.js TypeScript applications, SQL data models, and automation tooling.",
+      tag: "Next.js • TS • AI",
+    },
+  ];
 
-  const mainImageSrc = activeView === "campus" ? campusPhotoUrl : avatar3dUrl;
+  const fieldSnapshots = [
+    {
+      src: "/images/debian_real_portrait_2.jpg",
+      alt: isId
+        ? "Naufal Nizar De Bian berdiskusi santai saat mengeksplorasi studi kasus teknologi"
+        : "Naufal Nizar De Bian during a casual tech study session",
+      label: isId ? "DISKUSI & KODE" : "STUDY & BUILD",
+      caption: isId
+        ? "Refleksi antarmuka dan studi kasus pengembangan web."
+        : "Interface refinement & full-stack software sessions.",
+      objectClass: "object-cover object-[50%_15%]",
+    },
+    {
+      src: "/images/debian_real_portrait_4.jpg",
+      alt: isId
+        ? "Naufal Nizar De Bian di ruang terbuka persawahan Jawa Timur"
+        : "Naufal Nizar De Bian outdoors in East Java countryside",
+      label: isId ? "LUAR LAYAR" : "OFF-SCREEN",
+      caption: isId
+        ? "Menjaga perspektif jernih di ruang terbuka Jawa Timur."
+        : "Recharging focus and clarity outdoors in East Java.",
+      objectClass: "object-cover object-[50%_20%]",
+    },
+  ];
 
   return (
-    <section className="w-full my-8 sm:my-10">
-      <div className="bg-white rounded-3xl p-5 sm:p-8 lg:p-10 shadow-xs border border-[#ded8cb]">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-10 items-stretch">
-          {/* LEFT SHOWCASE (7 Cols): Real Campus Photo / 3D Concept Switcher */}
-          <div className="lg:col-span-7 flex flex-col justify-between gap-4">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#2563eb]" />
-                <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#111827]">
-                  {isId ? "Dokumentasi Identitas" : "Identity Visual Record"}
-                </span>
-              </div>
-
-              <div className="inline-flex p-1 rounded-xl bg-[#f5f3ee] border border-[#ded8cb] text-[11px] font-mono">
-                <button
-                  type="button"
-                  onClick={() => setActiveView("campus")}
-                  className={`px-3 py-1 rounded-lg font-bold transition-all cursor-pointer ${
-                    activeView === "campus"
-                      ? "bg-white text-[#2563eb] shadow-2xs"
-                      : "text-[#6b6863] hover:text-[#111827]"
-                  }`}
-                >
-                  {isId ? "Potret Resmi" : "Official Portrait"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveView("avatar")}
-                  className={`px-3 py-1 rounded-lg font-bold transition-all cursor-pointer ${
-                    activeView === "avatar"
-                      ? "bg-white text-[#2563eb] shadow-2xs"
-                      : "text-[#6b6863] hover:text-[#111827]"
-                  }`}
-                >
-                  {isId ? "Konsep Digital 3D" : "3D Digital Render"}
-                </button>
-              </div>
+    <section className="w-full my-8 sm:my-12">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-stretch">
+        {/* LEFT COLUMN (6 Cols): Structured Technical Learning Tracks */}
+        <motion.div
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: "some" }}
+          transition={{ duration: 0.42, ease: "easeOut" }}
+          className="lg:col-span-6 bg-[#0b1120] text-white rounded-3xl p-6 sm:p-8 border border-slate-800 flex flex-col justify-between gap-6"
+        >
+          <div className="space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-blue-400 font-bold">
+                <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                {isId ? "PILAR KOMPETENSI // X TKJ" : "ENGINEERING PILLARS // X TKJ"}
+              </span>
+              <span className="font-mono text-[10px] text-slate-400 border border-slate-700/80 px-2.5 py-0.5 rounded-full">
+                2024–2026
+              </span>
             </div>
 
-            <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-[#f5f2ea] border border-[#ded8cb] group">
-              <Image
-                src={mainImageSrc}
-                alt={
-                  activeView === "campus"
-                    ? "Naufal Nizar De Bian — SMK Telkom Malang"
-                    : "Digital 3D Identity Render of Naufal Nizar De Bian"
-                }
-                fill
-                priority
-                className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
-                sizes="(max-width: 1024px) 100vw, 720px"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent pointer-events-none" />
-
-              <div className="absolute bottom-3.5 left-3.5 right-3.5 flex flex-wrap items-center justify-between gap-2 text-white">
-                <div className="px-3 py-1.5 rounded-xl bg-black/55 backdrop-blur-md border border-white/15 font-mono text-[11px] font-semibold">
-                  Naufal Nizar De Bian • Moklet A&apos;35
-                </div>
-                <div className="px-2.5 py-1 rounded-lg bg-black/55 backdrop-blur-md border border-white/15 font-mono text-[10px] font-bold">
-                  SMK TELKOM MALANG
-                </div>
-              </div>
-            </div>
+            <h2 className="font-serif text-xl sm:text-2xl font-bold text-white leading-snug">
+              {isId
+                ? "Menjembatani infrastruktur jaringan fisik dengan perangkat lunak modern."
+                : "Bridging physical network infrastructure with resilient web software."}
+            </h2>
           </div>
 
-          {/* RIGHT PANEL (5 Cols): Crisp Studio Portrait & Active Engineering Focus Card */}
-          <div className="lg:col-span-5 flex flex-col justify-between gap-5">
-            {/* Compact Real Portrait Frame */}
-            <div className="bg-[#fbf9f3] p-3.5 sm:p-4 rounded-2xl border border-[#ded8cb] flex items-center gap-4">
-              <div className="relative w-24 h-28 sm:w-28 sm:h-32 rounded-xl overflow-hidden bg-[#f5f3ee] border border-[#ded8cb] shrink-0">
-                <Image
-                  src={portraitUrl}
-                  alt="Naufal Nizar De Bian"
-                  fill
-                  unoptimized
-                  className="object-cover object-top"
-                  sizes="120px"
-                />
-              </div>
-
-              <div className="space-y-1.5 min-w-0">
-                <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#2563eb] block">
-                  {isId ? "Profil Pelajar Vokasi" : "Vocational Profile"}
-                </span>
-                <h2 className="font-serif text-lg sm:text-xl font-bold text-[#111827] leading-snug">
-                  Naufal Nizar De Bian Setyo Firwanto
-                </h2>
-                <p className="font-sans text-xs text-[#6b6863] leading-relaxed">
-                  {isId
-                    ? "Teknik Komputer dan Jaringan (TKJ) — SMK Telkom Malang."
-                    : "Computer & Network Engineering — SMK Telkom Malang."}
-                </p>
-              </div>
-            </div>
-
-            {/* Clean Dark Executive Status Block */}
-            <div className="bg-[#0b1120] text-white rounded-2xl p-5 sm:p-6 flex flex-col justify-between gap-4 flex-1 border border-slate-800">
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-blue-400 font-bold">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    {isId ? "Fokus Pembelajaran Saat Ini" : "Current Academic Focus"}
+          <div className="space-y-3">
+            {focusPillars.map((pillar) => (
+              <div
+                key={pillar.index}
+                className="rounded-2xl bg-slate-900/90 border border-slate-800 p-4 flex items-start justify-between gap-3"
+              >
+                <div className="flex items-start gap-3 min-w-0">
+                  <span className="font-mono text-xs font-bold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-1 rounded-lg shrink-0">
+                    {pillar.index}
                   </span>
-                  <span className="font-mono text-[10px] text-slate-400">
-                    MALANG 65139
+                  <div className="space-y-1 min-w-0">
+                    <h3 className="font-sans text-sm font-bold text-white">
+                      {pillar.title}
+                    </h3>
+                    <p className="font-sans text-xs text-slate-300 leading-relaxed">
+                      {pillar.detail}
+                    </p>
+                  </div>
+                </div>
+                <span className="hidden sm:inline-block font-mono text-[10px] font-semibold text-slate-300 bg-slate-800 border border-slate-700 px-2.5 py-1 rounded-md shrink-0">
+                  {pillar.tag}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="pt-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2 font-mono text-[11px] text-slate-400">
+            <span>SMK Telkom Malang • Laboratorium TKJ</span>
+            <Link
+              href="/education"
+              className="text-blue-400 hover:text-blue-300 font-semibold transition-colors"
+            >
+              {isId ? "Lihat Kurikulum & Lab →" : "View Curriculum & Labs →"}
+            </Link>
+          </div>
+        </motion.div>
+
+        {/* RIGHT COLUMN (6 Cols): Clean Editorial Dual-Photo Perspectives */}
+        <motion.div
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: "some" }}
+          transition={{ duration: 0.42, delay: 0.08, ease: "easeOut" }}
+          className="lg:col-span-6 bg-white/95 rounded-3xl p-5 sm:p-8 border border-[#ded8cb] shadow-xs flex flex-col justify-between gap-5"
+        >
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#2563eb]" />
+              <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#111827]">
+                {isId ? "Perspektif Lapangan & Keseharian" : "Field & Everyday Perspectives"}
+              </span>
+            </div>
+            <span className="font-mono text-[10px] uppercase tracking-wider text-[#6b6863] bg-[#fbf9f3] border border-[#ded8cb] px-2.5 py-0.5 rounded-full">
+              {isId ? "JAWA TIMUR" : "EAST JAVA"}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {fieldSnapshots.map((shot) => (
+              <figure
+                key={shot.src}
+                className="bg-[#fbf9f3] rounded-2xl p-3 border border-[#ded8cb] flex flex-col gap-3 group"
+              >
+                <div className="relative w-full aspect-[4/4.6] rounded-xl overflow-hidden bg-[#18181b] border border-[#ded8cb]/80">
+                  <Image
+                    src={shot.src}
+                    alt={shot.alt}
+                    fill
+                    className={`${shot.objectClass} group-hover:scale-[1.03] transition-transform duration-500`}
+                    sizes="(max-width: 640px) 100vw, 280px"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent pointer-events-none" />
+                  <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-sm border border-white/15 font-mono text-[9px] font-bold text-white uppercase tracking-wider">
+                    {shot.label}
                   </span>
                 </div>
-
-                <p className="font-sans text-sm text-slate-200 leading-relaxed">
-                  {isId
-                    ? "Siswa Kelas X TKJ — Mendalami arsitektur routing MikroTik & Cisco (OSPF/VLAN), administrasi server Debian Linux, containerization Docker, dan pengembangan aplikasi web modern."
-                    : "Grade X TKJ Student — Focusing on MikroTik & Cisco routing architectures (OSPF/VLAN), Debian Linux server administration, Docker containerization, and modern full-stack web engineering."}
-                </p>
-              </div>
-
-              <div className="flex flex-wrap gap-2 pt-3 border-t border-slate-800">
-                {["MikroTik & Cisco", "Debian Linux", "Next.js 15 & TS", "Docker"].map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-700 font-mono text-[10px] font-semibold text-slate-200"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
+                <figcaption className="font-sans text-xs text-[#4b5563] leading-relaxed px-0.5">
+                  {shot.caption}
+                </figcaption>
+              </figure>
+            ))}
           </div>
-        </div>
+
+          <div className="pt-3 border-t border-[#ded8cb]/80 flex flex-wrap items-center justify-between gap-2 text-xs">
+            <span className="font-serif italic text-[#4b5563]">
+              &ldquo;
+              {isId
+                ? "Keseimbangan antara presisi di terminal dan kejernihan berpikir di luar layar."
+                : "Balancing terminal precision with calm, clear perspective off-screen."}
+              &rdquo;
+            </span>
+            <Link
+              href="/gallery"
+              className="font-mono text-[11px] font-bold text-[#2563eb] hover:text-[#1d4ed8] transition-colors shrink-0"
+            >
+              {isId ? "Lihat Galeri →" : "Explore Gallery →"}
+            </Link>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
