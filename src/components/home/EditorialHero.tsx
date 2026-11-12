@@ -198,6 +198,8 @@ export function EditorialHero({
                         {school}
                       </p>
                     </div>
+                    
+                    {/*Kenapa ii ko}
 
                     {/* Footer Row: Tags on Left + Barcode on Right */}
                     <div className="pt-2.5 border-t border-[#ded8cb]/70 flex items-center justify-between gap-2 mt-auto">

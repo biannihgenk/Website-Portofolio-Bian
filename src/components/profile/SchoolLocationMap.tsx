@@ -34,10 +34,10 @@ export function SchoolLocationMap() {
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             </div>
             <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#222222] mt-1">
-              Peta Lokasi & Kampus SMK Telkom Malang
+              Lokasi SMK Telkom Malang
             </h3>
             <p className="font-sans text-xs sm:text-sm text-[#6b6863]">
-              Pusat kegiatan vokasi, lab rekayasa jaringan TKJ, dan keseharian Debian di Sawojajar, Kota Malang.
+              Pusat Kegiatan Pendidikan Kejuruan
             </p>
           </div>
         </div>
@@ -143,7 +143,7 @@ export function SchoolLocationMap() {
 
             <div className="pt-3 border-t border-[#ded8cb]/80">
               <span className="font-mono text-[10px] uppercase font-bold text-[#6b6863]">
-                KAMPUS & ANGKATAN
+              Sekolah
               </span>
               <p className="font-sans text-xs text-[#222222] leading-relaxed mt-0.5">
                 Sekolah Menengah Kejuruan Telkom pertama di Indonesia, pelopor pendidikan kejuruan teknologi informasi dan jaringan.
