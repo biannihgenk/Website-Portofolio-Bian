@@ -91,7 +91,7 @@ export default async function GalleryPage({
         email={contactEmail}
       />
 
-      <main className="w-full pt-16 sm:pt-20 bg-transparent overflow-hidden min-h-screen">
+      <main className="w-full pt-20 sm:pt-24 bg-transparent overflow-hidden min-h-screen">
         {/* Subtle Ambient Background Accents */}
         <div className="w-full relative overflow-hidden py-4 sm:py-6">
           <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-[#dbeafe]/30 blur-3xl pointer-events-none" />

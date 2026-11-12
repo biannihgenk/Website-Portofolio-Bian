@@ -78,7 +78,7 @@ export function AchievementsHero() {
 
             {/* Quick Metrics Bar */}
             <div className="max-w-xl">
-              <div className="grid grid-cols-3 gap-3.5 pt-1">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-1">
                 <div className="bg-[#fbf9f3] p-4 rounded-2xl border border-[#ded8cb] flex flex-col gap-1">
                   <div className="flex items-center justify-between">
                     <span className="font-mono text-[10px] sm:text-[11px] uppercase text-[#686660] font-bold">

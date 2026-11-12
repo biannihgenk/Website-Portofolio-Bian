@@ -154,7 +154,7 @@ export function WorkbenchHero() {
                 </div>
 
                 {/* Track Switcher */}
-                <div className="inline-flex p-1 bg-[#f5f2ea] rounded-xl border border-[#ded8cb]">
+                <div className="inline-flex flex-wrap gap-1 p-1 bg-[#f5f2ea] rounded-xl border border-[#ded8cb] max-w-full">
                   {(["fullstack", "network", "ai"] as TechTrack[]).map((track) => (
                     <button
                       key={track}
@@ -163,7 +163,7 @@ export function WorkbenchHero() {
                         setActiveTrack(track);
                         setCheckPassed(false);
                       }}
-                      className={`px-3 py-1 text-xs font-mono font-bold rounded-lg transition-all ${
+                      className={`px-3 py-1 text-xs font-mono font-bold rounded-lg transition-all cursor-pointer ${
                         activeTrack === track
                           ? "bg-white text-[#2563eb] shadow-xs"
                           : "text-[#686660] hover:text-[#222222]"
@@ -219,17 +219,17 @@ export function WorkbenchHero() {
                   type="button"
                   onClick={handleRunDiagnostic}
                   disabled={isRunningCheck}
-                  className="px-3.5 py-1.5 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-mono text-xs font-bold rounded-xl shadow-xs transition-all disabled:opacity-50 ml-auto flex items-center gap-2"
+                  className="px-4 py-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-mono text-xs font-bold rounded-xl shadow-xs transition-all disabled:opacity-50 ml-auto flex items-center gap-2 cursor-pointer"
                 >
-                  <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                  <span>{isRunningCheck ? "Menjalankan Test..." : "▶ Run Build Check"}</span>
+                  <span className={`w-2 h-2 rounded-full bg-white ${isRunningCheck ? "animate-ping" : ""}`} />
+                  <span>{isRunningCheck ? "Menjalankan Test..." : "Run Build Check"}</span>
                 </button>
               </div>
             </div>
 
             {/* Quick Metrics Bar */}
             <div className="relative max-w-xl">
-              <div className="grid grid-cols-3 gap-3 pt-1">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
                 <div className="p-3.5 bg-[#fbf9f3] rounded-2xl border border-[#ded8cb]">
                   <span className="font-mono text-[10px] text-[#686660] uppercase block font-bold">
                     PROYEK TERVERIFIKASI
@@ -272,13 +272,13 @@ export function WorkbenchHero() {
           {/* RIGHT COLUMN: Debian's Real Photo Showcase (5 Cols) */}
           <div className="lg:col-span-5 relative flex flex-col items-center justify-center">
             {/* Interactive Photo Mode Switcher */}
-            <div className="mb-3 flex items-center gap-1.5 p-1 bg-white/80 backdrop-blur-md rounded-2xl border border-[#ded8cb] shadow-xs z-20">
+            <div className="mb-3 flex flex-wrap justify-center items-center gap-1.5 p-1 bg-white/80 backdrop-blur-md rounded-2xl border border-[#ded8cb] shadow-xs z-20 max-w-full">
               {(["dev", "campus", "outdoor"] as PhotoView[]).map((pv) => (
                 <button
                   key={pv}
                   type="button"
                   onClick={() => setActivePhoto(pv)}
-                  className={`px-3 py-1 rounded-xl font-mono text-[11px] font-bold transition-all ${
+                  className={`px-3 py-1 rounded-xl font-mono text-[11px] font-bold transition-all cursor-pointer ${
                     activePhoto === pv
                       ? "bg-[#2563eb] text-white shadow-xs"
                       : "text-[#686660] hover:text-[#222222]"
