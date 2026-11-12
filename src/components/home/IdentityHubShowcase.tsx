@@ -354,10 +354,11 @@ export function IdentityHubShowcase({
               <Image
                 src="/images/bian_cutout.png"
                 alt="Naufal Nizar De Bian — Siswa SMK Telkom Malang"
-                width={314}
-                height={635}
+                width={931}
+                height={1900}
+                unoptimized
                 className="w-[205px] sm:w-[245px] lg:w-[275px] h-auto object-contain select-none drop-shadow-[0_18px_36px_rgba(15,23,42,0.12)]"
-                sizes="(max-width: 640px) 210px, (max-width: 1024px) 250px, 280px"
+                sizes="(max-width: 640px) 220px, (max-width: 1024px) 260px, 290px"
               />
             </div>
           </motion.div>

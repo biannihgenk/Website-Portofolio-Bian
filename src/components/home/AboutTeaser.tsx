@@ -16,8 +16,11 @@ export function AboutTeaser() {
           {/* Visual Left Frame */}
           <div className="lg:col-span-5 order-2 lg:order-1 relative">
             <div className="relative w-full max-w-md mx-auto">
+              {/* Tilted background paper card */}
+              <div className="absolute inset-0 bg-blue-100/45 rounded-3xl -rotate-2 shadow-2xs pointer-events-none" />
+
               {/* Clean photo card with Foto Bian */}
-              <div className="relative bg-white p-4 sm:p-5 rounded-3xl shadow-sm border border-[#ded8cb]">
+              <div className="relative bg-white p-4 sm:p-5 rounded-3xl shadow-sm border border-[#ded8cb] rotate-[1deg] hover:rotate-0 transition-transform duration-300">
                 <div className="relative aspect-[4/5] sm:aspect-[3/4] rounded-2xl overflow-hidden bg-[#f5f2ea] shadow-inner">
                   <Image
                     src="/images/Foto Bian.png"
@@ -25,7 +28,7 @@ export function AboutTeaser() {
                     fill
                     priority
                     unoptimized
-                    className="object-cover object-top hover:scale-103 transition-transform duration-500"
+                    className="object-cover object-[center_65%] hover:scale-103 transition-transform duration-500"
                   />
                 </div>
 

@@ -2,7 +2,9 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { motion } from "motion/react";
+import { useLocale } from "next-intl";
+import { motion, useReducedMotion } from "motion/react";
+import { Link } from "@/lib/i18n/navigation";
 
 interface EditorialHeroProps {
   displayName?: string;
@@ -17,9 +19,11 @@ export function EditorialHero({
   bio,
   school = "SMK Telkom Malang",
 }: EditorialHeroProps) {
+  const locale = useLocale();
+  const isId = locale === "id";
+  const shouldReduceMotion = useReducedMotion();
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
 
-  // Fallback vocational portrait
   const fallbackPhoto =
     "https://lh3.googleusercontent.com/aida-public/AB6AXuBNrmoVQbmOgjgzU8fW6x2aFmr_pLmzPu3Ov1C2cUo_cELkM6-3NXEfEOffgUhB9tK56jVTL2sl8uHFX7NHzZE6ZYNLqF9Hk1CYTHk2LrkN0noWPfuShl5gS_-CMJ1pc0pYD2SRPy6xizzAYdTHWkIeQXNnBmPsbyYC0dqA_ePTpb_0ZIS4120TTNt5291kHYqe0gt1BJJKTJyFO1LQTR-sZ0ym-ySndPHyjcZtxCtVS_YUCtoH8GSU";
 
@@ -28,290 +32,308 @@ export function EditorialHero({
   return (
     <section
       id="editorial-hero"
-      className="relative w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-12 sm:py-20 lg:py-24 overflow-hidden lg:overflow-visible"
+      className="relative w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-14 sm:py-20 lg:py-24 overflow-hidden lg:overflow-visible scroll-mt-24"
     >
       {/* Soft Ambient Background Glow Accents */}
       <div
         className="absolute -top-24 -right-20 w-96 h-96 rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(219,234,254,0.35) 0%, transparent 70%)" }}
+        style={{
+          background: "radial-gradient(circle, rgba(219,234,254,0.35) 0%, transparent 70%)",
+        }}
       />
       <div
         className="absolute top-1/2 -left-20 w-80 h-80 rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(224,231,255,0.28) 0%, transparent 70%)" }}
+        style={{
+          background: "radial-gradient(circle, rgba(224,231,255,0.28) 0%, transparent 70%)",
+        }}
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center relative z-10">
-        {/* ───────────────────────────────────────────────────────────── */}
-        {/* LEFT COLUMN: GREETING & EDITORIAL INTRODUCTION */}
-        {/* ───────────────────────────────────────────────────────────── */}
-        <div className="lg:col-span-7 flex flex-col items-start gap-5 sm:gap-6 text-left">
-          {/* Availability Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200/80 rounded-full shadow-xs">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="font-mono text-xs font-bold tracking-wide">
-              Terbuka untuk kolaborasi &amp; magang
+        {/* LEFT COLUMN: EDITORIAL IDENTITY & TECHNICAL FOCUS */}
+        <motion.div
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: "some" }}
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          className="lg:col-span-7 flex flex-col items-start gap-5 sm:gap-6 text-left"
+        >
+          {/* Availability & Role Badge */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white text-[#111827] border border-[#ded8cb] rounded-full shadow-2xs">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+            </span>
+            <span className="font-mono text-[11px] font-bold uppercase tracking-wider">
+              WEB &amp; NETWORK ENGINEER • MOKLET A&apos;35
             </span>
           </div>
 
-          {/* Headline Greeting */}
-          <div className="space-y-3">
-            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-black text-[#222222] tracking-tight leading-[1.15]">
-              Rekayasa Sistem Jaringan &amp; Web Modern
+          {/* Serif Editorial Heading */}
+          <div className="space-y-4">
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0b0c0c] tracking-tight leading-[1.12]">
+              {isId ? (
+                <>
+                  Merancang Infrastruktur Jaringan &amp;{" "}
+                  <span className="italic font-normal text-[#2563eb]">
+                    Sistem Web Modern.
+                  </span>
+                </>
+              ) : (
+                <>
+                  Engineering Resilient Networks &amp;{" "}
+                  <span className="italic font-normal text-[#2563eb]">
+                    Modern Web Systems.
+                  </span>
+                </>
+              )}
             </h2>
 
-            {/* Description Text with Debian's Full Name */}
-            <p className="font-sans text-base sm:text-lg text-[#6b6863] max-w-2xl leading-relaxed">
-              Saya{" "}
-              <strong className="text-[#222222] font-bold">
-                {displayName || "Naufal Nizar De Bian Setyo Firwanto"}
+            <p className="font-sans text-base sm:text-lg text-[#4b5563] max-w-2xl leading-relaxed">
+              {isId ? "Saya " : "I'm "}
+              <strong className="text-[#0b0c0c] font-semibold">
+                {displayName}
               </strong>{" "}
-              (Bian), Siswa{" "}
-              <span className="text-blue-600 font-bold underline decoration-blue-300 decoration-2 underline-offset-4">
-                {school}
-              </span>{" "}
-              {bio || "konsentrasi Teknik Komputer dan Jaringan (TKJ). Berdedikasi dengan fokus pada arsitektur sistem jaringan, rekayasa web modern, dan sistem digital terdistribusi."}
+              (Bian) — {isId ? "siswa" : "a vocational student at"}{" "}
+              <span className="text-[#2563eb] font-semibold">{school}</span>.{" "}
+              {bio ||
+                (isId
+                  ? "Berfokus pada perancangan topologi MikroTik & Cisco, administrasi server Linux Debian, serta pengembangan aplikasi web modern dan AI."
+                  : "Focused on MikroTik & Cisco network engineering, Debian Linux systems administration, and modern AI-enabled web development.")}
             </p>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-wrap items-center gap-3 pt-2">
+          <div className="flex flex-wrap items-center gap-3 pt-1">
             <a
               href="#contact"
               className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-md hover:shadow-lg hover:-translate-y-0.5 active:scale-95 transition-all cursor-pointer"
             >
-              <span>Hubungi Saya</span>
+              <span>{isId ? "Hubungi Saya" : "Get in Touch"}</span>
               <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
                 ↗
               </span>
             </a>
 
-            <a
-              href="#about-profile"
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-white hover:bg-[#f5f2ea] text-[#222222] border border-[#ded8cb] hover:border-blue-300 font-semibold text-sm shadow-xs hover:shadow-sm hover:-translate-y-0.5 active:scale-95 transition-all cursor-pointer"
+            <Link
+              href="/profile"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-white hover:bg-[#f5f2ea] text-[#111827] border border-[#ded8cb] hover:border-blue-300 font-semibold text-sm shadow-2xs hover:-translate-y-0.5 active:scale-95 transition-all"
             >
-              <svg className="w-4 h-4 text-[#6b6863]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-              <span>Jelajahi Profil</span>
-            </a>
+              <span>{isId ? "Profil Lengkap" : "Full Profile"}</span>
+            </Link>
           </div>
 
-          {/* Interactive Hint */}
-          <div className="flex items-center gap-2 text-xs font-mono text-[#6b6863] pt-1">
+          {/* Interactive ID Hint */}
+          <div className="flex items-center gap-2 text-xs font-mono text-[#6b6863]">
             <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
             <span>
-              Kartu identitas interaktif — klik tombol balik atau seret untuk spesifikasi teknis.
+              {isId
+                ? "Kartu identitas interaktif — seret atau balik kartu untuk melihat kredensial teknis."
+                : "Interactive identity card — drag or flip to inspect technical credentials."}
             </span>
           </div>
 
-          {/* Quick Skill Tags */}
-          <div className="flex flex-wrap items-center gap-2 pt-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-[#ded8cb] text-[#222222] font-mono text-xs shadow-xs">
-              <span>🌱</span> {school}
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 font-mono text-xs shadow-xs font-bold">
-              <span>⚡</span> TKJ &apos;26
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-[#ded8cb] text-[#222222] font-mono text-xs shadow-xs">
-              <span>📍</span> Malang, East Java
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 font-mono text-xs shadow-xs font-semibold">
-              <span>💻</span> Web &amp; Network
-            </span>
-          </div>
-        </div>
+          {/* Clean 3-Column Core Technical Focus Strip */}
+          <div className="w-full pt-6 mt-1 border-t border-[#ded8cb]/80 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+            <div className="space-y-1">
+              <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#2563eb] block">
+                01 / NETWORKING
+              </span>
+              <span className="font-sans text-xs sm:text-sm font-semibold text-[#111827] block">
+                MikroTik, Cisco &amp; VLAN
+              </span>
+            </div>
 
-        {/* ───────────────────────────────────────────────────────────── */}
-        {/* RIGHT COLUMN: 3D ID BADGE CARD (Clean & Professional)        */}
-        {/* ───────────────────────────────────────────────────────────── */}
-        <div className="lg:col-span-5 relative flex flex-col items-center justify-center pt-8 lg:pt-0">
-          {/* Card Presentation Area */}
+            <div className="space-y-1">
+              <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#2563eb] block">
+                02 / WEB ARCHITECTURE
+              </span>
+              <span className="font-sans text-xs sm:text-sm font-semibold text-[#111827] block">
+                Next.js 15, TypeScript &amp; SQL
+              </span>
+            </div>
+
+            <div className="space-y-1">
+              <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#2563eb] block">
+                03 / SYSTEMS &amp; LAB
+              </span>
+              <span className="font-sans text-xs sm:text-sm font-semibold text-[#111827] block">
+                Debian Linux &amp; Docker
+              </span>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* RIGHT COLUMN: DRAGGABLE & FLIPPABLE 3D IDENTITY CARD */}
+        <motion.div
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: "some" }}
+          transition={{ duration: 0.5, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+          className="lg:col-span-5 relative flex flex-col items-center justify-center pt-4 lg:pt-0"
+        >
           <div className="relative flex flex-col items-center select-none">
-            {/* Draggable & Flippable Card Container */}
             <motion.div
               drag
-              dragConstraints={{ top: -30, bottom: 45, left: -60, right: 60 }}
-              dragElastic={0.25}
-              dragTransition={{ bounceStiffness: 300, bounceDamping: 20 }}
-              whileHover={{ scale: 1.015 }}
+              dragConstraints={{ top: -24, bottom: 32, left: -40, right: 40 }}
+              dragElastic={0.2}
+              dragTransition={{ bounceStiffness: 300, bounceDamping: 22 }}
+              whileHover={shouldReduceMotion ? undefined : { scale: 1.015 }}
               whileTap={{ scale: 0.98, cursor: "grabbing" }}
-              className="relative z-30 cursor-grab select-none [perspective:1400px]"
+              className="relative z-20 cursor-grab select-none [perspective:1400px]"
             >
-              {/* Frosted Transparent Plastic Holder Pouch with Punch Hole */}
-              <div className="p-3 sm:p-3.5 rounded-[32px] bg-white/80 backdrop-blur-md border border-slate-200/90 shadow-2xl shadow-blue-500/10 relative">
-                
-                {/* Punch Slot at Top of Acrylic Holder */}
-                <div className="w-16 h-3 mx-auto mb-2.5 bg-slate-200/90 rounded-full border border-slate-300 shadow-inner flex items-center justify-center">
-                  <div className="w-8 h-1.5 rounded-full bg-slate-500/80" />
+              {/* Frosted Acrylic Holder */}
+              <div className="p-3 sm:p-3.5 rounded-[30px] bg-white/85 backdrop-blur-md border border-slate-200/90 shadow-xl shadow-slate-900/[0.06] relative">
+                {/* Punch Slot */}
+                <div className="w-14 h-2.5 mx-auto mb-2.5 bg-slate-200/80 rounded-full border border-slate-300/80 flex items-center justify-center">
+                  <div className="w-7 h-1 rounded-full bg-slate-500/70" />
                 </div>
 
-                {/* 3D DOUBLE-SIDED CARD FLIP WRAPPER */}
+                {/* 3D DOUBLE-SIDED CARD */}
                 <motion.div
                   animate={{ rotateY: isFlipped ? 180 : 0 }}
-                  transition={{ duration: 0.6, type: "spring", stiffness: 220, damping: 20 }}
-                  className="relative w-[275px] xs:w-[295px] sm:w-[310px] min-h-[430px] sm:min-h-[465px] bg-white rounded-2xl p-4 sm:p-5 shadow-xs border border-[#ded8cb] [transform-style:preserve-3d]"
+                  transition={{ duration: 0.55, type: "spring", stiffness: 220, damping: 22 }}
+                  className="relative w-[270px] sm:w-[300px] min-h-[425px] sm:min-h-[455px] bg-white rounded-2xl p-4 sm:p-5 shadow-xs border border-[#ded8cb] [transform-style:preserve-3d]"
                 >
-                  {/* ─────────────────────────────────────────────────── */}
-                  {/* FRONT SIDE OF ID CARD (Inspired by filoalvian.com) */}
-                  {/* ─────────────────────────────────────────────────── */}
+                  {/* FRONT SIDE */}
                   <div
                     className={`w-full h-full flex flex-col justify-between [backface-visibility:hidden] ${
                       isFlipped ? "pointer-events-none" : ""
                     }`}
                   >
-                    {/* Header: Star Logo & Portfolio ID */}
                     <div className="flex items-center justify-between pb-2.5 border-b border-[#ded8cb]/70">
                       <div className="flex items-center gap-1.5">
-                        <span className="text-[#2563eb] text-sm font-bold">★</span>
-                        <span className="font-mono text-xs font-black text-[#222222] tracking-wider">
-                          BianPortfolio.id
+                        <span className="w-2 h-2 rounded-full bg-[#2563eb]" />
+                        <span className="font-mono text-xs font-bold text-[#111827] tracking-wider">
+                          debianxyz.my.id
                         </span>
                       </div>
-                      <div className="px-2 py-0.5 rounded-full bg-[#f5f2ea] border border-[#ded8cb] font-mono text-[9px] text-[#6b6863] font-bold">
+                      <span className="px-2 py-0.5 rounded-full bg-[#f5f2ea] border border-[#ded8cb] font-mono text-[9px] text-[#6b6863] font-bold">
                         2026
-                      </div>
+                      </span>
                     </div>
 
-                    {/* Portrait Photo Container */}
-                    <div className="my-2.5 relative w-full aspect-[4/5] rounded-xl overflow-hidden bg-[#f5f3ee] border border-[#ded8cb] shadow-inner group">
+                    <div className="my-2.5 relative w-full aspect-[4/5] rounded-xl overflow-hidden bg-[#f5f3ee] border border-[#ded8cb]">
                       <Image
                         src={displayPhoto}
                         alt="Naufal Nizar De Bian Setyo Firwanto"
                         fill
-                        sizes="320px"
+                        sizes="300px"
                         unoptimized
                         priority
                         className="object-cover"
                       />
-                      {/* Active Online Indicator Pill */}
-                      <div className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-full bg-white/95 backdrop-blur-sm border border-[#ded8cb] text-[9px] font-mono text-blue-700 font-bold flex items-center gap-1 shadow-xs">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#2563eb] animate-pulse" />
-                        <span>STUDENT ID</span>
+                      <div className="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-full bg-white/95 backdrop-blur-sm border border-[#ded8cb] text-[9px] font-mono text-[#2563eb] font-bold flex items-center gap-1 shadow-xs">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <span>IDENTITY CARD</span>
                       </div>
                     </div>
 
-                    {/* Student Name & Academic Affiliation */}
-                    <div className="text-left space-y-1">
-                      <h3 className="font-serif font-black text-xl text-[#222222] leading-tight">
+                    <div className="text-left space-y-0.5">
+                      <h3 className="font-serif font-bold text-lg sm:text-xl text-[#111827] leading-tight">
                         Naufal Nizar De Bian
                       </h3>
-                      <p className="font-mono text-xs text-[#6b6863]">
-                        Siswa Teknik Komputer dan Jaringan
+                      <p className="font-mono text-[11px] text-[#6b6863]">
+                        {isId ? "Teknik Komputer & Jaringan" : "Computer & Network Engineering"}
                       </p>
-                      <p className="font-mono text-xs text-[#2563eb] font-bold">
+                      <p className="font-mono text-[11px] text-[#2563eb] font-bold">
                         {school}
                       </p>
                     </div>
-                    
-                    {/*Kenapa ii ko}
 
-                    {/* Footer Row: Tags on Left + Barcode on Right */}
-                    <div className="pt-2.5 border-t border-[#ded8cb]/70 flex items-center justify-between gap-2 mt-auto">
+                    <div className="pt-2.5 border-t border-[#ded8cb]/70 flex items-center justify-between gap-2 mt-2">
                       <div className="flex flex-col text-left">
                         <span className="font-mono text-[9px] text-[#6b6863] uppercase">
-                          Bidang Minat
+                          Focus Domain
                         </span>
-                        <span className="font-mono text-[10px] font-bold text-[#222222]">
-                          Network • Web • Systems
+                        <span className="font-mono text-[10px] font-bold text-[#111827]">
+                          Network • Web • SysAdmin
                         </span>
                       </div>
 
-                      {/* Vector Barcode */}
                       <div className="flex flex-col items-end shrink-0">
-                        <div className="h-5 w-20 flex items-center justify-end gap-[1.5px] opacity-80">
-                          {[3, 1, 2, 4, 1, 3, 2, 1, 4, 2, 3, 1, 5, 2, 1, 3, 2, 4, 1, 3].map((w, i) => (
+                        <div className="h-4 w-16 flex items-center justify-end gap-[1.5px] opacity-80">
+                          {[3, 1, 2, 4, 1, 3, 2, 1, 4, 2, 3, 1, 5, 2, 1, 3].map((w, i) => (
                             <div
                               key={i}
-                              className="bg-[#222222] h-full rounded-[0.5px]"
+                              className="bg-[#111827] h-full rounded-[0.5px]"
                               style={{ width: `${w}px` }}
                             />
                           ))}
                         </div>
                         <span className="font-mono text-[8px] text-[#6b6863] mt-0.5">
-                          TKJ-33-2026
+                          TKJ-35-2026
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  {/* ─────────────────────────────────────────────────── */}
-                  {/* BACK SIDE OF ID CARD (Clean, Professional, No Lab Mention) */}
-                  {/* ─────────────────────────────────────────────────── */}
+                  {/* BACK SIDE */}
                   <div
                     className={`absolute inset-0 p-4 sm:p-5 flex flex-col justify-between rounded-2xl bg-white [transform:rotateY(180deg)] [backface-visibility:hidden] ${
                       !isFlipped ? "pointer-events-none" : ""
                     }`}
                   >
-                    {/* Top Dark Brushed Magnetic Stripe */}
-                    <div className="-mx-4 sm:-mx-5 -mt-4 sm:-mt-5 h-9 bg-[#1e293b] border-b border-black/20 rounded-t-xl" />
+                    <div className="-mx-4 sm:-mx-5 -mt-4 sm:-mt-5 h-8 bg-[#0f172a] border-b border-black/20 rounded-t-xl" />
 
-                    {/* Security Microchip & Contactless Symbol */}
                     <div className="flex items-center justify-between pt-1">
-                      {/* Golden EMV Smart Card Chip Graphic */}
-                      <div className="w-11 h-8 rounded-md bg-linear-to-br from-amber-200 via-amber-300 to-amber-500 border border-amber-600/50 shadow-inner flex flex-col justify-around p-1">
-                        <div className="h-[1px] bg-amber-700/50 w-full" />
-                        <div className="h-[1px] bg-amber-700/50 w-full" />
+                      <div className="w-10 h-7 rounded-md bg-gradient-to-br from-amber-200 via-amber-300 to-amber-500 border border-amber-600/40 flex flex-col justify-around p-1">
+                        <div className="h-[1px] bg-amber-800/40 w-full" />
+                        <div className="h-[1px] bg-amber-800/40 w-full" />
                       </div>
 
-                      {/* Contactless NFC Waves & Security Seal */}
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-sm text-[#2563eb] font-bold" title="Contactless NFC">
+                        <span className="font-mono text-xs text-[#2563eb] font-bold" title="NFC">
                           ((( · )))
                         </span>
-                        <div className="px-2 py-0.5 rounded-md bg-blue-50 border border-blue-200 text-[9px] font-mono text-blue-700 font-bold">
+                        <div className="px-2.5 py-0.5 rounded-md bg-blue-50 border border-blue-200 text-[9px] font-mono text-blue-700 font-bold">
                           VERIFIED • 2026
                         </div>
                       </div>
                     </div>
 
-                    {/* Official Student Credentials Card Panel */}
-                    <div className="space-y-2 text-left my-1 bg-[#fcfbf7] p-3 rounded-xl border border-[#ded8cb]">
+                    <div className="space-y-2.5 text-left my-1 bg-[#fbf9f3] p-3 rounded-xl border border-[#ded8cb]">
                       <div>
                         <span className="font-mono text-[8px] text-[#6b6863] uppercase block">
-                          Nama Lengkap
+                          {isId ? "Nama Lengkap" : "Full Name"}
                         </span>
-                        <span className="font-serif font-bold text-xs text-[#222222]">
-                          Naufal Nizar De Bian Setyo Firwanto
+                        <span className="font-serif font-bold text-xs text-[#111827]">
+                          {displayName}
                         </span>
                       </div>
 
                       <div className="grid grid-cols-2 gap-2">
                         <div>
                           <span className="font-mono text-[8px] text-[#6b6863] uppercase block">
-                            Program Keahlian
+                            {isId ? "Konsentrasi" : "Major"}
                           </span>
-                          <span className="font-mono text-[10px] text-[#222222] font-semibold">
-                            Teknik Komputer &amp; Jaringan
+                          <span className="font-mono text-[10px] text-[#111827] font-semibold">
+                            TKJ (Networking)
                           </span>
                         </div>
                         <div>
                           <span className="font-mono text-[8px] text-[#6b6863] uppercase block">
-                            Angkatan
+                            {isId ? "Angkatan" : "Cohort"}
                           </span>
-                          <span className="font-mono text-[10px] text-blue-600 font-bold">
-                            Moklet A&apos;35 (Kelas X TKJ)
+                          <span className="font-mono text-[10px] text-[#2563eb] font-bold">
+                            Moklet A&apos;35
                           </span>
                         </div>
                       </div>
 
                       <div>
                         <span className="font-mono text-[8px] text-[#6b6863] uppercase block">
-                          Institusi Pendidikan
+                          {isId ? "Institusi" : "Institution"}
                         </span>
-                        <span className="font-mono text-[10px] text-[#222222] font-semibold">
+                        <span className="font-mono text-[10px] text-[#111827] font-semibold">
                           {school}
                         </span>
                       </div>
                     </div>
 
-                    {/* Official Signature Strip & Security QR Code */}
                     <div className="flex items-center justify-between gap-3 pt-1 border-t border-[#ded8cb] mt-auto">
-                      {/* Signature Panel */}
                       <div className="flex-1 text-left">
                         <span className="font-mono text-[8px] text-[#6b6863] uppercase block mb-1">
-                          Tanda Tangan Pemegang
+                          {isId ? "Tanda Tangan" : "Signature"}
                         </span>
                         <div className="h-7 bg-[#f5f2ea] rounded-md border border-[#ded8cb] px-2 flex items-center justify-center">
                           <span className="font-serif italic text-xs font-bold text-[#2563eb] tracking-wide select-none">
@@ -320,59 +342,46 @@ export function EditorialHero({
                         </div>
                       </div>
 
-                      {/* Decorative Vector QR Code Matrix */}
                       <div className="w-10 h-10 rounded-md bg-white border border-[#ded8cb] p-1 flex flex-col justify-between shrink-0 shadow-2xs">
                         <div className="grid grid-cols-3 gap-[1px] w-full h-full">
                           {[1, 0, 1, 1, 1, 0, 0, 1, 1].map((dot, idx) => (
                             <div
                               key={idx}
-                              className={`rounded-[0.5px] ${dot ? "bg-[#222222]" : "bg-transparent"}`}
+                              className={`rounded-[0.5px] ${dot ? "bg-[#111827]" : "bg-transparent"}`}
                             />
                           ))}
                         </div>
                       </div>
                     </div>
 
-                    {/* Bottom Status Row */}
                     <div className="pt-2 border-t border-[#ded8cb] flex items-center justify-between text-[9px] font-mono text-[#6b6863]">
                       <span>PORTFOLIO IDENTITY</span>
                       <span className="text-emerald-600 font-bold flex items-center gap-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                        Valid &amp; Aktif
+                        {isId ? "Valid & Aktif" : "Verified & Active"}
                       </span>
                     </div>
                   </div>
                 </motion.div>
               </div>
-
-              {/* FLOATING "↺ Balik kartu" PILL (Positioned on the side, like filoalvian.com) */}
-              <button
-                type="button"
-                onClick={() => setIsFlipped((prev) => !prev)}
-                className="absolute -left-16 sm:-left-20 bottom-16 sm:bottom-20 z-40 hidden md:flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white hover:bg-blue-50 border border-[#ded8cb] hover:border-blue-400 text-xs font-mono font-bold text-[#222222] hover:text-blue-600 shadow-md hover:shadow-lg transition-all cursor-pointer group whitespace-nowrap"
-                aria-label="Balik sisi kartu"
-              >
-                <span className="group-hover:rotate-180 transition-transform duration-500 text-sm">
-                  ↺
-                </span>
-                <span>Balik kartu</span>
-              </button>
             </motion.div>
 
-            {/* Mobile Fallback Flip Button */}
-            <div className="mt-3 md:hidden flex items-center justify-center">
+            {/* Clean Flip Button Right Below Card */}
+            <div className="mt-4 flex items-center justify-center">
               <button
                 type="button"
                 onClick={() => setIsFlipped((prev) => !prev)}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white hover:bg-blue-50 border border-[#ded8cb] text-xs font-mono font-bold text-[#222222] shadow-sm transition-all cursor-pointer"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white hover:bg-blue-50 border border-[#ded8cb] hover:border-blue-300 text-xs font-mono font-bold text-[#111827] hover:text-blue-600 shadow-xs transition-all cursor-pointer group"
+                aria-label={isId ? "Balik kartu spesifikasi" : "Flip specification card"}
               >
-                <span>↺</span>
-                <span>Balik kartu</span>
+                <span className="group-hover:rotate-180 transition-transform duration-500 inline-block">
+                  ↺
+                </span>
+                <span>{isId ? "Balik Kartu Spesifikasi" : "Flip Specification Card"}</span>
               </button>
             </div>
-
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -8,6 +8,7 @@ interface Node {
   vx: number;
   vy: number;
   radius: number;
+  color: string;
 }
 
 interface Packet {
@@ -43,21 +44,29 @@ export function InteractiveNetworkBackground() {
 
     syncCanvasSize();
 
-    // Mouse coordinates (default to offscreen)
     const mouse = {
       x: -1000,
       y: -1000,
       targetX: -1000,
       targetY: -1000,
-      radius: 160,
+      radius: 195,
       isActive: false,
     };
 
-    // Responsive node count: lightweight on mobile, balanced on desktop
-    const calculateNodeCount = (w: number) => {
-      if (w < 640) return 18; // Mobile: ultra lightweight
-      if (w < 1024) return 26; // Tablet
-      return 36; // Desktop
+    // Multi-hue palette: Royal Blue, Electric Sky, Indigo & Slate
+    const colors = [
+      "rgba(37, 99, 235, 0.65)",
+      "rgba(56, 189, 248, 0.65)",
+      "rgba(99, 102, 241, 0.62)",
+      "rgba(148, 163, 184, 0.55)",
+    ];
+
+    // Balanced responsive node count: responsive on mobile, rich on desktop
+    const calculateNodeCount = (w: number, h: number) => {
+      if (w < 640) return 20;
+      if (w < 1024) return 32;
+      const areaBased = Math.floor((w * h) / 23000);
+      return Math.min(64, Math.max(42, areaBased));
     };
 
     let nodes: Node[] = [];
@@ -66,34 +75,35 @@ export function InteractiveNetworkBackground() {
     function initNodes() {
       nodes = [];
       packets = [];
-      const count = calculateNodeCount(width);
+      const count = calculateNodeCount(width, height);
 
       for (let i = 0; i < count; i++) {
-        const radius = Math.random() * 1.2 + 1.2;
+        const radius = Math.random() * 1.5 + 1.2;
+        const color = colors[Math.floor(Math.random() * colors.length)];
         nodes.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.35,
-          vy: (Math.random() - 0.5) * 0.35,
+          vx: (Math.random() - 0.5) * 0.44,
+          vy: (Math.random() - 0.5) * 0.44,
           radius,
+          color,
         });
       }
     }
 
     function spawnPacket() {
-      if (nodes.length < 2 || packets.length > 5) return;
+      if (nodes.length < 2 || packets.length > 7) return;
       const startIndex = Math.floor(Math.random() * nodes.length);
       const startNode = nodes[startIndex];
 
-      // Find nearby nodes
       let targetNode: Node | null = null;
-      const minDistance = 150;
+      const minDistanceSq = 165 * 165;
 
       for (let i = 0; i < nodes.length; i++) {
         if (i === startIndex) continue;
         const dx = nodes[i].x - startNode.x;
         const dy = nodes[i].y - startNode.y;
-        if (dx * dx + dy * dy < minDistance * minDistance) {
+        if (dx * dx + dy * dy < minDistanceSq) {
           targetNode = nodes[i];
           break;
         }
@@ -104,7 +114,7 @@ export function InteractiveNetworkBackground() {
           startNode,
           endNode: targetNode,
           progress: 0,
-          speed: Math.random() * 0.012 + 0.008,
+          speed: Math.random() * 0.015 + 0.011,
         });
       }
     }
@@ -115,7 +125,7 @@ export function InteractiveNetworkBackground() {
 
     function startPacketInterval() {
       if (packetInterval || isReducedMotion) return;
-      packetInterval = setInterval(spawnPacket, 1600);
+      packetInterval = setInterval(spawnPacket, 1150);
     }
 
     function stopPacketInterval() {
@@ -125,7 +135,6 @@ export function InteractiveNetworkBackground() {
       }
     }
 
-    // Debounced Resize (preserves nodes smoothly during mobile URL-bar height shifts)
     let resizeTimeout: ReturnType<typeof setTimeout>;
     function handleResize() {
       clearTimeout(resizeTimeout);
@@ -174,26 +183,25 @@ export function InteractiveNetworkBackground() {
 
     initNodes();
 
-    // Main 60FPS Batch-Rendered Loop
     let lastTime = performance.now();
-    const maxConnectDistSq = 145 * 145;
+    const maxConnectDist = 160;
+    const maxConnectDistSq = maxConnectDist * maxConnectDist;
     const mouseRadiusSq = mouse.radius * mouse.radius;
 
     function drawFrame(delta: number) {
       if (!ctx || !canvas) return;
 
-      // Smooth mouse position damping
       if (mouse.isActive && !isReducedMotion) {
-        mouse.x += (mouse.targetX - mouse.x) * 0.2;
-        mouse.y += (mouse.targetY - mouse.y) * 0.2;
+        mouse.x += (mouse.targetX - mouse.x) * 0.22;
+        mouse.y += (mouse.targetY - mouse.y) * 0.22;
       }
 
       ctx.clearRect(0, 0, width, height);
 
-      // 1. Batch draw connecting lines in a single path (99% fewer draw calls)
+      // 1. Connecting constellation web lines (GPU-friendly batched strokes)
       ctx.beginPath();
-      ctx.strokeStyle = "rgba(37, 99, 235, 0.12)";
-      ctx.lineWidth = 0.8;
+      ctx.strokeStyle = "rgba(37, 99, 235, 0.14)";
+      ctx.lineWidth = 0.9;
 
       for (let i = 0; i < nodes.length; i++) {
         const a = nodes[i];
@@ -206,20 +214,33 @@ export function InteractiveNetworkBackground() {
             ctx.lineTo(b.x, b.y);
           }
         }
-
-        // Connect node to mouse if active
-        if (mouse.isActive && !isReducedMotion) {
-          const dx = mouse.x - a.x;
-          const dy = mouse.y - a.y;
-          if (dx * dx + dy * dy < mouseRadiusSq) {
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(mouse.x, mouse.y);
-          }
-        }
       }
       ctx.stroke();
 
-      // 2. Draw & update packets
+      // 1b. Stronger interactive mouse-to-node links + gentle magnetic drift
+      if (mouse.isActive && !isReducedMotion && mouse.x > 0 && mouse.y > 0) {
+        ctx.beginPath();
+        ctx.strokeStyle = "rgba(37, 99, 235, 0.34)";
+        ctx.lineWidth = 1.15;
+
+        for (let i = 0; i < nodes.length; i++) {
+          const a = nodes[i];
+          const dx = mouse.x - a.x;
+          const dy = mouse.y - a.y;
+          const distSq = dx * dx + dy * dy;
+          if (distSq < mouseRadiusSq) {
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            const dist = Math.sqrt(distSq);
+            const force = (1 - dist / mouse.radius) * 0.025 * delta;
+            a.x += dx * force;
+            a.y += dy * force;
+          }
+        }
+        ctx.stroke();
+      }
+
+      // 2. Pulsing data packets (with soft glow halo without costly shadowBlur)
       if (!isReducedMotion) {
         for (let k = packets.length - 1; k >= 0; k--) {
           const p = packets[k];
@@ -233,17 +254,21 @@ export function InteractiveNetworkBackground() {
           const currX = p.startNode.x + (p.endNode.x - p.startNode.x) * p.progress;
           const currY = p.startNode.y + (p.endNode.y - p.startNode.y) * p.progress;
 
+          // Soft halo
           ctx.beginPath();
-          ctx.arc(currX, currY, 2, 0, Math.PI * 2);
-          ctx.fillStyle = "rgba(37, 99, 235, 0.75)";
+          ctx.arc(currX, currY, 5, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(37, 99, 235, 0.22)";
+          ctx.fill();
+
+          // Bright core
+          ctx.beginPath();
+          ctx.arc(currX, currY, 2.2, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(37, 99, 235, 0.9)";
           ctx.fill();
         }
       }
 
-      // 3. Update & batch draw all nodes in a single fill call
-      ctx.beginPath();
-      ctx.fillStyle = "rgba(37, 99, 235, 0.4)";
-
+      // 3. Move and render multi-hue constellation nodes
       for (let i = 0; i < nodes.length; i++) {
         const node = nodes[i];
 
@@ -251,7 +276,6 @@ export function InteractiveNetworkBackground() {
           node.x += node.vx * delta;
           node.y += node.vy * delta;
 
-          // Gentle bounce off screen boundaries
           if (node.x < 0) {
             node.x = 0;
             node.vx *= -1;
@@ -268,10 +292,27 @@ export function InteractiveNetworkBackground() {
           }
         }
 
-        ctx.moveTo(node.x + node.radius, node.y);
+        ctx.beginPath();
         ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+        ctx.fillStyle = node.color;
+        ctx.fill();
       }
-      ctx.fill();
+
+      // 4. Interactive cursor focal aura & orbital ring on desktop
+      if (mouse.isActive && !isReducedMotion && mouse.x > 0 && mouse.y > 0) {
+        ctx.beginPath();
+        ctx.arc(mouse.x, mouse.y, 14, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(37, 99, 235, 0.08)";
+        ctx.fill();
+        ctx.strokeStyle = "rgba(37, 99, 235, 0.28)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(mouse.x, mouse.y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(37, 99, 235, 0.8)";
+        ctx.fill();
+      }
     }
 
     function render(currentTime: number) {
@@ -309,7 +350,6 @@ export function InteractiveNetworkBackground() {
       animationFrameId = requestAnimationFrame(render);
     }
 
-    // Pause on visibility change (saves CPU and battery when tab is hidden)
     function handleVisibility() {
       if (document.hidden) {
         if (animationFrameId !== null) {
@@ -348,22 +388,32 @@ export function InteractiveNetworkBackground() {
       className="fixed inset-0 w-full h-full pointer-events-none z-[1] overflow-hidden"
     >
       {/* 1. Global Architectural Blueprint Dots Layer */}
-      <div className="absolute inset-0 w-full h-full blueprint-dots opacity-80 pointer-events-none" />
+      <div className="absolute inset-0 w-full h-full blueprint-dots opacity-85 pointer-events-none" />
 
-      {/* 2. Soft Ambient Corner Glows (GPU-free radial gradient without blur filter) */}
+      {/* 2. Soft Ambient Corner Glows */}
       <div
-        className="absolute -top-32 -right-32 w-[460px] h-[460px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(219,234,254,0.42) 0%, transparent 70%)" }}
+        className="absolute -top-32 -right-32 w-[520px] h-[520px] rounded-full pointer-events-none"
+        style={{
+          background: "radial-gradient(circle, rgba(219,234,254,0.45) 0%, transparent 70%)",
+        }}
       />
       <div
-        className="absolute top-1/2 -left-32 w-[420px] h-[420px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(224,231,255,0.34) 0%, transparent 70%)" }}
+        className="absolute top-1/2 -left-32 w-[480px] h-[480px] rounded-full pointer-events-none"
+        style={{
+          background: "radial-gradient(circle, rgba(224,231,255,0.36) 0%, transparent 70%)",
+        }}
+      />
+      <div
+        className="absolute -bottom-32 right-1/4 w-[500px] h-[500px] rounded-full pointer-events-none"
+        style={{
+          background: "radial-gradient(circle, rgba(224,242,254,0.32) 0%, transparent 70%)",
+        }}
       />
 
-      {/* 3. Ultra-Smooth Hardware-Accelerated Canvas */}
+      {/* 3. Hardware-Accelerated Network Canvas */}
       <canvas
         ref={canvasRef}
-        className="w-full h-full block opacity-75 sm:opacity-85"
+        className="w-full h-full block opacity-80 sm:opacity-90"
       />
     </div>
   );

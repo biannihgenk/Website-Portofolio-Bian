@@ -275,17 +275,22 @@ export function TechStackMotionBar() {
                 }`}
                 title={`Klik untuk lihat detail ${tech.name}`}
               >
-                {/* Icon Container */}
+                {/* Actively Floating Icon Container with Wave Delay */}
                 <div
                   className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#fbf9f3] p-1.5 flex items-center justify-center shrink-0 border border-[#ded8cb]/70 group-hover:border-blue-300 group-hover:bg-blue-50/50 group-hover:shadow-xs transition-colors"
                 >
-                  <Image
-                    src={tech.icon}
-                    alt={tech.name}
-                    width={44}
-                    height={44}
-                    className="w-full h-full object-contain group-hover:scale-115 transition-transform duration-300 drop-shadow-xs"
-                  />
+                  <div
+                    className="w-full h-full animate-icon-float"
+                    style={{ animationDelay: `${(idx % 5) * 0.35}s` }}
+                  >
+                    <Image
+                      src={tech.icon}
+                      alt={tech.name}
+                      width={44}
+                      height={44}
+                      className="w-full h-full object-contain group-hover:scale-120 group-hover:-rotate-6 transition-transform duration-300 drop-shadow-xs"
+                    />
+                  </div>
                 </div>
 
                 <div className="flex flex-col text-left">
@@ -324,17 +329,22 @@ export function TechStackMotionBar() {
                 }`}
                 title={`Klik untuk lihat detail ${tech.name}`}
               >
-                {/* Icon Container */}
+                {/* Actively Floating Icon Container with Wave Delay */}
                 <div
                   className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#fbf9f3] p-1.5 flex items-center justify-center shrink-0 border border-[#ded8cb]/70 group-hover:border-amber-300 group-hover:bg-amber-50/50 group-hover:shadow-xs transition-colors"
                 >
-                  <Image
-                    src={tech.icon}
-                    alt={tech.name}
-                    width={44}
-                    height={44}
-                    className="w-full h-full object-contain group-hover:scale-115 transition-transform duration-300 drop-shadow-xs"
-                  />
+                  <div
+                    className="w-full h-full animate-icon-float"
+                    style={{ animationDelay: `${((idx + 2) % 5) * 0.35}s` }}
+                  >
+                    <Image
+                      src={tech.icon}
+                      alt={tech.name}
+                      width={44}
+                      height={44}
+                      className="w-full h-full object-contain group-hover:scale-120 group-hover:rotate-6 transition-transform duration-300 drop-shadow-xs"
+                    />
+                  </div>
                 </div>
 
                 <div className="flex flex-col text-left">

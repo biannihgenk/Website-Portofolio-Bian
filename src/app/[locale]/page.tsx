@@ -22,6 +22,7 @@ import type {
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { KineticCanvasStage } from "@/components/home/KineticCanvasStage";
+import { EditorialHero } from "@/components/home/EditorialHero";
 import { TechStackMotionBar } from "@/components/home/TechStackMotionBar";
 import { AboutTeaser } from "@/components/home/AboutTeaser";
 import { FeaturedProjects } from "@/components/home/FeaturedProjects";
@@ -143,18 +144,23 @@ export default async function HomePage({
       />
 
       <main className="w-full flex flex-col items-center justify-start">
-        {/* 1. UNIFIED EXECUTIVE HERO & INTERACTIVE 3D IDENTITY CARD */}
+        {/* 1. KINETIC TYPOGRAPHY & HERO STAGE (Top Iconic Opening Stage) */}
         <KineticCanvasStage
-          displayName={displayName}
-          avatarUrl={avatarUrl}
-          bio={bio}
           school={school}
           githubUrl={githubUrl}
           linkedinUrl={linkedinUrl}
           instagramUrl={instagramUrl}
         />
 
-        {/* 2. ACTIVE LAB & PRODUCTION STACK */}
+        {/* 2. EDITORIAL INTRO & INTERACTIVE 3D IDENTITY CARD */}
+        <EditorialHero
+          displayName={displayName}
+          avatarUrl={avatarUrl}
+          bio={bio}
+          school={school}
+        />
+
+        {/* 3. ACTIVE LAB & PRODUCTION STACK */}
         <TechStackMotionBar />
 
         {/* 3. ABOUT TEASER / THE JOURNEY & PHILOSOPHY */}

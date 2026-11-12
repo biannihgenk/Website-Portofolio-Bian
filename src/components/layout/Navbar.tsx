@@ -20,12 +20,13 @@ interface AiMessage {
   text: string;
 }
 
+// Track per-page-load trigger in memory so opening or reloading the site
+// shows the welcome popup automatically once per visit, without nagging on
+// subsequent SPA <Link> clicks in the same tab.
+let hasShownWelcomeInPageLoad = false;
+
 function persistGuideSeen() {
-  try {
-    localStorage.setItem("bian_welcome_guide_seen", "true");
-  } catch {
-    // ignore
-  }
+  hasShownWelcomeInPageLoad = true;
 }
 
 export function Navbar({
@@ -103,16 +104,11 @@ export function Navbar({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Open welcome guide popup automatically only on first visit
+  // Open welcome guide popup automatically when opening/loading the website
   useEffect(() => {
-    try {
-      if (localStorage.getItem("bian_welcome_guide_seen") === "true") {
-        return;
-      }
-    } catch {
-      // ignore storage access issues
-    }
+    if (hasShownWelcomeInPageLoad) return;
     const timer = setTimeout(() => {
+      hasShownWelcomeInPageLoad = true;
       setGuideModalOpen(true);
     }, 450);
     return () => clearTimeout(timer);
