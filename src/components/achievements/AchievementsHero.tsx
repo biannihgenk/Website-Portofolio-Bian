@@ -3,173 +3,139 @@
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { InteractiveSticker } from "@/components/ui/InteractiveSticker";
+import { SubpageBreadcrumb } from "@/components/layout/SubpageBreadcrumb";
 
 export function AchievementsHero() {
-
   return (
-    <section className="relative w-full pt-4 pb-8">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-        {/* Left Editorial Copy (Col 7) */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
-          className="lg:col-span-7 flex flex-col gap-6"
-        >
-          {/* Eyebrow badge */}
-          <div className="inline-flex items-center gap-2.5 self-start flex-wrap">
-            <span className="px-3.5 py-1.5 rounded-full bg-[#fef3c7] text-[#92400e] font-mono text-xs font-bold uppercase tracking-wider shadow-xs border border-[#fde68a] flex items-center gap-1.5">
-              <span className="text-sm">🏆</span>
-              HONORS &amp; COMPETITION ARCHIVE
-            </span>
-            <span className="inline-flex items-center gap-1.5 font-mono text-xs text-[#2563eb] bg-[#dbeafe]/70 px-3 py-1 rounded-full font-bold border border-[#bfdbfe]">
-              <span className="w-2 h-2 rounded-full bg-[#2563eb] animate-pulse" />
-              VERIFIED CREDENTIALS
-            </span>
-          </div>
+    <section className="relative w-full pt-2 pb-8">
+      <SubpageBreadcrumb
+        sectionIndex="03 / PENCAPAIAN"
+        sectionLabel="Pencapaian & Sertifikasi"
+        sectionLabelEn="Honors & Credentials"
+        rightMeta="SMK TELKOM MALANG"
+      />
 
-          {/* Hero Heading with Rich Editorial Typography */}
-          <div className="flex flex-col gap-2">
-            <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#222222] tracking-tight leading-[1.12] font-bold">
-              Pencapaian, Rekognisi &amp; <br />
-              <span className="italic font-normal text-[#2563eb] font-serif relative inline-block">
-                Jejak Dedikasi Nyata
-                {/* SVG underline flourish */}
-                <svg
-                  className="absolute -bottom-2.5 left-0 w-full h-3 text-[#2563eb]/60"
-                  fill="none"
-                  viewBox="0 0 240 12"
-                  preserveAspectRatio="none"
-                >
-                  <path
-                    d="M2 9C60 3 150 2 238 8"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeWidth="3"
-                  />
+      <div className="bg-white/95 rounded-3xl border border-[#ded8cb] p-6 sm:p-10 lg:p-12 shadow-xs">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+          {/* Left Editorial Copy (Col 7) */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45 }}
+            className="lg:col-span-7 flex flex-col gap-6"
+          >
+            {/* Eyebrow badge */}
+            <div className="inline-flex items-center gap-2.5 self-start flex-wrap">
+              <span className="px-3.5 py-1.5 rounded-full bg-[#f5f3ee] text-[#111827] font-mono text-[11px] font-bold uppercase tracking-wider border border-[#ded8cb] flex items-center gap-2">
+                <svg className="w-3.5 h-3.5 text-[#2563eb]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="8" r="7" />
+                  <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
                 </svg>
+                HONORS &amp; COMPETITION ARCHIVE
+              </span>
+              <span className="inline-flex items-center gap-1.5 font-mono text-[11px] text-[#2563eb] bg-[#dbeafe]/60 px-3 py-1.5 rounded-full font-bold border border-[#bfdbfe]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#2563eb]" />
+                VERIFIED CREDENTIALS
+              </span>
+            </div>
+
+            {/* Hero Heading */}
+            <h1 className="font-serif text-3xl sm:text-5xl lg:text-[3.25rem] text-[#0b0c0c] tracking-tight leading-[1.12] font-bold">
+              Pencapaian, Rekognisi &amp; <br />
+              <span className="italic font-normal text-[#2563eb] font-serif">
+                Jejak Dedikasi Nyata.
               </span>
             </h1>
-          </div>
 
-          {/* Supporting Text: Clean, professional, and confident */}
-          <p className="font-sans text-base sm:text-lg text-[#444748] max-w-xl leading-relaxed">
-            Dokumentasi resmi penghargaan kompetisi teknologi informasi, inovasi rekayasa perangkat lunak, dan sertifikasi kompetensi industri yang diraih melalui dedikasi konsisten dan standar keunggulan tinggi.
-          </p>
+            {/* Supporting Text */}
+            <p className="font-sans text-base sm:text-lg text-[#4b5563] max-w-xl leading-relaxed">
+              Dokumentasi resmi penghargaan kompetisi teknologi informasi, inovasi rekayasa perangkat lunak, dan sertifikasi kompetensi industri yang diraih melalui dedikasi konsisten dan standar keunggulan tinggi.
+            </p>
 
-          {/* Quote Card: Professional & Inspiring */}
-          <motion.div
-            whileHover={{ scale: 1.01, y: -2 }}
-            transition={{ type: "spring", stiffness: 350, damping: 25 }}
-            className="relative bg-white p-5 rounded-2xl shadow-scrapbook border border-[#ded8cb] max-w-xl group overflow-hidden"
-          >
-            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-[#fef3c7]/40 to-transparent pointer-events-none rounded-tr-2xl" />
-            <div className="flex items-start gap-3.5 relative z-10">
-              <span className="text-2xl shrink-0 mt-0.5">🎖️</span>
-              <div>
-                <p className="font-serif text-base sm:text-lg text-[#222222] italic font-semibold leading-snug">
-                  “Kemenangan bukan sekadar berdiri di atas podium, melainkan bukti keberanian untuk merancang solusi berdampak dan terus menaikkan standar keahlian.”
-                </p>
-                <div className="flex items-center justify-between gap-2 mt-3 pt-2.5 border-t border-[#f0eee8]">
-                  <span className="font-mono text-xs text-[#2563eb] font-bold">
-                    Naufal Nizar De Bian Setyo Firwanto
+            {/* Quote Card */}
+            <div className="relative bg-[#fbf9f3] p-5 rounded-2xl border border-[#ded8cb] max-w-xl">
+              <div className="flex items-start gap-3.5">
+                <div className="w-9 h-9 rounded-xl bg-white border border-[#ded8cb] text-[#2563eb] flex items-center justify-center shrink-0">
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="font-serif text-sm sm:text-base text-[#111827] italic font-semibold leading-relaxed">
+                    &ldquo;Kemenangan bukan sekadar berdiri di atas podium, melainkan bukti keberanian untuk merancang solusi berdampak dan terus menaikkan standar keahlian.&rdquo;
+                  </p>
+                  <div className="flex items-center justify-between gap-2 mt-3 pt-2.5 border-t border-[#ded8cb]/70">
+                    <span className="font-mono text-xs text-[#2563eb] font-bold">
+                      Naufal Nizar De Bian Setyo Firwanto
+                    </span>
+                    <span className="font-mono text-[10px] uppercase text-[#686660] font-bold">
+                      Moklet A&apos;35
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Metrics Bar */}
+            <div className="max-w-xl">
+              <div className="grid grid-cols-3 gap-3.5 pt-1">
+                <div className="bg-[#fbf9f3] p-4 rounded-2xl border border-[#ded8cb] flex flex-col gap-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-[10px] sm:text-[11px] uppercase text-[#686660] font-bold">
+                      Sertifikasi
+                    </span>
+                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                  </div>
+                  <span className="font-serif text-2xl sm:text-3xl text-[#111827] font-bold">
+                    14<span className="text-[#2563eb] text-xl">+</span>
                   </span>
-                  <span className="font-mono text-[10px] uppercase text-[#686660] font-bold">
-                    Moklet A&apos;35
+                  <span className="font-sans text-xs text-[#686660]">
+                    Resmi Terakreditasi
+                  </span>
+                </div>
+
+                <div className="bg-[#fbf9f3] p-4 rounded-2xl border border-[#ded8cb] flex flex-col gap-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-[10px] sm:text-[11px] uppercase text-[#686660] font-bold">
+                      Kejuaraan
+                    </span>
+                    <span className="w-2 h-2 rounded-full bg-amber-500" />
+                  </div>
+                  <span className="font-serif text-2xl sm:text-3xl text-[#111827] font-bold">
+                    03<span className="text-[#2563eb] text-xl">x</span>
+                  </span>
+                  <span className="font-sans text-xs text-[#686660]">
+                    Podium &amp; Finalis
+                  </span>
+                </div>
+
+                <div className="bg-[#fbf9f3] p-4 rounded-2xl border border-[#ded8cb] flex flex-col gap-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-[10px] sm:text-[11px] uppercase text-[#686660] font-bold">
+                      Dedikasi
+                    </span>
+                    <span className="w-2 h-2 rounded-full bg-[#2563eb]" />
+                  </div>
+                  <span className="font-serif text-2xl sm:text-3xl text-[#2563eb] font-bold">
+                    100%
+                  </span>
+                  <span className="font-sans text-xs text-[#686660]">
+                    Kualitas Eksekusi
                   </span>
                 </div>
               </div>
             </div>
           </motion.div>
 
-          {/* Quick Metrics Bar with interactive motion & Interactive Network Trophy Sticker */}
-          <div className="relative max-w-xl">
-            <div className="grid grid-cols-3 gap-3.5 pt-2">
-              <motion.div
-                whileHover={{ y: -3, scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="bg-white p-4 rounded-2xl shadow-scrapbook border border-[#ded8cb] flex flex-col gap-1 cursor-default group"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-[10px] sm:text-[11px] uppercase text-[#686660] font-bold">
-                    Sertifikasi
-                  </span>
-                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                </div>
-                <span className="font-serif text-2xl sm:text-3xl text-[#222222] font-bold group-hover:text-[#2563eb] transition-colors">
-                  14<span className="text-[#2563eb] text-xl">+</span>
-                </span>
-                <span className="font-sans text-xs text-[#686660]">
-                  Resmi Terakreditasi
-                </span>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ y: -3, scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="bg-white p-4 rounded-2xl shadow-scrapbook border border-[#ded8cb] flex flex-col gap-1 cursor-default group"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-[10px] sm:text-[11px] uppercase text-[#686660] font-bold">
-                    Kejuaraan
-                  </span>
-                  <span className="w-2 h-2 rounded-full bg-amber-500" />
-                </div>
-                <span className="font-serif text-2xl sm:text-3xl text-[#222222] font-bold group-hover:text-[#2563eb] transition-colors">
-                  03<span className="text-[#2563eb] text-xl">x</span>
-                </span>
-                <span className="font-sans text-xs text-[#686660]">
-                  Podium &amp; Finalis
-                </span>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ y: -3, scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="bg-white p-4 rounded-2xl shadow-scrapbook border border-[#ded8cb] flex flex-col gap-1 cursor-default group"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-[10px] sm:text-[11px] uppercase text-[#686660] font-bold">
-                    Dedikasi
-                  </span>
-                  <span className="w-2 h-2 rounded-full bg-[#2563eb]" />
-                </div>
-                <span className="font-serif text-2xl sm:text-3xl text-[#2563eb] font-bold">
-                  100%
-                </span>
-                <span className="font-sans text-xs text-[#686660]">
-                  Kualitas Eksekusi
-                </span>
-              </motion.div>
-            </div>
-
-            {/* Interactive Network Globe Sticker */}
-            <div className="hidden sm:block absolute -right-8 -bottom-8 pointer-events-auto">
-              <InteractiveSticker
-                id="achievement-globe"
-                imageSrc="/images/sticker_fiber_globe.png"
-                alt="3D Fiber Network Globe Sticker"
-                quote="Prestasi Nasional 🏆"
-                subquote="OKTAL 1st Winner • Kota Malang"
-                badge="GOLD HONORS"
-                badgeColor="emerald"
-                size="sm"
-                floatType="1"
-              />
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Right Architectural Credential Showcase (Col 5) */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.15 }}
-          className="lg:col-span-5 relative flex flex-col justify-center"
-        >
-          {/* Elegant Verified Credential Card */}
-          <div className="relative bg-white rounded-3xl p-5 sm:p-6 border border-[#ded8cb] shadow-scrapbook">
+          {/* Right Architectural Credential Showcase (Col 5) */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.45, delay: 0.1 }}
+            className="lg:col-span-5 relative flex flex-col justify-center"
+          >
+            {/* Elegant Verified Credential Card */}
+            <div className="relative bg-[#fbf9f3] rounded-2xl p-5 sm:p-6 border border-[#ded8cb]">
             {/* Top Identity Header */}
             <div className="flex items-center justify-between gap-2 pb-3.5 border-b border-[#ded8cb]/80">
               <div className="flex items-center gap-2">
@@ -274,9 +240,10 @@ export function AchievementsHero() {
             </div>
           </div>
         </motion.div>
+        </div>
       </div>
 
-      {/* Decorative Divider with Monospaced Tape Marker */}
+      {/* Decorative Divider */}
       <div className="relative my-12 sm:my-16 flex items-center justify-center">
         <div className="w-full h-px bg-[#ded8cb]" />
         <div className="absolute bg-[#fbf9f3] px-4 flex items-center gap-2 font-mono text-xs text-[#686660]">

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { InteractiveSticker } from "@/components/ui/InteractiveSticker";
+import { SubpageBreadcrumb } from "@/components/layout/SubpageBreadcrumb";
 
 type TechTrack = "fullstack" | "network" | "ai";
 type PhotoView = "dev" | "campus" | "outdoor";
@@ -26,7 +26,7 @@ export function WorkbenchHero() {
   const trackConfigs: Record<TechTrack, TrackDetail> = {
     fullstack: {
       label: "Full-Stack Web",
-      badge: "⚡ Next.js 15 & TypeScript",
+      badge: "Next.js 15 & TypeScript",
       command: "pnpm build && pnpm test:e2e --coverage",
       stack: "Next.js 15 App Router • TypeScript • Supabase • Tailwind CSS",
       metric: "100 Lighthouse • <20ms Edge Latency",
@@ -34,7 +34,7 @@ export function WorkbenchHero() {
     },
     network: {
       label: "Jaringan & SysAdmin",
-      badge: "🌐 MikroTik & Linux Debian",
+      badge: "MikroTik & Linux Debian",
       command: "/ip route print detail && /tool netwatch monitor",
       stack: "RouterOS v7 • Debian Linux • Docker Containers • VLAN / OSPF",
       metric: "0% Packet Loss • 1.2ms Sawojajar Gateway",
@@ -42,7 +42,7 @@ export function WorkbenchHero() {
     },
     ai: {
       label: "AI & Automasi",
-      badge: "🧠 Python & Local LLM",
+      badge: "Python & Local LLM",
       command: "python3 -m agents.eval --model=ollama-qwen --stream",
       stack: "Python • Ollama Inference • REST Webhooks • Agentic Workflows",
       metric: "35 tok/sec • Zero External API Cost",
@@ -99,28 +99,27 @@ export function WorkbenchHero() {
 
   return (
     <section className="relative w-full mb-12 sm:mb-16 pt-2">
-      {/* Outer Clean Editorial Card Container */}
-      <div className="relative w-full bg-[#fbf9f3] rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-10 lg:p-12 border border-[#ded8cb] shadow-scrapbook overflow-hidden">
-        {/* Subtle Ambient Accent Gradients */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#dbeafe]/30 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#fef3c7]/25 rounded-full blur-3xl pointer-events-none" />
+      <SubpageBreadcrumb
+        sectionIndex="02 / PROYEK"
+        sectionLabel="Proyek & Rekayasa"
+        sectionLabelEn="Projects & Blueprints"
+        rightMeta="SMK TELKOM MALANG"
+      />
 
+      {/* Outer Clean Editorial Card Container */}
+      <div className="relative w-full bg-white/95 rounded-3xl p-6 sm:p-10 lg:p-12 border border-[#ded8cb] shadow-xs overflow-hidden">
         {/* Top Clean Identification Stamp */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pb-6 sm:pb-8 border-b border-[#ded8cb]/80 relative z-10">
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-6 border-b border-[#ded8cb]/80 relative z-10">
           <div className="flex items-center gap-2.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#2563eb] animate-pulse" />
-            <span className="font-mono text-xs font-bold text-[#1e40af] uppercase tracking-wider">
+            <span className="w-2 h-2 rounded-full bg-[#2563eb]" />
+            <span className="font-mono text-xs font-bold text-[#111827] uppercase tracking-wider">
               PROJECTS &amp; DIGITAL BLUEPRINTS
-            </span>
-            <span className="text-[#ded8cb] hidden sm:inline">•</span>
-            <span className="font-mono text-xs text-[#686660] hidden sm:inline">
-              SMK TELKOM MALANG // MOKLET A&apos;35
             </span>
           </div>
 
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#ded8cb] shadow-xs text-xs font-mono font-medium text-[#444748]">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#fbf9f3] border border-[#ded8cb] text-xs font-mono font-medium text-[#444748]">
             <span className="w-2 h-2 rounded-full bg-emerald-500" />
-            <span>SYS STATUS: 100% OPERATIONAL</span>
+            <span>SYS STATUS: OPERATIONAL</span>
           </div>
         </div>
 
@@ -130,33 +129,19 @@ export function WorkbenchHero() {
           <div className="lg:col-span-7 flex flex-col gap-6">
             {/* Title & Narrative */}
             <div className="space-y-3">
-              <h1 className="font-serif text-3xl sm:text-5xl lg:text-[3.25rem] text-[#222222] font-bold tracking-tight leading-[1.12]">
+              <h1 className="font-serif text-3xl sm:text-5xl lg:text-[3.25rem] text-[#0b0c0c] font-bold tracking-tight leading-[1.12]">
                 Rekayasa Sistem, <br />
-                <span className="text-[#2563eb] italic font-normal font-serif relative inline-block">
+                <span className="text-[#2563eb] italic font-normal font-serif">
                   Prototipe &amp; Solusi Nyata.
-                  {/* Underline flourish */}
-                  <svg
-                    className="w-full h-3 text-[#2563eb]/60 absolute -bottom-2 left-0"
-                    fill="none"
-                    viewBox="0 0 240 12"
-                    preserveAspectRatio="none"
-                  >
-                    <path
-                      d="M2 9C55 3 145 2 238 8"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeWidth="3.5"
-                    />
-                  </svg>
                 </span>
               </h1>
-              <p className="font-sans text-base sm:text-lg text-[#444748] leading-relaxed pt-1 max-w-xl">
-                Koleksi karya rekayasa perangkat lunak, sistem jaringan terdistribusi, dan automasi cerdas yang dibangun dengan standar performa industri, kode bersih, dan estetika yang presisi.
+              <p className="font-sans text-base sm:text-lg text-[#4b5563] leading-relaxed pt-1 max-w-xl">
+                Koleksi karya rekayasa perangkat lunak, sistem jaringan terdistribusi, dan automasi cerdas yang dibangun dengan standar performa industri, kode bersih, dan arsitektur yang terukur.
               </p>
             </div>
 
             {/* INTERACTIVE TRACK CONSOLE */}
-            <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-scrapbook border border-[#ded8cb] space-y-4">
+            <div className="bg-[#fbf9f3] rounded-2xl p-4 sm:p-5 shadow-xs border border-[#ded8cb] space-y-4">
               {/* Console Top Bar: Track Pills */}
               <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#f0eee8]">
                 <div className="flex items-center gap-2">
@@ -242,14 +227,14 @@ export function WorkbenchHero() {
               </div>
             </div>
 
-            {/* Quick Metrics Bar & Interactive Network Sticker */}
+            {/* Quick Metrics Bar */}
             <div className="relative max-w-xl">
               <div className="grid grid-cols-3 gap-3 pt-1">
-                <div className="p-3.5 bg-white rounded-2xl shadow-scrapbook border border-[#ded8cb]">
+                <div className="p-3.5 bg-[#fbf9f3] rounded-2xl border border-[#ded8cb]">
                   <span className="font-mono text-[10px] text-[#686660] uppercase block font-bold">
                     PROYEK TERVERIFIKASI
                   </span>
-                  <div className="font-serif text-2xl sm:text-3xl text-[#222222] font-bold mt-0.5">
+                  <div className="font-serif text-2xl sm:text-3xl text-[#111827] font-bold mt-0.5">
                     08<span className="text-[#2563eb] text-xl">+</span>
                   </div>
                   <span className="font-sans text-[11px] text-[#686660]">
@@ -257,7 +242,7 @@ export function WorkbenchHero() {
                   </span>
                 </div>
 
-                <div className="p-3.5 bg-white rounded-2xl shadow-scrapbook border border-[#ded8cb]">
+                <div className="p-3.5 bg-[#fbf9f3] rounded-2xl border border-[#ded8cb]">
                   <span className="font-mono text-[10px] text-[#686660] uppercase block font-bold">
                     STANDAR KODE
                   </span>
@@ -269,7 +254,7 @@ export function WorkbenchHero() {
                   </span>
                 </div>
 
-                <div className="p-3.5 bg-white rounded-2xl shadow-scrapbook border border-[#ded8cb]">
+                <div className="p-3.5 bg-[#fbf9f3] rounded-2xl border border-[#ded8cb]">
                   <span className="font-mono text-[10px] text-[#686660] uppercase block font-bold">
                     LATENSI JARINGAN
                   </span>
@@ -280,21 +265,6 @@ export function WorkbenchHero() {
                     Edge Response
                   </span>
                 </div>
-              </div>
-
-              {/* Interactive Router Sticker (Desktop Accent) */}
-              <div className="hidden sm:block absolute -right-10 -bottom-8 pointer-events-auto">
-                <InteractiveSticker
-                  id="packet-router"
-                  imageSrc="/images/sticker_packet_router.png"
-                  alt="3D RouterBoard RB750Gr3 Sticker"
-                  quote="MikroTik RouterOS 📡"
-                  subquote="Sawojajar Lab Gateway • OSPF / VLAN Active"
-                  badge="NETWORKING"
-                  badgeColor="blue"
-                  size="sm"
-                  floatType="2"
-                />
               </div>
             </div>
           </div>

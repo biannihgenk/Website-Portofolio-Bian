@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useTranslations } from "next-intl";
+import { CrossingTickerRibbons } from "@/components/home/CrossingTickerRibbons";
 
 interface ContactSectionProps {
   email?: string;
@@ -30,7 +31,12 @@ export function ContactSection({
   }
 
   return (
-    <section id="contact" className="relative w-full py-16 sm:py-24 bg-transparent overflow-hidden">
+    <section id="contact" className="relative w-full pt-8 pb-16 sm:pt-12 sm:pb-24 bg-transparent overflow-hidden">
+      {/* Dual Crossing Animated Ribbons */}
+      <div className="mb-10 sm:mb-14">
+        <CrossingTickerRibbons />
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         <div className="relative bg-white rounded-3xl sm:rounded-[36px] p-8 sm:p-14 lg:p-20 border border-[#ded8cb] shadow-sm overflow-hidden text-center">
           {/* Top Postage Badge */}

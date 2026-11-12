@@ -1,132 +1,149 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { useLocale } from "next-intl";
 
 interface ProfileGalleryShowcaseProps {
   avatarUrl?: string | null;
 }
 
 export function ProfileGalleryShowcase({ avatarUrl }: ProfileGalleryShowcaseProps) {
+  const locale = useLocale();
+  const isId = locale === "id";
+  const [activeView, setActiveView] = useState<"campus" | "avatar">("campus");
 
-  // High quality 3D Digital Avatar generated for Debian
+  const campusPhotoUrl = "/images/debian_real_landscape.jpg";
   const avatar3dUrl = "/images/debian_avatar_3d.jpg";
+  const portraitUrl = avatarUrl || "/images/Foto Bian.png";
 
-  // Real photo polaroid of Debian
-  const polaroidUrl =
-    avatarUrl ||
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuBzEg0dTm5r9F3ELc8yZMzz2jl8mJO01rSTxaPNiDLccnm-VcU0WN6c7tIO7PYWSS4pvg3T-uEcUOlaGg57DF_gVdFee7w07JtNoCFiRhx6fcrtYQGa739wtXv0lSLsakZVmx7Vn3K1RmfnghgP3JeaWGIUdQAcuwIDi3nMHmKQ2AikPE3Y1eXvWCDmZXGIbJg5h4XkQA13OO0avrtzCWKuxykzw6xl6eyRV55Qs2jaEjr3ZEkEXzJF";
+  const mainImageSrc = activeView === "campus" ? campusPhotoUrl : avatar3dUrl;
 
   return (
-    <section className="w-full my-8 sm:my-12">
-      <div className="bg-white rounded-3xl p-6 md:p-10 shadow-scrapbook relative overflow-hidden border border-[#ded8cb]">
-        {/* Subtle decorative watermark icon */}
-        <div className="absolute -right-8 -bottom-8 opacity-5 pointer-events-none select-none text-[#222222]">
-          <svg className="w-80 h-80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-            <path d="M12 2a10 10 0 0 0-10 10c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z" />
-          </svg>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
-          {/* Main 3D Tech Avatar Hero Spotlight (Left 7 Cols) */}
-          <div className="lg:col-span-7 flex flex-col items-center sm:items-start relative">
-            <motion.div
-              whileHover={{ scale: 1.01 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="relative w-full rounded-2xl overflow-hidden bg-[#f5f2ea] p-3 sm:p-4 shadow-inner group border border-[#ded8cb]"
-            >
-              <div className="relative w-full aspect-[4/3] sm:aspect-[16/11] max-h-[480px] rounded-xl overflow-hidden bg-[#fbf9f3] flex items-center justify-center border border-[#e5e0d4]">
-                <Image
-                  src={avatar3dUrl}
-                  alt="3D Digital Art Avatar of Debian Bian at SMK Telkom Malang"
-                  fill
-                  priority
-                  className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                />
-
-                {/* Ambient Soft Glow Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-
-                {/* Floating pill badge on image */}
-                <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/60 shadow-md flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#2563eb] animate-ping" />
-                  <span className="font-mono text-[11px] font-bold text-[#222222]">
-                    DEBIAN BIAN • 3D TECH AVATAR
-                  </span>
-                </div>
-
-                <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-lg text-white font-mono text-[10px] font-bold border border-white/20">
-                  SMK TELKOM MALANG
-                </div>
+    <section className="w-full my-8 sm:my-10">
+      <div className="bg-white rounded-3xl p-5 sm:p-8 lg:p-10 shadow-xs border border-[#ded8cb]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-10 items-stretch">
+          {/* LEFT SHOWCASE (7 Cols): Real Campus Photo / 3D Concept Switcher */}
+          <div className="lg:col-span-7 flex flex-col justify-between gap-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#2563eb]" />
+                <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#111827]">
+                  {isId ? "Dokumentasi Identitas" : "Identity Visual Record"}
+                </span>
               </div>
 
-              {/* Bottom card label strip */}
-              <div className="flex flex-wrap items-center justify-between gap-2 mt-3 px-1">
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#2563eb]" />
-                  <span className="font-mono text-xs font-bold text-[#222222]">
-                    NAUFAL NIZAR DE BIAN
-                  </span>
-                  <span className="font-mono text-[10px] text-[#6b6863] uppercase">
-                    / NETWORK & AI DEV
-                  </span>
-                </div>
-                <div className="font-mono text-[10px] bg-white border border-[#ded8cb] px-2.5 py-1 rounded-full text-[#444748] font-bold">
-                  FIGURE 01 • 3D AVATAR EDITION
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Right Side: Portrait Snapshot (5 Cols) */}
-          <div className="lg:col-span-5 flex flex-col gap-6">
-            <div className="relative self-center lg:self-start w-full max-w-sm">
-              <div className="bg-white p-4 pb-6 rounded-2xl shadow-sm border border-[#ded8cb]">
-                <div className="w-full aspect-[4/5] rounded-xl overflow-hidden bg-[#f5f3ee] relative">
-                  <Image
-                    src={polaroidUrl}
-                    alt="Debian (Bian) photo in green paddy fields"
-                    fill
-                    unoptimized
-                    className="object-cover"
-                  />
-                  <div className="absolute bottom-2 left-2 bg-[#222222]/75 backdrop-blur-sm text-white font-mono text-[10px] px-2.5 py-0.5 rounded-full font-bold">
-                    REC // 35MM VIBE
-                  </div>
-                </div>
-
-                <div className="mt-4 text-center flex flex-col gap-1">
-                  <p className="font-serif text-lg text-[#222222] italic font-bold">
-                    “Pematang Sawah, Jawa Timur”
-                  </p>
-                  <p className="font-mono text-xs text-[#6b6863]">
-                    Breathe in nature, recharge logic & perspective.
-                  </p>
-                </div>
+              <div className="inline-flex p-1 rounded-xl bg-[#f5f3ee] border border-[#ded8cb] text-[11px] font-mono">
+                <button
+                  type="button"
+                  onClick={() => setActiveView("campus")}
+                  className={`px-3 py-1 rounded-lg font-bold transition-all cursor-pointer ${
+                    activeView === "campus"
+                      ? "bg-white text-[#2563eb] shadow-2xs"
+                      : "text-[#6b6863] hover:text-[#111827]"
+                  }`}
+                >
+                  {isId ? "Potret Resmi" : "Official Portrait"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveView("avatar")}
+                  className={`px-3 py-1 rounded-lg font-bold transition-all cursor-pointer ${
+                    activeView === "avatar"
+                      ? "bg-white text-[#2563eb] shadow-2xs"
+                      : "text-[#6b6863] hover:text-[#111827]"
+                  }`}
+                >
+                  {isId ? "Konsep Digital 3D" : "3D Digital Render"}
+                </button>
               </div>
             </div>
 
-            {/* Postal Stamp Badge & Identity Pill */}
-            <div className="flex items-center gap-4 bg-[#f5f2ea] p-4 rounded-2xl border border-[#ded8cb] shadow-xs">
-              {/* Postal Stamp Replica */}
-              <div className="w-16 h-16 shrink-0 bg-[#f3b9a7]/70 rounded-xl flex flex-col items-center justify-center text-center p-1 shadow-xs border-2 border-dashed border-[#222222]/30">
-                <span className="font-mono text-[9px] uppercase font-bold text-[#1e0300]">
-                  MALANG
-                </span>
-                <span className="text-sm">📮</span>
-                <span className="font-mono text-[8px] font-bold text-[#1e0300]">
-                  POS 65139
-                </span>
+            <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-[#f5f2ea] border border-[#ded8cb] group">
+              <Image
+                src={mainImageSrc}
+                alt={
+                  activeView === "campus"
+                    ? "Naufal Nizar De Bian — SMK Telkom Malang"
+                    : "Digital 3D Identity Render of Naufal Nizar De Bian"
+                }
+                fill
+                priority
+                className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
+                sizes="(max-width: 1024px) 100vw, 720px"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent pointer-events-none" />
+
+              <div className="absolute bottom-3.5 left-3.5 right-3.5 flex flex-wrap items-center justify-between gap-2 text-white">
+                <div className="px-3 py-1.5 rounded-xl bg-black/55 backdrop-blur-md border border-white/15 font-mono text-[11px] font-semibold">
+                  Naufal Nizar De Bian • Moklet A&apos;35
+                </div>
+                <div className="px-2.5 py-1 rounded-lg bg-black/55 backdrop-blur-md border border-white/15 font-mono text-[10px] font-bold">
+                  SMK TELKOM MALANG
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT PANEL (5 Cols): Crisp Studio Portrait & Active Engineering Focus Card */}
+          <div className="lg:col-span-5 flex flex-col justify-between gap-5">
+            {/* Compact Real Portrait Frame */}
+            <div className="bg-[#fbf9f3] p-3.5 sm:p-4 rounded-2xl border border-[#ded8cb] flex items-center gap-4">
+              <div className="relative w-24 h-28 sm:w-28 sm:h-32 rounded-xl overflow-hidden bg-[#f5f3ee] border border-[#ded8cb] shrink-0">
+                <Image
+                  src={portraitUrl}
+                  alt="Naufal Nizar De Bian"
+                  fill
+                  unoptimized
+                  className="object-cover object-top"
+                  sizes="120px"
+                />
               </div>
 
-              <div className="flex flex-col gap-1">
-                <span className="font-mono text-[10px] uppercase tracking-widest text-[#2563eb] font-bold">
-                  CURRENT STATUS
+              <div className="space-y-1.5 min-w-0">
+                <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#2563eb] block">
+                  {isId ? "Profil Pelajar Vokasi" : "Vocational Profile"}
                 </span>
-                <p className="font-sans text-xs sm:text-sm text-[#222222] font-medium leading-snug">
-                  Siswa Kelas X TKJ • Eksplorasi Routing BGP/OSPF, Containerization, &amp; AI Systems.
+                <h2 className="font-serif text-lg sm:text-xl font-bold text-[#111827] leading-snug">
+                  Naufal Nizar De Bian Setyo Firwanto
+                </h2>
+                <p className="font-sans text-xs text-[#6b6863] leading-relaxed">
+                  {isId
+                    ? "Teknik Komputer dan Jaringan (TKJ) — SMK Telkom Malang."
+                    : "Computer & Network Engineering — SMK Telkom Malang."}
                 </p>
+              </div>
+            </div>
+
+            {/* Clean Dark Executive Status Block */}
+            <div className="bg-[#0b1120] text-white rounded-2xl p-5 sm:p-6 flex flex-col justify-between gap-4 flex-1 border border-slate-800">
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-blue-400 font-bold">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    {isId ? "Fokus Pembelajaran Saat Ini" : "Current Academic Focus"}
+                  </span>
+                  <span className="font-mono text-[10px] text-slate-400">
+                    MALANG 65139
+                  </span>
+                </div>
+
+                <p className="font-sans text-sm text-slate-200 leading-relaxed">
+                  {isId
+                    ? "Siswa Kelas X TKJ — Mendalami arsitektur routing MikroTik & Cisco (OSPF/VLAN), administrasi server Debian Linux, containerization Docker, dan pengembangan aplikasi web modern."
+                    : "Grade X TKJ Student — Focusing on MikroTik & Cisco routing architectures (OSPF/VLAN), Debian Linux server administration, Docker containerization, and modern full-stack web engineering."}
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-2 pt-3 border-t border-slate-800">
+                {["MikroTik & Cisco", "Debian Linux", "Next.js 15 & TS", "Docker"].map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-700 font-mono text-[10px] font-semibold text-slate-200"
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
             </div>
           </div>

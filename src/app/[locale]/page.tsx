@@ -23,7 +23,6 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { KineticCanvasStage } from "@/components/home/KineticCanvasStage";
 import { TechStackMotionBar } from "@/components/home/TechStackMotionBar";
-import { EditorialHero } from "@/components/home/EditorialHero";
 import { AboutTeaser } from "@/components/home/AboutTeaser";
 import { FeaturedProjects } from "@/components/home/FeaturedProjects";
 import { Milestones } from "@/components/home/Milestones";
@@ -143,22 +142,18 @@ export default async function HomePage({
       />
 
       <main className="w-full flex flex-col items-center justify-start">
-        {/* 1. KINETIC TYPOGRAPHY & HERO STAGE */}
+        {/* 1. UNIFIED EXECUTIVE HERO & INTERACTIVE 3D IDENTITY CARD */}
         <KineticCanvasStage
+          displayName={displayName}
+          avatarUrl={avatarUrl}
+          bio={bio}
+          school={school}
           githubUrl={githubUrl}
           linkedinUrl={linkedinUrl}
           instagramUrl={instagramUrl}
         />
 
-        {/* 2. EDITORIAL HERO & PERSONAL PROFILE POLAROID (Salam kenal ya! + 3D Hanging ID Card) */}
-        <EditorialHero
-          displayName={displayName}
-          avatarUrl={avatarUrl}
-          bio={bio}
-          school={school}
-        />
-
-        {/* 2.5 ACTIVE LAB & PRODUCTION STACK (Interactive Motion Ticker with Tech Logos) */}
+        {/* 2. ACTIVE LAB & PRODUCTION STACK */}
         <TechStackMotionBar />
 
         {/* 3. ABOUT TEASER / THE JOURNEY & PHILOSOPHY */}
